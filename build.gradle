@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.3.3.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE"
     }
 }
 
@@ -32,6 +32,7 @@ sourceSets {
 apply from: "dependency.gradle"
 apply from: "codeAnalysis.gradle"
 apply from: "documentation.gradle"
+apply from: "database.gradle"
 apply from: "tests.gradle"
 
 group = serviceGroup

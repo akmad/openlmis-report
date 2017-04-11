@@ -13,7 +13,6 @@ import mw.gov.health.lmis.reports.service.referencedata.UserReferenceDataService
 import mw.gov.health.lmis.utils.AuthenticationHelper;
 import mw.gov.health.lmis.utils.Message;
 
-@SuppressWarnings("PMD.TooManyMethods")
 @Service
 public class PermissionService {
   public static final String REPORT_TEMPLATES_EDIT = "REPORT_TEMPLATES_EDIT";
