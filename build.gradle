@@ -16,9 +16,10 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-apply plugin: 'checkstyle'
 apply plugin: 'jacoco'
-apply plugin: 'pmd'
+
+apply from: "dependency.gradle"
+apply from: "codeAnalysis.gradle"
 
 group = serviceGroup
 version = serviceVersion
@@ -26,30 +27,6 @@ archivesBaseName = rootProject.name
 project.ext.buildTime = java.time.Instant.now().toString() // for versioning
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-    jcenter()
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-}
-
-dependencies {
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-data-rest"
-    compile "org.projectlombok:lombok:1.16.8"
-    compile "org.springframework.boot:spring-boot-starter-data-jpa"
-    compile "org.postgresql:postgresql:9.4.1208"
-    compile "com.github.tomakehurst:wiremock:1.58"
-    compile "org.springframework:spring-test"
-    compile 'org.webjars:swagger-ui:2.2.6'
-    compile 'org.openlmis:openlmis-service-util:3.0.0'
-    compile 'org.apache.commons:commons-lang3:3.5'
-    compile 'org.javers:javers-spring-boot-starter-sql:2.8.1'
-    compile 'org.flywaydb:flyway-core:4.0.3'
-
-    testCompile "junit:junit"
-    testCompile "org.mockito:mockito-core:1.+"
-}
 
 idea {
     project {
@@ -64,15 +41,6 @@ idea {
                 }
             }
         }
-    /*    iml.withXml { xmlFile ->
-            xmlFile.asNode().component.find { it.@name == 'NewModuleRootManager'}['Content'][0]
-                .addNode {
-                sourceFolder {
-                    profile(url: "file://$MODULE_DIR\$/src/integration-test/java", isTestSource:
-                            true)
-                }
-            }
-        }*/
     }
 }
 
@@ -159,7 +127,7 @@ checkstyle {
 //Usage: gradle sonarqube
 sonarqube {
     properties {
-        property "sonar.projectName", "OpenLMIS Template Service"
+        property "sonar.projectName", "Malawi Reports Service"
         property "sonar.projectKey", "org.sonarqube:$rootProject.name"
         property "sonar.projectVersion", version
         property "sonar.host.url", "http://sonar.openlmis.org"

@@ -1,6 +1,6 @@
 {
-  "name": "openlmis-template",
-  "version": "0.0.1",
+  "name": "mw-reports",
+  "version": "1.0.0",
 
   "devDependencies":
   {

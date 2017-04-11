@@ -1,19 +1,26 @@
 version: "2"
 services:
-  template-service:
-    image: openlmis/template-service
+
+  reports:
+    image: openlmis-mw/reports
     links:
       - db
       - log
-    ports:
-      - "8080"
     env_file: .env
+
   db:
-    image: openlmis/postgres:9.4
-    ports:
-      - "5432"
+    image: openlmis/postgres:9.6
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "tcp://localhost:514"
+        syslog-facility: "local1"
+    depends_on: [log]
     env_file: .env
+
   log:
     image: openlmis/rsyslog:1
+    ports:
+      - "514:514"
     volumes:
-      - '../logs/template-service:/var/log'
+      - '../logs/fulfillment:/var/log'
