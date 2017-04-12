@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class VersionController {
   private static final Logger LOGGER = LoggerFactory.getLogger(VersionController.class);
 
-  @RequestMapping("/mw-reports")
+  @RequestMapping("/reports")
   public Version display() {
     LOGGER.debug("Returning version");
     return new Version();
