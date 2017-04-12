@@ -1,4 +1,4 @@
-package mw.gov.health.lmis.reports.security;
+package mw.gov.health.lmis.security;
 
 import org.javers.spring.auditable.AuthorProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import mw.gov.health.lmis.utils.AuthenticationHelper;
 public class UserNameProvider implements AuthorProvider {
 
   @Autowired
-  AuthenticationHelper authenticationHelper;
+  private AuthenticationHelper authenticationHelper;
 
   @Override
   public String provide() {

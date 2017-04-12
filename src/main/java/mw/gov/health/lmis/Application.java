@@ -30,7 +30,7 @@ import java.util.Locale;
 
 import mw.gov.health.lmis.reports.domain.BaseEntity;
 import mw.gov.health.lmis.reports.i18n.ExposedMessageSourceImpl;
-import mw.gov.health.lmis.reports.security.UserNameProvider;
+import mw.gov.health.lmis.security.UserNameProvider;
 import mw.gov.health.lmis.settings.domain.ConfigurationSetting;
 
 @SpringBootApplication

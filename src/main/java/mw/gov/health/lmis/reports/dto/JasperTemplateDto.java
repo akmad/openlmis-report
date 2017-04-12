@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -69,11 +70,10 @@ public class JasperTemplateDto implements JasperTemplate.Importer, JasperTemplat
    * @param templates list of {@link JasperTemplate}
    * @return new list of JasperTemplateDto.
    */
-  public static Iterable<JasperTemplateDto> newInstance(Iterable<JasperTemplate> templates) {
-
-    List<JasperTemplateDto> jasperTemplateDtos = new ArrayList<>();
-    templates.forEach(t -> jasperTemplateDtos.add(newInstance(t)));
-    return jasperTemplateDtos;
+  public static List<JasperTemplateDto> newInstance(Iterable<JasperTemplate> templates) {
+    return StreamSupport.stream(templates.spliterator(), false)
+        .map(JasperTemplateDto::newInstance)
+        .collect(Collectors.toList());
   }
 
   /**
@@ -86,13 +86,19 @@ public class JasperTemplateDto implements JasperTemplate.Importer, JasperTemplat
     if (jasperTemplate == null) {
       return null;
     }
+
     JasperTemplateDto jasperTemplateDto = new JasperTemplateDto();
     jasperTemplate.export(jasperTemplateDto);
 
     if (jasperTemplate.getTemplateParameters() != null) {
-      jasperTemplateDto.setTemplateParameters(jasperTemplate.getTemplateParameters().stream()
-          .map(JasperTemplateParameterDto::newInstance).collect(Collectors.toList()));
+      jasperTemplateDto.setTemplateParameters(
+          jasperTemplate.getTemplateParameters()
+              .stream()
+              .map(JasperTemplateParameterDto::newInstance)
+              .collect(Collectors.toList())
+      );
     }
+
     return jasperTemplateDto;
   }
 }

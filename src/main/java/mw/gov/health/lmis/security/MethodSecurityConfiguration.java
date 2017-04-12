@@ -1,4 +1,4 @@
-package mw.gov.health.lmis.reports.security;
+package mw.gov.health.lmis.security;
 
 
 import org.springframework.context.annotation.Configuration;

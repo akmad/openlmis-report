@@ -1,36 +1,38 @@
 #%RAML 0.8
 ---
-title: OpenLMIS Template API
+title: OpenLMIS Malawi Reports API
 version: "@version@"
-baseUri: "http://localhost:8080"
+baseUri: "@baseUrl@"
+protocols: [ HTTP, HTTPS ]
 
 documentation:
     - title: Getting Started
-      content: Welcome to the OpenLMIS template-service documentation. This minimal API is intended for illustrative purposes.
+      content: Welcome to the OpenLMIS Malawi reports-service documentation.
 
 schemas:
-  - auditLogEntry: !include schemas/auditLogEntry.json
 
-  - auditLogEntryArray: |
+  - configurationSetting: !include schemas/configurationSetting.json
+
+  - jasperTemplateDto: !include schemas/jasperTemplateDto.json
+
+
+  - jasperTemplateDtoArray: |
       {
           "type": "array",
-          "items": { "type": "object", "$ref": "schemas/auditLogEntry.json" }
+          "items": { "type": "object", "$ref": "schemas/jasperTemplateDto.json" }
       }
 
-  - version: |
-      {   "$schema": "http://json-schema.org/draft-03/schema",
-          "description": "Service version and build information",
-          "type": "object",
-          "properties": {
-              "service": { "type": "string", "required": true},
-              "build": { "type": "string", "required": true},
-              "branch": { "type": "string", "required": true},
-              "timeStamp": { "type": "string", "required": true},
-              "version": { "type": "string", "required": true}
-          }
-      }
+  - localizedMessage: !include schemas/localizedMessage.json
 
 traits:
+    - secured:
+          queryParameters:
+              access_token:
+                  displayName: access_token
+                  description: OAuth2 access token
+                  type: string
+                  required: true
+                  repeat: false
     - paginated:
           queryParameters:
               page:
@@ -44,95 +46,172 @@ traits:
                   required: false
                   repeat: false
 resourceTypes:
-    - auditLog:
-        description: This represents the audit log for all <<resourcePathName|!singularize>> resources.
+    - collection:
         get:
-          description: Returns all or part of the resource's audit log
-          # Although /auditLog endpoints support "page" and "number" query parameters for pagination,
-          # they don’t return the response body and set of pagination-related values expected to be
-          # returned for core domain resources.
-          is: [ paginated ]
-          queryParameters:
-              author:
-                  displayName: author
-                  description: Name of the author of changes which should be returned. By default, all changes are returned regardless of author.
-                  type: string
-                  required: false
-                  repeat: false
-              changedPropertyName:
-                  displayName: changedPropertyName
-                  description: The name of the property about which changes should be returned. If null or empty, changes associated with any and all properties are returned.
-                  type: string
-                  required: false
-                  repeat: false
+            is: [ secured ]
+            responses:
+                200:
+                  description: Collection retrieved successfully
+                  body:
+                      application/json:
+                          schema: <<schema>>
+                404:
+                  description: Collection is empty.
+        post:
+            is: [ secured ]
+            body:
+                application/json:
+                    schema: <<schema>>
+            responses:
+                201:
+                  description: Item created successfully
+                  body:
+                      application/json:
+                          schema: <<schema>>
+    - member:
+        get:
+            is: [ secured ]
+            responses:
+                200:
+                    body:
+                        application/json:
+                            schema: <<schema>>
+        post:
+            is: [ secured ]
+            body:
+                application/json:
+                    schema: <<schema>>
+            responses:
+                200:
+                    body:
+                        application/json:
+                            schema: <<schema>>
+        delete:
+            is: [ secured ]
+            responses:
+                200:
+
+/api:
+
+  /reports/templates:
+      displayName: Report Template
+      post:
+          is: [ secured ]
+          description: Create or update report template.
+          body:
+              multipart/form-data:
+                formParameters:
+                    file:
+                         displayName: Template with .jrxml format
+                         type: file
+                         required: false
+                         repeat: false
+                    name:
+                         displayName: Name of Template in database
+                         type: string
+                         required: false
+                         repeat: false
+                    description:
+                         displayName: Description of Template
+                         type: string
+                         required: false
+                         repeat: false
+          responses:
+                200:
+                403:
+                    body:
+                      application/json:
+                        schema: localizedMessage
+      get:
+          is: [ secured ]
+          description: Get all templates.
           responses:
               200:
-                body:
-                  application/json:
-                    schema: auditLogEntryArray
-                    example: |
-                      [
-                        {
-                          "changeType": "ValueChange",
-                          "globalId": {
-                            "entity": "org.openlmis.SomeClass",
-                            "cdoId": 1
-                          },
-                          "commitMetadata": {
-                            "author": "SomeUserName",
-                            "properties": [],
-                            "commitDate": "2016-12-17T19:39:57.621",
-                            "id": 3
-                          },
-                          "property": "PropertyName",
-                          "left": "OldValue",
-                          "right": "NewValue"
-                        }
-                      ]
-              404:
-                description: The specified <<resourcePathName|!singularize>> does not exist.
-
-    - instanceAuditLog:
-        description: This represents the audit log for a specified instance of the <<resourcePathName|!singularize>> resource.
-        type: auditLog
-        uriParameters:
-            id:
-                type: string
-                required: true
-                repeat: false
-/:
-    displayName: Version
-    get:
-        description: Get version
-        responses:
-          200:
-            description: Returns version information.
-            headers:
-              X-Content-Type-Options:
-              X-XSS-Protection:
-            body:
-              application/json:
-                schema: version
-
-    /widgets:
-      displayName: widgets
-      get:
-        responses:
-          200:
+                  body:
+                    application/json:
+                      schema: jasperTemplateDtoArray
+              403:
+                  body:
+                    application/json:
+                        schema: localizedMessage
       /{id}:
-        uriParameters:
-          id:
-            displayName: id
-            type: string
-            required: true
-            repeat: false
-        delete:
-          responses:
-        get:
-          responses:
-        put:
-          responses:
-        post:
-          responses:
-      /{id}/auditLog:
-        type: instanceAuditLog
+          uriParameters:
+              id:
+                  displayName: id
+                  type: string
+                  required: true
+                  repeat: false
+          delete:
+              is: [ secured ]
+              description: Delete chosen template.
+              responses:
+                  204:
+                  403:
+                      body:
+                        application/json:
+                            schema: localizedMessage
+                  404:
+                      body:
+                        application/json:
+                          schema: localizedMessage
+          get:
+              is: [ secured ]
+              description: Get chosen template.
+              responses:
+                  200:
+                      body:
+                        application/json:
+                          schema: jasperTemplateDto
+                  403:
+                      body:
+                        application/json:
+                            schema: localizedMessage
+                  404:
+                      body:
+                        application/json:
+                            schema: localizedMessage
+          /{format}:
+              uriParameters:
+                  format:
+                      displayName: format
+                      type: string
+                      required: true
+                      repeat: false
+              get:
+                  is: [ secured ]
+                  description: Generate report from template ID and format.
+                  responses:
+                      200:
+                          body:
+                            application/pdf:
+                            text/csv:
+                            application/vnd.ms-excel:
+                            text/html:
+                      403:
+                          body:
+                            application/json:
+                                schema: localizedMessage
+                      404:
+                          body:
+                            application/json:
+                                schema: localizedMessage
+
+  /settings:
+      displayName: Settings.
+      /{key}:
+            uriParameters:
+              key:
+                  displayName: key
+                  type: string
+                  required: true
+                  repeat: false
+            get:
+               is: [ secured ]
+               description: Get chosen setting.
+               responses:
+                   "200":
+                       body:
+                           application/json:
+                   "404":
+                       body:
+                         application/json:

@@ -1,4 +1,4 @@
-package mw.gov.health.lmis.reports.service;
+package mw.gov.health.lmis.utils;
 
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasKey;

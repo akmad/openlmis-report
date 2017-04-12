@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -35,11 +36,11 @@ import mw.gov.health.lmis.utils.Message;
 
 @Controller
 @Transactional
-@RequestMapping("/api/reports/templates/requisitions")
+@RequestMapping("/api/reports/templates")
 public class JasperTemplateController extends BaseController {
-  private static final String CONSISTENCY_REPORT = "Consistency Report";
-
   private static final Logger LOGGER = Logger.getLogger(JasperTemplateController.class);
+
+  private static final String CONSISTENCY_REPORT = "Consistency Report";
 
   @Autowired
   private JasperTemplateService jasperTemplateService;
@@ -90,11 +91,9 @@ public class JasperTemplateController extends BaseController {
   @RequestMapping(method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public Iterable<JasperTemplateDto> getAllTemplates() {
+  public List<JasperTemplateDto> getAllTemplates() {
     permissionService.canViewReports();
-    Iterable<JasperTemplateDto> templates =
-        JasperTemplateDto.newInstance(jasperTemplateRepository.findAll());
-    return templates;
+    return JasperTemplateDto.newInstance(jasperTemplateRepository.findAll());
   }
 
   /**
