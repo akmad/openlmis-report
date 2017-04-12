@@ -1,9 +1,11 @@
 package mw.gov.health.lmis.reports.domain;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -74,6 +76,11 @@ public class JasperTemplateParameter extends BaseEntity {
   @Setter
   private String description;
 
+  @ElementCollection
+  @Getter
+  @Setter
+  private List<String> options;
+
   @Column(nullable = false)
   @Getter
   @Setter
@@ -88,7 +95,6 @@ public class JasperTemplateParameter extends BaseEntity {
    */
   public static JasperTemplateParameter newInstance(Importer importer) {
     JasperTemplateParameter jasperTemplateParameter = new JasperTemplateParameter();
-
     jasperTemplateParameter.setId(importer.getId());
     jasperTemplateParameter.setName(importer.getName());
     jasperTemplateParameter.setDisplayName(importer.getDisplayName());
@@ -99,7 +105,7 @@ public class JasperTemplateParameter extends BaseEntity {
     jasperTemplateParameter.setSelectProperty(importer.getSelectProperty());
     jasperTemplateParameter.setDisplayProperty(importer.getDisplayProperty());
     jasperTemplateParameter.setRequired(importer.getRequired());
-
+    jasperTemplateParameter.setOptions(importer.getOptions());
     return jasperTemplateParameter;
   }
 
@@ -119,6 +125,7 @@ public class JasperTemplateParameter extends BaseEntity {
     exporter.setSelectProperty(selectProperty);
     exporter.setDisplayProperty(displayProperty);
     exporter.setRequired(required);
+    exporter.setOptions(options);
   }
 
   public interface Exporter {
@@ -142,6 +149,8 @@ public class JasperTemplateParameter extends BaseEntity {
 
     void setRequired(Boolean required);
 
+    void setOptions(List<String> options);
+
   }
 
   public interface Importer {
@@ -164,6 +173,8 @@ public class JasperTemplateParameter extends BaseEntity {
     String getDisplayProperty();
 
     Boolean getRequired();
+
+    List<String> getOptions();
 
   }
 }

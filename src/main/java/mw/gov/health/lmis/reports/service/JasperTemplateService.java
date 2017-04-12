@@ -30,9 +30,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -190,6 +192,15 @@ public class JasperTemplateService {
     if (jrParameter.getDefaultValueExpression() != null) {
       jasperTemplateParameter.setDefaultValue(jrParameter.getDefaultValueExpression()
           .getText().replace("\"", "").replace("\'", ""));
+    }
+
+    String optionsProperty = jrParameter.getPropertiesMap().getProperty("options");
+    if (optionsProperty != null) {
+      // split by unescaped commas
+      List<String> options = Arrays.stream(optionsProperty.split("(?<!\\\\),"))
+              .map(option -> option.replace("\\,", ","))
+              .collect(Collectors.toList());
+      jasperTemplateParameter.setOptions(options);
     }
 
     return jasperTemplateParameter;

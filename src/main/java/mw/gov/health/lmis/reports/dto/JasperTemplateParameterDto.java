@@ -1,6 +1,7 @@
 package mw.gov.health.lmis.reports.dto;
 
 
+import java.util.List;
 import java.util.UUID;
 
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class JasperTemplateParameterDto
   private String displayProperty;
   private String description;
   private Boolean required;
+  private List<String> options;
 
   /**
    * Create new instance of JasperTemplateParameterDto based on given {@link
