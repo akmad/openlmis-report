@@ -34,7 +34,7 @@ configure(checkApiIsRaml) {
 sonarqube {
     properties {
         property "sonar.projectName", "Malawi Reports Service"
-        property "sonar.projectKey", "org.sonarqube:$rootProject.name"
+        property "sonar.projectKey", "org.sonarqube:mw-reports"
         property "sonar.projectVersion", version
         property "sonar.host.url", "http://sonar.openlmis.org"
         property "sonar.java.coveragePlugin", "jacoco"
@@ -44,6 +44,6 @@ sonarqube {
         property "sonar.jacoco.reportPath", "build/jacoco/test.exec"
         //Tells SonarQube where the integration tests code coverage report is
         property "sonar.jacoco.itReportPath", "build/jacoco/integrationTest.exec"
-        properties["sonar.tests"] += sourceSets.integrationTest.java
+    properties["sonar.tests"] += sourceSets.integrationTest.java
     }
 }
