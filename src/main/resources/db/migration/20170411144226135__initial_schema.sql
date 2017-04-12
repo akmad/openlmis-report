@@ -31,6 +31,16 @@ CREATE TABLE template_parameters (
 
 
 --
+-- Name: configuration_settings; Type: TABLE; Schema: requisition; Owner: postgres; Tablespace:
+--
+
+CREATE TABLE configuration_settings (
+    key character varying(255) NOT NULL,
+    value text NOT NULL
+);
+
+
+--
 -- Name: jasper_templates_pkey; Type: CONSTRAINT; Schema: requisition; Owner: postgres; Tablespace:
 --
 
@@ -44,6 +54,14 @@ ALTER TABLE ONLY jasper_templates
 
 ALTER TABLE ONLY template_parameters
     ADD CONSTRAINT template_parameters_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: configuration_settings_pkey; Type: CONSTRAINT; Schema: requisition; Owner: postgres; Tablespace:
+--
+
+ALTER TABLE ONLY configuration_settings
+    ADD CONSTRAINT configuration_settings_pkey PRIMARY KEY (key);
 
 
 --

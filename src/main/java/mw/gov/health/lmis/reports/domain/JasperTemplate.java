@@ -19,6 +19,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +27,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "jasper_templates")
 @NoArgsConstructor
+@AllArgsConstructor
 public class JasperTemplate extends BaseEntity {
 
   @Column(columnDefinition = TEXT_COLUMN_DEFINITION, unique = true, nullable = false)

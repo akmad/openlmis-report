@@ -21,7 +21,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.List;
 
-import mw.gov.health.lmis.reports.Application;
 import mw.gov.health.lmis.reports.dto.CodeDto;
 
 @RunWith(SpringJUnit4ClassRunner.class)

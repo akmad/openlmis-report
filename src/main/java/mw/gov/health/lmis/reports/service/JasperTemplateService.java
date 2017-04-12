@@ -1,7 +1,7 @@
 package mw.gov.health.lmis.reports.service;
 
 import static java.io.File.createTempFile;
-import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_IO;
+import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_IO;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_CREATION;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_EMPTY;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INCORRECT_TYPE;
@@ -128,7 +128,7 @@ public class JasperTemplateService {
     } catch (JRException ex) {
       throw new ReportingException(ex, ERROR_REPORTING_FILE_INVALID);
     } catch (IOException ex) {
-      throw new ReportingException(ex, ERROR_IO, ex.getMessage());
+      throw new ReportingException(ex, ERROR_REPORTING_IO, ex.getMessage());
     }
   }
 

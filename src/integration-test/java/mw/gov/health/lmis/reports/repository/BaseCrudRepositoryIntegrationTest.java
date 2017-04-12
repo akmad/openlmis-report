@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import mw.gov.health.lmis.reports.Application;
+import mw.gov.health.lmis.Application;
 import mw.gov.health.lmis.reports.domain.BaseEntity;
 
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -1,4 +1,4 @@
-package mw.gov.health.lmis.reports;
+package mw.gov.health.lmis;
 
 import org.javers.core.Javers;
 import org.javers.core.MappingStyle;
@@ -28,14 +28,15 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
 import java.util.Locale;
 
-import mw.gov.health.lmis.JaVersDateProvider;
 import mw.gov.health.lmis.reports.domain.BaseEntity;
 import mw.gov.health.lmis.reports.i18n.ExposedMessageSourceImpl;
 import mw.gov.health.lmis.reports.security.UserNameProvider;
+import mw.gov.health.lmis.settings.domain.ConfigurationSetting;
 
 @SpringBootApplication
 @ImportResource("applicationContext.xml")
-@EntityScan(basePackageClasses = {BaseEntity.class}, basePackages = "org.openlmis.util.converter")
+@EntityScan(basePackageClasses = {BaseEntity.class, ConfigurationSetting.class},
+    basePackages = "org.openlmis.util.converter")
 public class Application {
   private static Logger LOGGER = LoggerFactory.getLogger(Application.class);
 

@@ -13,7 +13,8 @@ public class ReportingMessageKeys extends MessageKeys {
   private static final String FILE = "file";
 
 
-  public static final String ERROR_IO = ERROR + ".io";
+  public static final String ERROR_REPORTING_IO = join(ERROR, "io");
+  public static final String ERROR_REPORTING_CLASS_NOT_FOUND = join(ERROR, "class", "notFound");
   public static final String ERROR_REPORTING_CREATION = join(ERROR, CREATION);
   public static final String ERROR_REPORTING_FILE_EMPTY = join(ERROR, FILE, EMPTY);
   public static final String ERROR_REPORTING_TEMPLATE_PARAMETER_INVALID =
