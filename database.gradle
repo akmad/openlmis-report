@@ -20,3 +20,8 @@ task generateMigration << {
     def migrationFile = new File(sourceSets.main.resources.srcDirs.first(),'db/migration/'+fullFileName)
     migrationFile.createNewFile()
 }
+
+task demoDataSeed(type:Exec) {
+    executable "./demo-data/demo_seed.sh"
+    args "demo-data", "build/demo-data", "demo-data/generator.js"
+}

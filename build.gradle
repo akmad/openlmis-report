@@ -78,5 +78,6 @@ build {
     dependsOn check
     dependsOn ramlToHtml
     dependsOn copyRamlHtmlToBuild
+    dependsOn demoDataSeed
     dependsOn copyConsulRegistrationToBuild
 }
