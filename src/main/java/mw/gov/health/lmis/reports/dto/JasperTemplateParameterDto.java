@@ -26,6 +26,7 @@ public class JasperTemplateParameterDto
   private String description;
   private Boolean required;
   private List<String> options;
+  private List<JasperTemplateParameterDependencyDto> dependencies;
 
   /**
    * Create new instance of JasperTemplateParameterDto based on given {@link

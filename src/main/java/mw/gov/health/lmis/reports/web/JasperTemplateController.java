@@ -162,6 +162,7 @@ public class JasperTemplateController extends BaseController {
     Map<String, Object> map = jasperTemplateService
         .mapRequestParametersToTemplate(request, template);
     map.put("format", format);
+    map.put("imagesDirectory", "images/");
 
     return new ModelAndView(jasperView, map);
   }

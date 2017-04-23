@@ -1,12 +1,12 @@
 package mw.gov.health.lmis.reports.service;
 
 import static java.io.File.createTempFile;
-import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_IO;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_CREATION;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_EMPTY;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INCORRECT_TYPE;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INVALID;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_MISSING;
+import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_IO;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_PARAMETER_INCORRECT_TYPE;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_PARAMETER_MISSING;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_TEMPLATE_EXIST;
@@ -40,6 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import mw.gov.health.lmis.reports.domain.JasperTemplate;
 import mw.gov.health.lmis.reports.domain.JasperTemplateParameter;
+import mw.gov.health.lmis.reports.domain.JasperTemplateParameterDependency;
 import mw.gov.health.lmis.reports.exception.ReportingException;
 import mw.gov.health.lmis.reports.repository.JasperTemplateRepository;
 
@@ -194,14 +195,8 @@ public class JasperTemplateService {
           .getText().replace("\"", "").replace("\'", ""));
     }
 
-    String optionsProperty = jrParameter.getPropertiesMap().getProperty("options");
-    if (optionsProperty != null) {
-      // split by unescaped commas
-      List<String> options = Arrays.stream(optionsProperty.split("(?<!\\\\),"))
-              .map(option -> option.replace("\\,", ","))
-              .collect(Collectors.toList());
-      jasperTemplateParameter.setOptions(options);
-    }
+    jasperTemplateParameter.setOptions(extractOptions(jrParameter));
+    jasperTemplateParameter.setDependencies(extractDependencies(jrParameter));
 
     return jasperTemplateParameter;
   }
@@ -270,5 +265,34 @@ public class JasperTemplateService {
     if (file == null) {
       throw new ReportingException(ERROR_REPORTING_FILE_MISSING);
     }
+  }
+
+  private List<String> extractOptions(JRParameter parameter) {
+    return extractListProperties(parameter, "options");
+  }
+
+  private List<JasperTemplateParameterDependency> extractDependencies(JRParameter parameter) {
+    return extractListProperties(parameter, "dependencies")
+        .stream()
+        .map(option -> {
+          // split by colons
+          String[] properties = option.split(":");
+          return new JasperTemplateParameterDependency(properties[0], properties[1]);
+        })
+        .collect(Collectors.toList());
+  }
+
+  private List<String> extractListProperties(JRParameter parameter, String property) {
+    String dependencyProperty = parameter.getPropertiesMap().getProperty(property);
+
+    if (dependencyProperty != null) {
+      // split by unescaped commas
+      return Arrays
+          .stream(dependencyProperty.split("(?<!\\\\),"))
+          .map(option -> option.replace("\\,", ","))
+          .collect(Collectors.toList());
+    }
+
+    return new ArrayList<>();
   }
 }
