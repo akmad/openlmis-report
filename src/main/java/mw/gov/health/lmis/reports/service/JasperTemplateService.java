@@ -277,7 +277,7 @@ public class JasperTemplateService {
         .map(option -> {
           // split by colons
           String[] properties = option.split(":");
-          return new JasperTemplateParameterDependency(properties[0], properties[1]);
+          return new JasperTemplateParameterDependency(properties[0], properties[1], properties[2]);
         })
         .collect(Collectors.toList());
   }

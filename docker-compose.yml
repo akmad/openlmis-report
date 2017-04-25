@@ -23,4 +23,4 @@ services:
     ports:
       - "514:514"
     volumes:
-      - '../logs/fulfillment:/var/log'
+      - '../logs/reports:/var/log'

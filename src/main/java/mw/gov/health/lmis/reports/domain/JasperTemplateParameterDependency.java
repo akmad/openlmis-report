@@ -46,10 +46,24 @@ public class JasperTemplateParameterDependency extends BaseEntity {
   @Column(columnDefinition = TEXT_COLUMN_DEFINITION, nullable = false)
   @Getter
   @Setter
+  private String property;
+
+  @Column(columnDefinition = TEXT_COLUMN_DEFINITION, nullable = false)
+  @Getter
+  @Setter
   private String placeholder;
 
-  public JasperTemplateParameterDependency(String dependency, String placeholder) {
+  /**
+   * Creates a new instance of jasper template dependency.
+   *
+   * @param dependency dependent parameter.
+   * @param property dependent parameter's property to extract.
+   * @param placeholder URI placeholder for parameter's property.
+   */
+  public JasperTemplateParameterDependency(
+      String dependency, String property, String placeholder) {
     this.dependency = dependency;
+    this.property = property;
     this.placeholder = placeholder;
   }
 
@@ -66,6 +80,7 @@ public class JasperTemplateParameterDependency extends BaseEntity {
 
     dependency.setId(importer.getId());
     dependency.setDependency(importer.getDependency());
+    dependency.setProperty(importer.getDependency());
     dependency.setPlaceholder(importer.getPlaceholder());
 
     return dependency;
@@ -87,6 +102,8 @@ public class JasperTemplateParameterDependency extends BaseEntity {
 
     void setDependency(String dependency);
 
+    void setProperty(String property);
+
     void setPlaceholder(String placeholder);
   }
 
@@ -94,6 +111,8 @@ public class JasperTemplateParameterDependency extends BaseEntity {
     UUID getId();
 
     String getDependency();
+
+    String getProperty();
 
     String getPlaceholder();
   }

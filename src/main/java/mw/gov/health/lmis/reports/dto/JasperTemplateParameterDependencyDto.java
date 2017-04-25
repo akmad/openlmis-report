@@ -33,6 +33,7 @@ public class JasperTemplateParameterDependencyDto implements
 
   private UUID id;
   private String dependency;
+  private String property;
   private String placeholder;
 
   /**
