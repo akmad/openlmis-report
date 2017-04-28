@@ -93,7 +93,7 @@ resourceTypes:
 
 /api:
 
-  /reports/templates:
+  /reports/templates/malawi:
       displayName: Report Template
       post:
           is: [ secured ]

@@ -36,7 +36,7 @@ import mw.gov.health.lmis.utils.Message;
 
 @Controller
 @Transactional
-@RequestMapping("/api/reports/templates")
+@RequestMapping("/api/reports/templates/malawi")
 public class JasperTemplateController extends BaseController {
   private static final Logger LOGGER = Logger.getLogger(JasperTemplateController.class);
 
