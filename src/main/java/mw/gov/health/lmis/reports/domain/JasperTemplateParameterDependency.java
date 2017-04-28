@@ -80,7 +80,7 @@ public class JasperTemplateParameterDependency extends BaseEntity {
 
     dependency.setId(importer.getId());
     dependency.setDependency(importer.getDependency());
-    dependency.setProperty(importer.getDependency());
+    dependency.setProperty(importer.getProperty());
     dependency.setPlaceholder(importer.getPlaceholder());
 
     return dependency;
@@ -94,6 +94,7 @@ public class JasperTemplateParameterDependency extends BaseEntity {
   public void export(JasperTemplateParameterDependency.Exporter exporter) {
     exporter.setId(id);
     exporter.setDependency(dependency);
+    exporter.setProperty(property);
     exporter.setPlaceholder(placeholder);
   }
 
