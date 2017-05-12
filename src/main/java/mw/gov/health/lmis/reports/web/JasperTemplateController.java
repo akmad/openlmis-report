@@ -40,6 +40,7 @@ import mw.gov.health.lmis.utils.Message;
 public class JasperTemplateController extends BaseController {
   private static final Logger LOGGER = Logger.getLogger(JasperTemplateController.class);
 
+  private static final String TIMELINESS_REPORT = "Timeliness Report";
   private static final String CONSISTENCY_REPORT = "Consistency Report";
 
   @Autowired
@@ -163,6 +164,10 @@ public class JasperTemplateController extends BaseController {
         .mapRequestParametersToTemplate(request, template);
     map.put("format", format);
     map.put("imagesDirectory", "images/");
+
+    if (TIMELINESS_REPORT.equals(template.getType())) {
+      return jasperReportsViewService.getTimelinessJasperReportView(jasperView, map);
+    }
 
     return new ModelAndView(jasperView, map);
   }
