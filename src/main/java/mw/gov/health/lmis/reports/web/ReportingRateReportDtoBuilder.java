@@ -214,7 +214,7 @@ public class ReportingRateReportDtoBuilder {
     if (zone == null) {
       return geographicZoneReferenceDataService.search(GEOGRAPHIC_ZONE_LEVEL, null);
     } else {
-      return geographicZoneReferenceDataService.search(GEOGRAPHIC_ZONE_LEVEL, zone.getId());
+      return Collections.singleton(zone);
     }
   }
 
