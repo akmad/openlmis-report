@@ -41,6 +41,8 @@ public class JasperTemplateController extends BaseController {
   private static final Logger LOGGER = Logger.getLogger(JasperTemplateController.class);
 
   private static final String TIMELINESS_REPORT = "Timeliness Report";
+  private static final String REPORTING_RATE_REPORT = "Reporting Rate Report";
+  private static final int DUE_DAYS = 10;
   private static final String CONSISTENCY_REPORT = "Consistency Report";
 
   @Autowired
@@ -167,6 +169,12 @@ public class JasperTemplateController extends BaseController {
 
     if (TIMELINESS_REPORT.equals(template.getType())) {
       return jasperReportsViewService.getTimelinessJasperReportView(jasperView, map);
+    }
+
+    if (REPORTING_RATE_REPORT.equals(template.getType())) {
+      map.putIfAbsent("DueDays", String.valueOf(DUE_DAYS));
+      jasperView = jasperReportsViewService
+              .getReportingRateJasperReportsView(template, request, map);
     }
 
     return new ModelAndView(jasperView, map);

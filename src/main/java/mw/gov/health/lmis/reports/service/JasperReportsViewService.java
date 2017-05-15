@@ -9,6 +9,7 @@ import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTI
 import static net.sf.jasperreports.engine.export.JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN;
 import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
 
+import mw.gov.health.lmis.reports.dto.ReportingRateReportDto;
 import mw.gov.health.lmis.reports.dto.external.FacilityDto;
 import mw.gov.health.lmis.reports.dto.external.GeographicZoneDto;
 import mw.gov.health.lmis.reports.dto.external.ProcessingPeriodDto;
@@ -21,6 +22,7 @@ import mw.gov.health.lmis.reports.service.referencedata.GeographicZoneReferenceD
 import mw.gov.health.lmis.reports.service.referencedata.PeriodReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.ProgramReferenceDataService;
 import mw.gov.health.lmis.reports.service.requisition.RequisitionService;
+import mw.gov.health.lmis.reports.web.ReportingRateReportDtoBuilder;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperReport;
 
@@ -41,6 +43,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -78,6 +81,9 @@ public class JasperReportsViewService {
 
   @Autowired
   private RequisitionService requisitionService;
+
+  @Autowired
+  private ReportingRateReportDtoBuilder reportingRateReportDtoBuilder;
 
   /**
    * Create Jasper Report View.
@@ -181,6 +187,48 @@ public class JasperReportsViewService {
     }
   }
 
+  /**
+   * Get customized Jasper Report View for Reporting Rate Report.
+   *
+   * @param jasperTemplate jasper template for report
+   * @param request http request for filling application context
+   * @param params template parameters populated with values from the request
+   * @return customized jasper view.
+   */
+  public JasperReportsMultiFormatView getReportingRateJasperReportsView(
+          JasperTemplate jasperTemplate, HttpServletRequest request, Map<String, Object> params)
+          throws JasperReportViewException {
+    JasperReportsMultiFormatView jasperView = new JasperReportsMultiFormatView();
+    setExportParams(jasperView);
+    jasperView.setUrl(getReportUrlForReportData(jasperTemplate));
+
+    UUID programId = (UUID) processParameter(params, "Program", true, UUID.class);
+    ProgramDto program = programReferenceDataService.findOne(programId);
+
+    UUID periodId = (UUID) processParameter(params, "Period", true, UUID.class);
+    ProcessingPeriodDto period = periodReferenceDataService.findOne(periodId);
+
+    UUID zoneId = (UUID) processParameter(params, "GeographicZone", false, UUID.class);
+    GeographicZoneDto zone = null;
+    if (zoneId != null) {
+      zone = geographicZoneReferenceDataService.findOne(zoneId);
+    }
+
+    Integer dueDays = (Integer) processParameter(params, "DueDays", false, Integer.class);
+    if (dueDays != null && dueDays < 0) {
+      throw new ValidationMessageException(
+              new Message(ERROR_REPORTING_TEMPLATE_PARAMETER_INVALID, "DueDays"));
+    }
+
+    ReportingRateReportDto reportDto = reportingRateReportDtoBuilder.build(program, period, zone,
+            dueDays);
+    params.put("datasource", new JRBeanCollectionDataSource(Collections.singletonList(reportDto)));
+
+    if (getApplicationContext(request) != null) {
+      jasperView.setApplicationContext(getApplicationContext(request));
+    }
+    return jasperView;
+  }
 
   /**
    * Get customized Jasper Report View for Timeliness Report.

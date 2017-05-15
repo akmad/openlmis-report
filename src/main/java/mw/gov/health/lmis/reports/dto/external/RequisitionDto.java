@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.json.JSONObject;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -59,4 +61,8 @@ public class RequisitionDto {
   @Getter
   @Setter
   private JSONObject template;
+
+  @Getter
+  @Setter
+  private List<StatusChangeDto> statusHistory = new ArrayList<>();
 }
