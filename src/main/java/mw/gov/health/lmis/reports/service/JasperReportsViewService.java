@@ -270,7 +270,8 @@ public class JasperReportsViewService {
 
     List<FacilityDto> facilities;
     if (district != null) {
-      facilities = facilityReferenceDataService.search(null, null, district.getId(), true);
+      facilities = facilityReferenceDataService.search(null, null, district.getId(), true)
+              .getContent();
     } else {
       facilities = facilityReferenceDataService.findAll();
     }

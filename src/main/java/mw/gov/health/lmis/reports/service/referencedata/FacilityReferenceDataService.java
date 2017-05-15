@@ -1,5 +1,6 @@
 package mw.gov.health.lmis.reports.service.referencedata;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -36,14 +37,14 @@ public class FacilityReferenceDataService extends BaseReferenceDataService<Facil
    * @param name Filed with string to find similar name.
    * @return List of FacilityDtos with similar code or name.
    */
-  public List<FacilityDto> search(String code, String name, UUID zoneId, boolean recurse) {
+  public Page<FacilityDto> search(String code, String name, UUID zoneId, boolean recurse) {
     Map<String, Object> requestBody = new HashMap<>();
     requestBody.put("code", code);
     requestBody.put("name", name);
     requestBody.put("zoneId", zoneId);
     requestBody.put("recurse", recurse);
 
-    return findAll("search", RequestParameters.init(), requestBody);
+    return getPage("search", RequestParameters.init(), requestBody);
   }
 
   /**

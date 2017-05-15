@@ -177,7 +177,8 @@ public class ReportingRateReportDtoBuilder {
   Collection<FacilityDto> getAvailableFacilities(Collection<GeographicZoneDto> zones) {
     List<FacilityDto> facilities = new ArrayList<>();
     for (GeographicZoneDto zone : zones) {
-      facilities.addAll(facilityReferenceDataService.search(null, null, zone.getId(), true));
+      facilities.addAll(facilityReferenceDataService.search(
+              null, null, zone.getId(), true).getContent());
     }
 
     return facilities
