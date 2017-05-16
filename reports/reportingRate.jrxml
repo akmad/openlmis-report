@@ -187,7 +187,7 @@
 			</staticText>
 			<textField>
 				<reportElement x="0" y="100" width="120" height="20" uuid="08ab21bc-114c-4722-8522-50ac17c1f387"/>
-				<textFieldExpression><![CDATA[($P{GeographicZone} == null) ? "All" : $P{geographicZoneName}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{GeographicZone} == null) ? "All" : $F{geographicZoneName}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="340" y="80" width="110" height="20" uuid="7db639b5-4a4c-4aa2-b6f8-043eeb1f5348"/>
