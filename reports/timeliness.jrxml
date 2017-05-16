@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-05-16T16:43:30 -->
+<!-- 2017-05-16T17:26:21 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="timeliness" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="341cf801-7355-4499-bd5c-182e5275caa1">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -100,7 +100,7 @@
 		<band height="120">
 			<textField>
 				<reportElement x="0" y="100" width="200" height="20" uuid="fd6aed73-3a96-47f0-8e7f-b1e10f931071"/>
-				<textFieldExpression><![CDATA[($P{district} == null) ? "All" : $P{district}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{district} == null) ? "All" : $P{district}.getName()]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="" x="640" y="80" width="160" height="20" uuid="b3b7899b-f638-4fc7-b92d-a4125eaf5ef1">

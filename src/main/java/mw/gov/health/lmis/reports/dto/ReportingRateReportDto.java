@@ -26,4 +26,6 @@ public class ReportingRateReportDto {
   private String programName;
 
   private String periodName;
+
+  private String geographicZoneName;
 }

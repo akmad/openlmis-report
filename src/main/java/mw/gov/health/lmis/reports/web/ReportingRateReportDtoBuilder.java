@@ -66,6 +66,9 @@ public class ReportingRateReportDtoBuilder {
     report.setCompletionByZone(getCompletionsByZone(program, periods, zones, dueDays));
     report.setPeriodName(period.getName());
     report.setProgramName(program.getName());
+    if (zone != null) {
+      report.setGeographicZoneName(zone.getName());
+    }
 
     return report;
   }
