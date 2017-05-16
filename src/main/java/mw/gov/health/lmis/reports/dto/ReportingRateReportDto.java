@@ -22,4 +22,8 @@ public class ReportingRateReportDto {
    * List of requisition completions grouped by geographic zones.
    */
   private List<RequisitionCompletionDto> completionByZone;
+
+  private String programName;
+
+  private String periodName;
 }

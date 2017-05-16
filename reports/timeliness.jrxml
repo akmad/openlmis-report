@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-03-01T09:39:47 -->
+<!-- 2017-05-16T16:43:30 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="timeliness" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="341cf801-7355-4499-bd5c-182e5275caa1">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -41,6 +41,7 @@
 		<property name="displayProperty" value="name"/>
 		<property name="required" value="true"/>
 	</parameter>
+	<parameter name="imagesDirectory" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -95,33 +96,89 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<title>
-		<band height="100" splitType="Stretch">
-			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+	<pageHeader>
+		<band height="120">
+			<textField>
+				<reportElement x="0" y="100" width="200" height="20" uuid="fd6aed73-3a96-47f0-8e7f-b1e10f931071"/>
+				<textFieldExpression><![CDATA[($P{district} == null) ? "All" : $P{district}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="200" y="0" width="380" height="60" forecolor="#3D9297" uuid="9425a6c9-4546-4c90-9119-7a7f300b6fb5"/>
-				<textElement textAlignment="Center">
-					<font size="18" isBold="false"/>
-					<paragraph lineSpacing="Double" lineSpacingSize="2.0"/>
+				<reportElement key="" x="640" y="80" width="160" height="20" uuid="b3b7899b-f638-4fc7-b92d-a4125eaf5ef1">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Ministry of Health and Social Welfare
-Non Reporting Facility Report]]></text>
+				<text><![CDATA[Report Run Date:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="0" y="50" width="180" height="15" uuid="7252b5e1-f025-4e48-ae7c-bd95e291de65"/>
-				<textFieldExpression><![CDATA["Program: " + $P{program}.getName()]]></textFieldExpression>
+				<reportElement x="200" y="100" width="220" height="20" uuid="ff20b76b-fd6b-43be-9e70-de36953c315f"/>
+				<textFieldExpression><![CDATA[$P{program}.getName();]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="200" y="80" width="220" height="20" uuid="8a0a0c00-5ac1-462c-baba-e545cdae1d27"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Program:]]></text>
+			</staticText>
+			<textField>
+				<reportElement key="" x="640" y="100" width="160" height="20" uuid="fecb9e0f-a7f5-40de-8f25-47360652b748">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("d - MMM - yy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="80" width="200" height="20" uuid="333cf5f4-1696-452a-ad45-0635a394548e"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[District:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="80" width="220" height="20" uuid="8e225f67-8b0c-4650-a3ed-b033b8e78e4c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporting Period:]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="760" y="0" width="40" height="20" uuid="6276a84b-d800-4a94-a6dd-dabf49c7a75e"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="0" y="0" width="50" height="50" uuid="bb13cce2-4e0f-432d-a84b-e79f77b98980"/>
+				<imageExpression><![CDATA[getClass().getResourceAsStream($P{imagesDirectory} + "malawi_crest.png")]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="240" y="0" width="280" height="39" uuid="4a93f7da-7f96-4a6d-8673-79a46347e654">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18"/>
+				</textElement>
+				<text><![CDATA[Ministry of Health, Malawi]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="420" y="100" width="220" height="20" uuid="18d2576a-f3a5-4ece-b37c-48987f063b55"/>
+				<textFieldExpression><![CDATA[$P{period}.getName();]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="65" width="180" height="15" uuid="f2dee407-b67a-426b-8ae1-9ed9eeb333cc"/>
-				<textFieldExpression><![CDATA["Period: " + $P{period}.getName()]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="680" y="65" width="100" height="15" uuid="6d7191af-705f-44e6-bfd0-53e40f9e237b"/>
+				<reportElement x="680" y="0" width="80" height="20" uuid="e99fbe7c-fec3-45ff-98ec-f108cebc3565"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Page: " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="60" width="800" height="20" forecolor="#FFFFFF" backcolor="#787878" uuid="855cca04-8ce8-4fba-b4a4-033be59e8904"/>
+				<textElement textAlignment="Center">
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Non Reporting Facility Report]]></text>
+			</staticText>
 		</band>
-	</title>
+	</pageHeader>
 	<columnHeader>
 		<band height="30">
 			<staticText>
@@ -153,7 +210,7 @@ Non Reporting Facility Report]]></text>
 				<text><![CDATA[Facility type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="475" y="0" width="305" height="30" backcolor="#3D9297" uuid="8e7db4f0-de17-4a0a-b56c-452be828d4db"/>
+				<reportElement mode="Opaque" x="475" y="0" width="325" height="30" backcolor="#3D9297" uuid="8e7db4f0-de17-4a0a-b56c-452be828d4db"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -227,7 +284,7 @@ Non Reporting Facility Report]]></text>
 				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Row" mode="Opaque" x="475" y="0" width="305" height="25" uuid="325890b1-a7bb-4c2b-b9aa-0149b25d9968">
+				<reportElement style="Row" mode="Opaque" x="475" y="0" width="325" height="25" uuid="325890b1-a7bb-4c2b-b9aa-0149b25d9968">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<box bottomPadding="1">
