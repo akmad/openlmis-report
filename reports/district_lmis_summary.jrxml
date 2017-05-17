@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-04-26T14:17:59 -->
+<!-- 2017-05-17T12:27:27 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="district_lmis_summary" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="03f89d37-6dd5-4a05-a39e-8088f6a884a6">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -66,6 +66,7 @@ WHERE
    AND referencedata.processing_periods.name = $P{period}
    AND ($P{district} IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
   AND referencedata.facilities.active = true
+  AND requisition.requisitions.status = 'AUTHORIZED'
 ORDER BY referencedata.facilities.name DESC,
   referencedata.orderable_display_categories.displayorder ASC,
   referencedata.orderables.fullproductname DESC]]>
