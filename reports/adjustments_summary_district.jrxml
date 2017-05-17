@@ -62,6 +62,7 @@ FROM
 	JOIN referencedata.geographic_zones AS zones ON zones.id = facilities.geographiczoneid
 WHERE
 	programs.name = $P{program}
+  	AND requisition.requisitions.status = 'AUTHORIZED'
 	AND ($P{district} IS NULL OR zones.id IN (SELECT id FROM findChildZones))
 	AND periods.name = $P{period}
 	AND ($P{adjustmentType} IS NULL OR stock_adjustment_reasons.name = $P{adjustmentType})]]>
