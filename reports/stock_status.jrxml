@@ -42,8 +42,9 @@ SELECT referencedata.facilities.name AS FacilityName,
   referencedata.programs.name AS ProgramName,
   rli.MonthsOfStock AS MOS
 FROM requisition.requisition_line_items
-  JOIN (SELECT id
-  , stockonhand::float / averageconsumption AS MonthsOfStock
+  JOIN (SELECT id,
+  CASE WHEN averageconsumption = 0 THEN NULL ELSE stockonhand::float / averageconsumption
+  END AS MonthsOfStock
   FROM requisition.requisition_line_items) AS rli ON requisition.requisition_line_items.id=rli.id 
   JOIN referencedata.orderables ON 
    requisition.requisition_line_items.orderableid = referencedata.orderables.id 

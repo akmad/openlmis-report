@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-05-17T11:54:42 -->
+<!-- 2017-05-17T16:10:20 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="stock_imbalances" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f732ae30-fa4e-431f-89b3-5a7a1138e87e">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -53,8 +53,9 @@ SELECT referencedata.facilities.name AS facilityname,
       ELSE 'OK'
   END AS stockstatus	
 FROM requisition.requisition_line_items
-  JOIN (SELECT id
-  , stockonhand::float / averageconsumption AS MonthsOfStock
+  JOIN (SELECT id,
+  CASE WHEN averageconsumption = 0 THEN NULL ELSE stockonhand::float / averageconsumption
+  END AS MonthsOfStock
   FROM requisition.requisition_line_items) AS rli ON requisition.requisition_line_items.id=rli.id 
   JOIN referencedata.orderables ON 
    requisition.requisition_line_items.orderableid = referencedata.orderables.id 
