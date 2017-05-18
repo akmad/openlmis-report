@@ -47,7 +47,7 @@ SELECT referencedata.facilities.name AS facilityname,
   referencedata.programs.name AS programname,
   rli.MonthsOfStock as mos,
   CASE 
-      WHEN rli.MonthsOfStock = 0 THEN 'Stocked Out'
+      WHEN rli.MonthsOfStock = 0 THEN 'Stocked out'
       WHEN rli.MonthsOfStock < 3.00 THEN 'Understocked'
       WHEN rli.MonthsOfStock >= 6.00 THEN 'Overstocked'
       ELSE 'OK'
