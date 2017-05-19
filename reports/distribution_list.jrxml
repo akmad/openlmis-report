@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-04-29T20:51:33 -->
+<!-- 2017-05-19T14:28:31 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="adjustments_summary_district" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="548a4d5f-1cb0-4fa0-b5f9-40a07c579f42">
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
@@ -177,7 +177,7 @@ WHERE
 					<reportElement x="190" y="0" width="80" height="20" uuid="463ded2c-72f8-4378-ad69-f513ede91e9f"/>
 					<textFieldExpression><![CDATA[$F{productcode}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
+				<textField pattern="#,##0.###;(#,##0.###-)" isBlankWhenNull="true">
 					<reportElement x="520" y="0" width="70" height="20" uuid="f875ee85-3b20-46fe-a422-7bb10d811e06">
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -185,7 +185,7 @@ WHERE
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$V{Consumption Period 1} / $V{Consumption Period 1 Count}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
+				<textField pattern="#,##0.###;(#,##0.###-)" isBlankWhenNull="true">
 					<reportElement x="600" y="0" width="70" height="20" uuid="fafcbb95-2fac-4ebd-bb63-0ce5135cad56">
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -193,7 +193,7 @@ WHERE
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$V{Consumption Period 2} / $V{Consumption Period 2 Count}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
+				<textField pattern="#,##0.###;(#,##0.###-)" isBlankWhenNull="true">
 					<reportElement x="685" y="0" width="70" height="20" uuid="e2739dbc-7a66-42b0-9a17-e7f8e4b93cb4">
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -201,7 +201,7 @@ WHERE
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$V{Consumption Period 3} / $V{Consumption Period 3 Count}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
+				<textField pattern="#,##0.###;(#,##0.###-)" isBlankWhenNull="true">
 					<reportElement x="760" y="0" width="40" height="20" uuid="f827ab65-0195-461a-9d5c-ae6ecad6df26">
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -209,7 +209,7 @@ WHERE
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$V{Total Consumption} / $V{Product Code_COUNT}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
+				<textField pattern="#,##0.###;(#,##0.###-)" isBlankWhenNull="true">
 					<reportElement x="460" y="0" width="50" height="20" uuid="41ea6fb2-2b00-4e84-8ffb-e89185f96a9d"/>
 					<textElement textAlignment="Left"/>
 					<textFieldExpression><![CDATA[$V{Consumption Period 1 Count} > 0 ? $V{Period 1 Closing Balance}
