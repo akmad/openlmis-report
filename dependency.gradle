@@ -29,6 +29,9 @@ dependencies {
     compile "org.projectlombok:lombok:1.16.8"
     compile "org.webjars:swagger-ui:2.2.6"
 
+    compile "org.apache.poi:poi:3.10.1"
+    compile "org.apache.poi:poi-ooxml:3.10.1"
+
     testCompile "com.github.tomakehurst:wiremock:1.58"
     testCompile "com.jayway.restassured:rest-assured:2.7.0"
     testCompile "guru.nidi.raml:raml-tester:0.8.9"
