@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-05-17T12:27:27 -->
+<!-- 2017-05-19T13:18:10 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="district_lmis_summary" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="03f89d37-6dd5-4a05-a39e-8088f6a884a6">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -47,8 +47,10 @@ SELECT referencedata.facilities.name AS facilityname,
 FROM requisition.requisition_line_items
   JOIN referencedata.orderables ON 
    requisition.requisition_line_items.orderableid = referencedata.orderables.id 
+  JOIN referencedata.program_orderables ON
+   referencedata.orderables.id = referencedata.program_orderables.orderableid
   JOIN referencedata.orderable_display_categories ON 
-   referencedata.orderables.code LIKE referencedata.orderable_display_categories.code || '%'
+   referencedata.program_orderables.orderabledisplaycategoryid = referencedata.orderable_display_categories.id
   JOIN requisition.requisitions ON 
    requisition.requisition_line_items.requisitionid = requisition.requisitions.id 
   JOIN referencedata.programs ON 
@@ -69,6 +71,7 @@ WHERE
   AND requisition.requisitions.status = 'AUTHORIZED'
 ORDER BY referencedata.facilities.name DESC,
   referencedata.orderable_display_categories.displayorder ASC,
+  referencedata.program_orderables.displayorder ASC,
   referencedata.orderables.fullproductname DESC]]>
 	</queryString>
 	<field name="facilityname" class="java.lang.String"/>
@@ -146,8 +149,9 @@ ORDER BY referencedata.facilities.name DESC,
 					<text><![CDATA[Quantity Received]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="45" y="30" width="55" height="15" backcolor="#F0F0F0" uuid="12930b5c-5676-459b-9483-091c64f3fcd6">
+					<reportElement mode="Opaque" x="50" y="30" width="55" height="15" backcolor="#F0F0F0" uuid="12930b5c-5676-459b-9483-091c64f3fcd6">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					</reportElement>
 					<box topPadding="0" leftPadding="2" bottomPadding="2" rightPadding="0">
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#D4D4D4"/>
@@ -176,8 +180,10 @@ ORDER BY referencedata.facilities.name DESC,
 					<text><![CDATA[Unit of Issue]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="100" y="30" width="155" height="15" backcolor="#F0F0F0" uuid="d2d776af-5894-469d-9b37-32c4e64ffa43">
+					<reportElement mode="Opaque" x="105" y="30" width="150" height="15" backcolor="#F0F0F0" uuid="d2d776af-5894-469d-9b37-32c4e64ffa43">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					</reportElement>
 					<box topPadding="0" leftPadding="0" bottomPadding="2" rightPadding="0">
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#D4D4D4"/>
@@ -221,8 +227,9 @@ ORDER BY referencedata.facilities.name DESC,
 					<text><![CDATA[Requested Quantity]]></text>
 				</staticText>
 				<staticText>
-					<reportElement mode="Opaque" x="0" y="30" width="45" height="15" backcolor="#F0F0F0" uuid="1d0c97c0-a3ea-4870-828a-033dbbf6a2ec">
+					<reportElement mode="Opaque" x="0" y="30" width="50" height="15" backcolor="#F0F0F0" uuid="1d0c97c0-a3ea-4870-828a-033dbbf6a2ec">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					</reportElement>
 					<box topPadding="0" leftPadding="10" bottomPadding="2" rightPadding="0">
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#D4D4D4"/>
@@ -355,7 +362,10 @@ ORDER BY referencedata.facilities.name DESC,
 				<textFieldExpression><![CDATA[$F{unitofissue}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="100" y="0" width="155" height="15" uuid="b78d8dc7-9081-48ab-a7ae-0d6294ccc9da"/>
+				<reportElement x="105" y="0" width="150" height="15" uuid="b78d8dc7-9081-48ab-a7ae-0d6294ccc9da">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{productname}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.###;(#,##0.###-)">
@@ -385,15 +395,21 @@ ORDER BY referencedata.facilities.name DESC,
 				<textFieldExpression><![CDATA[($F{quantityrequired} == null) ? "-" : $F{quantityrequired}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="45" y="0" width="55" height="15" uuid="e551397e-cb09-466d-8082-28298fe9a398"/>
+				<reportElement x="50" y="0" width="55" height="15" uuid="e551397e-cb09-466d-8082-28298fe9a398">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
 				<box leftPadding="2" rightPadding="0"/>
 				<textElement textAlignment="Left"/>
 				<textFieldExpression><![CDATA[$F{productcode}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="44" height="15" uuid="790bc7ec-8ac7-4e37-bbf8-637803eaaccd"/>
+				<reportElement x="0" y="0" width="50" height="15" uuid="790bc7ec-8ac7-4e37-bbf8-637803eaaccd">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
 				<box leftPadding="10" rightPadding="20"/>
-				<textElement textAlignment="Left"/>
+				<textElement textAlignment="Left">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 		</band>
