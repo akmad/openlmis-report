@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-05-19T14:17:02 -->
+<!-- 2017-05-19T14:31:31 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="stock_status" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="843ea716-ea72-47f8-bbd7-b9050b973ed0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -157,7 +157,7 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 			<band height="35">
 				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				<printWhenExpression><![CDATA[$V{REPORT_COUNT}.intValue() > 0]]></printWhenExpression>
-				<textField>
+				<textField pattern="#,##0.###;(#,##0.###-)">
 					<reportElement key="" style="Row" x="380" y="0" width="174" height="15" uuid="e7a3f271-4acc-42a3-aefb-d2b5b113718c"/>
 					<box topPadding="2" leftPadding="2">
 						<pen lineColor="#D3D3D3"/>
@@ -285,7 +285,7 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 				</box>
 				<textFieldExpression><![CDATA[$V{Group1_COUNT}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="#,##0.###;(#,##0.###-)">
 				<reportElement key="" x="380" y="0" width="174" height="15" uuid="693e3b8d-af2d-4393-8a17-efd0ee05d273"/>
 				<box topPadding="2" leftPadding="2">
 					<pen lineColor="#D3D3D3"/>
