@@ -20,6 +20,7 @@ import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiForm
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -96,7 +97,12 @@ public class JasperTemplateController extends BaseController {
   @ResponseBody
   public List<JasperTemplateDto> getAllTemplates() {
     permissionService.canViewReports();
-    return JasperTemplateDto.newInstance(jasperTemplateRepository.findAll());
+    return JasperTemplateDto.newInstance(jasperTemplateRepository.findAll())
+            .stream()
+            // filter out the Aggregate Orders Report
+            .filter(template -> !template.getId().equals(
+                    UUID.fromString("f28d0ebd-7276-4453-bc3c-48556a4bd25a")))
+            .collect(Collectors.toList());
   }
 
   /**
