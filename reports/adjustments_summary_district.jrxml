@@ -8,28 +8,28 @@
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="period" class="java.lang.String">
 		<property name="displayName" value="Period Name"/>
-		<property name="selectExpression" value="/api/processingPeriods"/>
+		<property name="selectExpression" value="/api/reports/processingPeriods"/>
 		<property name="selectProperty" value="name"/>
 		<property name="displayProperty" value="name"/>
 		<property name="required" value="true"/>
 	</parameter>
 	<parameter name="district" class="java.lang.String">
 		<property name="displayName" value="District"/>
-		<property name="selectExpression" value="/api/geographicZones/search?levelNumber=3"/>
+		<property name="selectExpression" value="/api/reports/districts"/>
 		<property name="selectProperty" value="name"/>
 		<property name="displayProperty" value="name"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="program" class="java.lang.String">
 		<property name="displayName" value="Program Name"/>
-		<property name="selectExpression" value="/api/programs"/>
+		<property name="selectExpression" value="/api/reports/programs"/>
 		<property name="selectProperty" value="name"/>
 		<property name="displayProperty" value="name"/>
 		<property name="required" value="true"/>
 	</parameter>
 	<parameter name="adjustmentType" class="java.lang.String">
 		<property name="displayName" value="Adjustment Type"/>
-		<property name="selectExpression" value="/api/stockAdjustmentReasons/search"/>
+		<property name="selectExpression" value="/api/reports/stockAdjustmentReasons/search"/>
 		<property name="selectProperty" value="name"/>
 		<property name="displayProperty" value="name"/>
 		<property name="required" value="false"/>

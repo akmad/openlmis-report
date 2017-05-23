@@ -66,7 +66,7 @@
 	</subDataset>
 	<parameter name="Program" class="java.lang.String">
 		<property name="displayName" value="Program"/>
-		<property name="selectExpression" value="/api/programs"/>
+		<property name="selectExpression" value="/api/reports/programs"/>
 		<property name="selectProperty" value="id"/>
 		<property name="displayProperty" value="name"/>
 		<property name="required" value="true"/>
@@ -74,7 +74,7 @@
 	</parameter>
 	<parameter name="Period" class="java.lang.String">
 		<property name="displayName" value="Period"/>
-		<property name="selectExpression" value="/api/processingPeriods"/>
+		<property name="selectExpression" value="/api/reports/processingPeriods"/>
 		<property name="displayProperty" value="name"/>
 		<property name="selectProperty" value="id"/>
 		<property name="required" value="true"/>
@@ -82,7 +82,7 @@
 	</parameter>
 	<parameter name="GeographicZone" class="java.lang.String">
 		<property name="displayName" value="District"/>
-		<property name="selectExpression" value="/api/geographicZones/search?levelNumber=3"/>
+		<property name="selectExpression" value="/api/reports/districts"/>
 		<property name="displayProperty" value="name"/>
 		<property name="selectProperty" value="id"/>
 		<property name="required" value="false"/>

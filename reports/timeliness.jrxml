@@ -22,21 +22,21 @@
 	</style>
 	<parameter name="district" class="mw.gov.health.lmis.reports.dto.external.GeographicZoneDto">
 		<property name="displayName" value="District"/>
-		<property name="selectExpression" value="/api/geographicZones/search?levelNumber=3"/>
+		<property name="selectExpression" value="/api/reports/districts"/>
 		<property name="selectProperty" value="id"/>
 		<property name="displayProperty" value="name"/>
 		<property name="required" value="false"/>
 	</parameter>
 	<parameter name="program" class="mw.gov.health.lmis.reports.dto.external.ProgramDto">
 		<property name="displayName" value="Program Name"/>
-		<property name="selectExpression" value="/api/programs"/>
+		<property name="selectExpression" value="/api/reports/programs"/>
 		<property name="selectProperty" value="id"/>
 		<property name="displayProperty" value="name"/>
 		<property name="required" value="true"/>
 	</parameter>
 	<parameter name="period" class="mw.gov.health.lmis.reports.dto.external.ProcessingPeriodDto">
 		<property name="displayName" value="Period Name"/>
-		<property name="selectExpression" value="/api/processingPeriods"/>
+		<property name="selectExpression" value="/api/reports/processingPeriods"/>
 		<property name="selectProperty" value="id"/>
 		<property name="displayProperty" value="name"/>
 		<property name="required" value="true"/>
