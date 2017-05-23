@@ -52,7 +52,7 @@ public class ReportsController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public Collection<GeographicZoneDto> getDistricts() {
-    permissionService.canViewReports();
+    permissionService.canViewReportsOrOrders();
     return geographicZoneReferenceDataService.search(DISTRICT_LEVEL, null);
   }
 
@@ -65,7 +65,7 @@ public class ReportsController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public Collection<ProcessingPeriodDto> getProcessingPeriods() {
-    permissionService.canViewReports();
+    permissionService.canViewReportsOrOrders();
     return periodReferenceDataService.findAll();
   }
 
@@ -78,7 +78,7 @@ public class ReportsController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public Collection<ProgramDto> getPrograms() {
-    permissionService.canViewReports();
+    permissionService.canViewReportsOrOrders();
     return programReferenceDataService.findAll();
   }
 
@@ -93,7 +93,7 @@ public class ReportsController extends BaseController {
   @ResponseBody
   public Collection<StockAdjustmentReasonDto> findStockAdjustmentReasonsByProgramId(
           @RequestParam("program") UUID programId) {
-    permissionService.canViewReports();
+    permissionService.canViewReports(null);
     return stockAdjustmentReasonReferenceDataService.search(programId);
   }
 }

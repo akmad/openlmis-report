@@ -10,6 +10,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import mw.gov.health.lmis.reports.service.PermissionService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -52,7 +53,8 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
   @Test
   public void shouldGetAllTemplates() {
     // given
-    JasperTemplate[] templates = { generateTemplate(), generateTemplate(), generateTemplate() };
+    JasperTemplate[] templates = { generateTemplate(), generateTemplate(),
+            generateTemplate(PermissionService.AGGREGATE_ORDERS_ID) };
     given(jasperTemplateRepository.findAll()).willReturn(Arrays.asList(templates));
 
     // when
@@ -67,7 +69,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
 
     // then
     assertNotNull(result);
-    assertEquals(3, result.length);
+    assertEquals(2, result.length);
     assertThat(RAML_ASSERT_MESSAGE, restAssured.getLastReport(), RamlMatchers.hasNoViolations());
   }
 
@@ -225,18 +227,16 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
   }
 
   private JasperTemplate generateTemplate() {
-    return generateTemplate(true);
+    return generateTemplate(UUID.randomUUID());
   }
 
-  private JasperTemplate generateTemplate(boolean persistent) {
+  private JasperTemplate generateTemplate(UUID id) {
     JasperTemplate template = new JasperTemplate();
 
-    template.setId(UUID.randomUUID());
+    template.setId(id);
     template.setName("name");
 
-    if (persistent) {
-      given(jasperTemplateRepository.findOne(template.getId())).willReturn(template);
-    }
+    given(jasperTemplateRepository.findOne(id)).willReturn(template);
 
     return template;
   }

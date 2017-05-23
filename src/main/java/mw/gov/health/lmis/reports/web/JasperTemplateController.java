@@ -97,12 +97,11 @@ public class JasperTemplateController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public List<JasperTemplateDto> getAllTemplates() {
-    permissionService.canViewReports();
+    permissionService.canViewReports(null);
     return JasperTemplateDto.newInstance(jasperTemplateRepository.findAll())
         .stream()
         // filter out the Aggregate Orders Report
-        .filter(template -> !template.getId().equals(
-            UUID.fromString("f28d0ebd-7276-4453-bc3c-48556a4bd25a")))
+        .filter(template -> !template.getId().equals(PermissionService.AGGREGATE_ORDERS_ID))
         .collect(Collectors.toList());
   }
 
@@ -116,7 +115,7 @@ public class JasperTemplateController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public JasperTemplateDto getTemplate(@PathVariable("id") UUID templateId) {
-    permissionService.canViewReports();
+    permissionService.canViewReports(templateId);
     JasperTemplate jasperTemplate =
         jasperTemplateRepository.findOne(templateId);
     if (jasperTemplate == null) {
@@ -160,7 +159,7 @@ public class JasperTemplateController extends BaseController {
                                      @PathVariable("format") String format)
       throws JasperReportViewException {
 
-    permissionService.canViewReports();
+    permissionService.canViewReports(templateId);
 
     JasperTemplate template = jasperTemplateRepository.findOne(templateId);
 
