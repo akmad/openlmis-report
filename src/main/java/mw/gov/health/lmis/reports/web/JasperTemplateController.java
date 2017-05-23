@@ -17,13 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-
 import mw.gov.health.lmis.reports.domain.JasperTemplate;
 import mw.gov.health.lmis.reports.dto.JasperTemplateDto;
 import mw.gov.health.lmis.reports.exception.JasperReportViewException;
@@ -34,6 +27,14 @@ import mw.gov.health.lmis.reports.service.JasperReportsViewService;
 import mw.gov.health.lmis.reports.service.JasperTemplateService;
 import mw.gov.health.lmis.reports.service.PermissionService;
 import mw.gov.health.lmis.utils.Message;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @Transactional
@@ -98,11 +99,11 @@ public class JasperTemplateController extends BaseController {
   public List<JasperTemplateDto> getAllTemplates() {
     permissionService.canViewReports();
     return JasperTemplateDto.newInstance(jasperTemplateRepository.findAll())
-            .stream()
-            // filter out the Aggregate Orders Report
-            .filter(template -> !template.getId().equals(
-                    UUID.fromString("f28d0ebd-7276-4453-bc3c-48556a4bd25a")))
-            .collect(Collectors.toList());
+        .stream()
+        // filter out the Aggregate Orders Report
+        .filter(template -> !template.getId().equals(
+            UUID.fromString("f28d0ebd-7276-4453-bc3c-48556a4bd25a")))
+        .collect(Collectors.toList());
   }
 
   /**
@@ -155,34 +156,47 @@ public class JasperTemplateController extends BaseController {
   @RequestMapping(value = "/{id}/{format}", method = RequestMethod.GET)
   @ResponseBody
   public ModelAndView generateReport(HttpServletRequest request,
-      @PathVariable("id") UUID templateId,
-      @PathVariable("format") String format) throws JasperReportViewException {
+                                     @PathVariable("id") UUID templateId,
+                                     @PathVariable("format") String format)
+      throws JasperReportViewException {
+
     permissionService.canViewReports();
 
     JasperTemplate template = jasperTemplateRepository.findOne(templateId);
+
     if (template == null) {
       throw new NotFoundMessageException(new Message(
           ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId));
     }
 
-    JasperReportsMultiFormatView jasperView = jasperReportsViewService
-        .getJasperReportsView(template, request);
-
-    Map<String, Object> map = jasperTemplateService
-        .mapRequestParametersToTemplate(request, template);
+    Map<String, Object> map = jasperTemplateService.mapRequestParametersToTemplate(
+        request, template
+    );
     map.put("format", format);
     map.put("imagesDirectory", "images/");
 
-    if (TIMELINESS_REPORT.equals(template.getType())) {
-      return jasperReportsViewService.getTimelinessJasperReportView(jasperView, map);
-    }
+    JasperReportsMultiFormatView jasperView;
 
     if (REPORTING_RATE_REPORT.equals(template.getType())) {
       map.putIfAbsent("DueDays", String.valueOf(DUE_DAYS));
-      jasperView = jasperReportsViewService
-              .getReportingRateJasperReportsView(template, request, map);
+
+      jasperView = jasperReportsViewService.getReportingRateJasperReportsView(
+          template, request, map
+      );
+    } else {
+      jasperView = jasperReportsViewService.getJasperReportsView(template, request);
     }
 
-    return new ModelAndView(jasperView, map);
+    String fileName = template.getName().replaceAll("\\s+", "_");
+    String contentDisposition = "inline; filename=" + fileName + "." + format;
+
+    jasperView
+        .getContentDispositionMappings()
+        .setProperty(format, contentDisposition.toLowerCase(Locale.ENGLISH));
+
+    return TIMELINESS_REPORT.equals(template.getType())
+        ? jasperReportsViewService.getTimelinessJasperReportView(jasperView, map)
+        : new ModelAndView(jasperView, map);
   }
+
 }
