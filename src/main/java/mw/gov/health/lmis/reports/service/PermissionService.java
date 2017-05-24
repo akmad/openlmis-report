@@ -2,6 +2,7 @@ package mw.gov.health.lmis.reports.service;
 
 import static mw.gov.health.lmis.reports.i18n.PermissionMessageKeys.ERROR_NO_PERMISSION;
 
+import mw.gov.health.lmis.reports.dto.external.DetailedRoleAssignmentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,9 +66,24 @@ public class PermissionService {
   }
 
   private Boolean hasPermission(String rightName) {
+    if (ORDERS_VIEW.equals(rightName)) {
+      return hasFulfillmentPermission(rightName);
+    }
     UserDto user = authenticationHelper.getCurrentUser();
     RightDto right = authenticationHelper.getRight(rightName);
     ResultDto<Boolean> result = userReferenceDataService.hasRight(user.getId(), right.getId());
     return null != result && result.getResult();
+  }
+
+  // Check if a user has fulfillment permission without specifying the warehouse
+  private Boolean hasFulfillmentPermission(String rightName) {
+    UserDto user = authenticationHelper.getCurrentUser();
+    List<DetailedRoleAssignmentDto> roleAssignments =
+            userReferenceDataService.getUserRightsAndRoles(user.getId());
+
+    return roleAssignments.stream().anyMatch(
+        assignment -> assignment.getRole().getRights().stream().anyMatch(
+            right -> right.getName().equals(rightName)
+    ));
   }
 }

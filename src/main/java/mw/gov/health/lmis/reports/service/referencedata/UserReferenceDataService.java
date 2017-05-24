@@ -1,9 +1,12 @@
 package mw.gov.health.lmis.reports.service.referencedata;
 
+import mw.gov.health.lmis.reports.dto.external.DetailedRoleAssignmentDto;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -41,6 +44,17 @@ public class UserReferenceDataService extends BaseReferenceDataService<UserDto> 
 
     Page<UserDto> users = getPage("search", RequestParameters.init(), requestBody);
     return users.getContent().isEmpty() ? null : users.getContent().get(0);
+  }
+
+  /**
+   * Get all rights and roles of the specified user.
+   *
+   * @param user UUID of the user to retrieve.
+   * @return a set of user role assignments.
+   */
+  public List<DetailedRoleAssignmentDto> getUserRightsAndRoles(UUID user) {
+    return findAll(user + "/roleAssignments", RequestParameters.init(), null,
+            HttpMethod.GET, DetailedRoleAssignmentDto[].class);
   }
 
   /**
