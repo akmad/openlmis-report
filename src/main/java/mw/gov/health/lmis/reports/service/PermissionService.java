@@ -25,6 +25,8 @@ public class PermissionService {
   public static final String ORDERS_VIEW = "ORDERS_VIEW";
   public static final UUID AGGREGATE_ORDERS_ID =
           UUID.fromString("f28d0ebd-7276-4453-bc3c-48556a4bd25a");
+  public static final UUID ORDER_ID =
+          UUID.fromString("3c9d1e80-1e45-4adb-97d9-208b6fdceeec");
 
   @Autowired
   private AuthenticationHelper authenticationHelper;
@@ -42,7 +44,8 @@ public class PermissionService {
    *                   the user can have either the ORDERS_VIEW or REPORTS_VIEW permission
    */
   public void canViewReports(UUID templateId) {
-    if (templateId != null && templateId.equals(AGGREGATE_ORDERS_ID)) {
+    if (templateId != null && (templateId.equals(AGGREGATE_ORDERS_ID)
+            || templateId.equals(ORDER_ID))) {
       canViewReportsOrOrders();
     } else {
       checkPermission(REPORTS_VIEW);

@@ -44,6 +44,7 @@ public class JasperTemplateController extends BaseController {
 
   private static final String TIMELINESS_REPORT = "Timeliness Report";
   private static final String REPORTING_RATE_REPORT = "Reporting Rate Report";
+  private static final String ORDER_REPORT = "Order Report";
   private static final int DUE_DAYS = 10;
   private static final String CONSISTENCY_REPORT = "Consistency Report";
 
@@ -101,7 +102,8 @@ public class JasperTemplateController extends BaseController {
     return JasperTemplateDto.newInstance(jasperTemplateRepository.findAll())
         .stream()
         // filter out the Aggregate Orders Report
-        .filter(template -> !template.getId().equals(PermissionService.AGGREGATE_ORDERS_ID))
+        .filter(template -> !(template.getId().equals(PermissionService.AGGREGATE_ORDERS_ID)
+                || template.getId().equals(PermissionService.ORDER_ID)))
         .collect(Collectors.toList());
   }
 
@@ -193,9 +195,14 @@ public class JasperTemplateController extends BaseController {
         .getContentDispositionMappings()
         .setProperty(format, contentDisposition.toLowerCase(Locale.ENGLISH));
 
-    return TIMELINESS_REPORT.equals(template.getType())
-        ? jasperReportsViewService.getTimelinessJasperReportView(jasperView, map)
-        : new ModelAndView(jasperView, map);
+    String templateType = template.getType();
+    if (TIMELINESS_REPORT.equals(templateType)) {
+      return jasperReportsViewService.getTimelinessJasperReportView(jasperView, map);
+    } else if (ORDER_REPORT.equals(templateType)) {
+      return jasperReportsViewService.getOrderJasperReportView(jasperView, map);
+    } else {
+      return new ModelAndView(jasperView, map);
+    }
   }
 
 }

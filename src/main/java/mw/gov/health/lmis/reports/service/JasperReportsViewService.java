@@ -12,15 +12,19 @@ import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
 import mw.gov.health.lmis.reports.dto.ReportingRateReportDto;
 import mw.gov.health.lmis.reports.dto.external.FacilityDto;
 import mw.gov.health.lmis.reports.dto.external.GeographicZoneDto;
+import mw.gov.health.lmis.reports.dto.external.OrderDto;
 import mw.gov.health.lmis.reports.dto.external.ProcessingPeriodDto;
 import mw.gov.health.lmis.reports.dto.external.ProgramDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionStatusDto;
 import mw.gov.health.lmis.reports.dto.external.TimelinessReportFacilityDto;
+import mw.gov.health.lmis.reports.service.fulfillment.OrderService;
+import mw.gov.health.lmis.reports.service.referencedata.BaseReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.FacilityReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.GeographicZoneReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.PeriodReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.ProgramReferenceDataService;
+import mw.gov.health.lmis.reports.service.referencedata.UserReferenceDataService;
 import mw.gov.health.lmis.reports.service.requisition.RequisitionService;
 import mw.gov.health.lmis.reports.web.ReportingRateReportDtoBuilder;
 import net.sf.jasperreports.engine.JRExporterParameter;
@@ -48,6 +52,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -84,6 +89,12 @@ public class JasperReportsViewService {
 
   @Autowired
   private ReportingRateReportDtoBuilder reportingRateReportDtoBuilder;
+
+  @Autowired
+  private OrderService orderService;
+
+  @Autowired
+  private UserReferenceDataService userReferenceDataService;
 
   /**
    * Create Jasper Report View.
@@ -261,6 +272,31 @@ public class JasperReportsViewService {
     return new ModelAndView(jasperView, parameters);
   }
 
+  /**
+   * Get customized Jasper Report View for Order Report.
+   *
+   * @param jasperView generic jasper report view
+   * @param parameters template parameters populated with values from the request
+   * @return customized jasper view.
+   */
+  public ModelAndView getOrderJasperReportView(JasperReportsMultiFormatView jasperView,
+                                               Map<String, Object> parameters) {
+    OrderDto order = orderService.findOne(
+            UUID.fromString(parameters.get("order").toString())
+    );
+    order.getStatusChanges().forEach(
+        statusChange -> statusChange.setAuthor(
+            getIfPresent(userReferenceDataService, statusChange.getAuthorId()))
+    );
+    parameters.put("datasource", new JRBeanCollectionDataSource(order.getOrderLineItems()));
+    parameters.put("order", order);
+
+    return new ModelAndView(jasperView, parameters);
+  }
+
+  private <T> T getIfPresent(BaseReferenceDataService<T> service, UUID id) {
+    return Optional.ofNullable(id).isPresent() ? service.findOne(id) : null;
+  }
 
   private List<FacilityDto> getFacilitiesForTimelinessReport(
           ProgramDto program, ProcessingPeriodDto processingPeriod, GeographicZoneDto district) {
