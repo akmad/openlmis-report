@@ -18,6 +18,7 @@ import mw.gov.health.lmis.reports.dto.external.ProgramDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionStatusDto;
 import mw.gov.health.lmis.reports.dto.external.TimelinessReportFacilityDto;
+import mw.gov.health.lmis.reports.dto.external.UserDto;
 import mw.gov.health.lmis.reports.service.fulfillment.OrderService;
 import mw.gov.health.lmis.reports.service.referencedata.BaseReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.FacilityReferenceDataService;
@@ -27,6 +28,7 @@ import mw.gov.health.lmis.reports.service.referencedata.ProgramReferenceDataServ
 import mw.gov.health.lmis.reports.service.referencedata.UserReferenceDataService;
 import mw.gov.health.lmis.reports.service.requisition.RequisitionService;
 import mw.gov.health.lmis.reports.web.ReportingRateReportDtoBuilder;
+import mw.gov.health.lmis.utils.AuthenticationHelper;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperReport;
 
@@ -95,6 +97,9 @@ public class JasperReportsViewService {
 
   @Autowired
   private UserReferenceDataService userReferenceDataService;
+
+  @Autowired
+  private AuthenticationHelper authenticationHelper;
 
   /**
    * Create Jasper Report View.
@@ -288,8 +293,11 @@ public class JasperReportsViewService {
         statusChange -> statusChange.setAuthor(
             getIfPresent(userReferenceDataService, statusChange.getAuthorId()))
     );
+    UserDto currentUser = authenticationHelper.getCurrentUser();
+
     parameters.put("datasource", new JRBeanCollectionDataSource(order.getOrderLineItems()));
     parameters.put("order", order);
+    parameters.put("user", currentUser.printName());
 
     return new ModelAndView(jasperView, parameters);
   }

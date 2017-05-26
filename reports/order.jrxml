@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-05-24T19:37:04 -->
+<!-- 2017-05-26T18:27:41 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="order" pageWidth="595" pageHeight="842" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="6e843fe2-ce72-4257-a4c3-1df03728dc95">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -28,6 +28,7 @@
 		<property name="required" value="true"/>
 	</parameter>
 	<parameter name="imagesDirectory" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="user" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -80,17 +81,6 @@
 		<band height="170">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<staticText>
-				<reportElement x="0" y="10" width="250" height="60" uuid="69507ad9-863a-4e09-a591-90e161383f9e"/>
-				<textElement>
-					<font size="10"/>
-					<paragraph lineSpacing="Fixed" lineSpacingSize="12.0"/>
-				</textElement>
-				<text><![CDATA[To The Chief Executive Officer
-Central Medical Stores Trust
-Private Bag 55
-Lilongwe]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="321" y="40" width="80" height="15" uuid="2ebe95a1-27cc-45b6-86c0-4fe603b2a68c"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<text><![CDATA[Facility: ]]></text>
@@ -108,7 +98,7 @@ Lilongwe]]></text>
 			<staticText>
 				<reportElement x="321" y="115" width="80" height="15" uuid="41672a04-8b3f-4edb-9755-9ab38e5f5084"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<text><![CDATA[Region:]]></text>
+				<text><![CDATA[Zone:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="321" y="130" width="80" height="15" uuid="5d8a3b43-4b11-4b19-bf7d-9c6491fb978f"/>
@@ -186,6 +176,14 @@ Lilongwe]]></text>
 			<textField isBlankWhenNull="true">
 				<reportElement key="" x="411" y="145" width="145" height="15" uuid="abe3fdb1-aa3b-4233-ba3d-1353fa702441"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+			</textField>
+			<textField>
+				<reportElement x="0" y="10" width="250" height="60" uuid="9cbbaa19-e521-48b0-b641-4670785813fa"/>
+				<textElement markup="html">
+					<font size="10"/>
+					<paragraph lineSpacing="Fixed" lineSpacingSize="12.0"/>
+				</textElement>
+				<textFieldExpression><![CDATA["To The Regional Branch Manager<br>" + $P{order}.getSupplyingFacility().getName() + "<br>Private Bag 55<br>Lilongwe"]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -391,6 +389,7 @@ Lilongwe]]></text>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
+				<textFieldExpression><![CDATA[$P{user}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="" x="290" y="140" width="80" height="20" uuid="1bf18c7f-35a2-4b7c-b8a5-5b9bacf1183d"/>
@@ -485,6 +484,7 @@ Lilongwe]]></text>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("MMM d, yyyy h:mm:ss a").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="380" y="140" width="40" height="20" uuid="a64dde3f-b081-496c-a33d-521309f2407e"/>
