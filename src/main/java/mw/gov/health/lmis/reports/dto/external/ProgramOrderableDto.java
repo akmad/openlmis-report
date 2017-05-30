@@ -3,6 +3,7 @@ package mw.gov.health.lmis.reports.dto.external;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -18,4 +19,5 @@ public class ProgramOrderableDto {
   private Integer displayOrder;
   private Integer dosesPerPatient;
   private MoneyDto value;
+  private BigDecimal pricePerPack;
 }
