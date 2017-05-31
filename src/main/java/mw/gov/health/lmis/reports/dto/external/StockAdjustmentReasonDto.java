@@ -9,9 +9,9 @@ import java.util.UUID;
 @Setter
 public class StockAdjustmentReasonDto {
   private UUID id;
-  private ProgramDto program;
   private String name;
   private String description;
   private Boolean additive;
   private Integer displayOrder;
+  private ProgramDto program;
 }

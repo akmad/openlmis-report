@@ -3,6 +3,8 @@ package mw.gov.health.lmis.reports.service;
 import static java.io.File.createTempFile;
 import static mw.gov.health.lmis.reports.dto.external.TimelinessReportFacilityDto.DISTRICT_LEVEL;
 import static mw.gov.health.lmis.reports.i18n.JasperMessageKeys.ERROR_JASPER_FILE_CREATION;
+import static mw.gov.health.lmis.reports.i18n.MessageKeys.ERROR_IO;
+import static mw.gov.health.lmis.reports.i18n.MessageKeys.ERROR_JASPER_FILE_FORMAT;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_CLASS_NOT_FOUND;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_IO;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_TEMPLATE_PARAMETER_INVALID;
@@ -10,6 +12,7 @@ import static net.sf.jasperreports.engine.export.JRHtmlExporterParameter.IS_USIN
 import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
 
 import mw.gov.health.lmis.reports.dto.ReportingRateReportDto;
+import mw.gov.health.lmis.reports.dto.RequisitionReportDto;
 import mw.gov.health.lmis.reports.dto.external.FacilityDto;
 import mw.gov.health.lmis.reports.dto.external.GeographicZoneDto;
 import mw.gov.health.lmis.reports.dto.external.OrderDto;
@@ -17,6 +20,8 @@ import mw.gov.health.lmis.reports.dto.external.ProcessingPeriodDto;
 import mw.gov.health.lmis.reports.dto.external.ProgramDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionStatusDto;
+import mw.gov.health.lmis.reports.dto.external.RequisitionTemplateColumnDto;
+import mw.gov.health.lmis.reports.dto.external.RequisitionTemplateDto;
 import mw.gov.health.lmis.reports.dto.external.TimelinessReportFacilityDto;
 import mw.gov.health.lmis.reports.dto.external.UserDto;
 import mw.gov.health.lmis.reports.service.fulfillment.OrderService;
@@ -28,11 +33,18 @@ import mw.gov.health.lmis.reports.service.referencedata.ProgramReferenceDataServ
 import mw.gov.health.lmis.reports.service.referencedata.UserReferenceDataService;
 import mw.gov.health.lmis.reports.service.requisition.RequisitionService;
 import mw.gov.health.lmis.reports.web.ReportingRateReportDtoBuilder;
+import mw.gov.health.lmis.reports.web.RequisitionReportDtoBuilder;
 import mw.gov.health.lmis.utils.AuthenticationHelper;
+import mw.gov.health.lmis.utils.ReportUtils;
+import net.sf.jasperreports.engine.JRBand;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -45,6 +57,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -70,6 +83,10 @@ import mw.gov.health.lmis.utils.Message;
 
 @Service
 public class JasperReportsViewService {
+  private static final String REQUISITION_REPORT_DIR = "/jasperTemplates/requisition.jrxml";
+  private static final String REQUISITION_LINE_REPORT_DIR =
+          "/jasperTemplates/requisitionLines.jrxml";
+  private static final String DATASOURCE = "datasource";
 
   @Autowired
   private DataSource replicationDataSource;
@@ -100,6 +117,9 @@ public class JasperReportsViewService {
 
   @Autowired
   private AuthenticationHelper authenticationHelper;
+
+  @Autowired
+  private RequisitionReportDtoBuilder requisitionReportDtoBuilder;
 
   /**
    * Create Jasper Report View.
@@ -238,7 +258,7 @@ public class JasperReportsViewService {
 
     ReportingRateReportDto reportDto = reportingRateReportDtoBuilder.build(program, period, zone,
             dueDays);
-    params.put("datasource", new JRBeanCollectionDataSource(Collections.singletonList(reportDto)));
+    params.put(DATASOURCE, new JRBeanCollectionDataSource(Collections.singletonList(reportDto)));
 
     if (getApplicationContext(request) != null) {
       jasperView.setApplicationContext(getApplicationContext(request));
@@ -269,7 +289,7 @@ public class JasperReportsViewService {
     }
     List<FacilityDto> facilities = getFacilitiesForTimelinessReport(program, period, district);
 
-    parameters.put("datasource", new JRBeanCollectionDataSource(facilities));
+    parameters.put(DATASOURCE, new JRBeanCollectionDataSource(facilities));
     parameters.put("program", program);
     parameters.put("period", period);
     parameters.put("district", district);
@@ -295,11 +315,82 @@ public class JasperReportsViewService {
     );
     UserDto currentUser = authenticationHelper.getCurrentUser();
 
-    parameters.put("datasource", new JRBeanCollectionDataSource(order.getOrderLineItems()));
+    parameters.put(DATASOURCE, new JRBeanCollectionDataSource(order.getOrderLineItems()));
     parameters.put("order", order);
     parameters.put("user", currentUser.printName());
 
     return new ModelAndView(jasperView, parameters);
+  }
+
+  /**
+   * Create custom Jasper Report View for printing a requisition.
+   *
+   * @param requisition requisition to render report for.
+   * @param request  it is used to take web application context.
+   * @return created jasper view.
+   * @throws JasperReportViewException if there will be any problem with creating the view.
+   */
+  public ModelAndView getRequisitionJasperReportView(
+          RequisitionDto requisition, HttpServletRequest request) throws JasperReportViewException {
+    RequisitionReportDto reportDto = requisitionReportDtoBuilder.build(requisition);
+    RequisitionTemplateDto template = requisition.getTemplate();
+
+    Map<String, Object> params = ReportUtils.createParametersMap();
+    params.put("subreport", createCustomizedRequisitionLineSubreport(template));
+    params.put(DATASOURCE, Collections.singletonList(reportDto));
+    params.put("template", template);
+
+    JasperReportsMultiFormatView jasperView = new JasperReportsMultiFormatView();
+    setExportParams(jasperView);
+    setCustomizedJasperTemplateForRequisitionReport(jasperView);
+
+    if (getApplicationContext(request) != null) {
+      jasperView.setApplicationContext(getApplicationContext(request));
+    }
+    return new ModelAndView(jasperView, params);
+  }
+
+
+  private JasperDesign createCustomizedRequisitionLineSubreport(RequisitionTemplateDto template)
+          throws JasperReportViewException {
+    try (InputStream inputStream = getClass().getResourceAsStream(REQUISITION_LINE_REPORT_DIR)) {
+      JasperDesign design = JRXmlLoader.load(inputStream);
+      JRBand detail = design.getDetailSection().getBands()[0];
+      JRBand header = design.getColumnHeader();
+
+      Map<String, RequisitionTemplateColumnDto> columns =
+              ReportUtils.getSortedTemplateColumnsForPrint(template.getColumnsMap());
+
+      ReportUtils.customizeBandWithTemplateFields(detail, columns, design.getPageWidth(), 9);
+      ReportUtils.customizeBandWithTemplateFields(header, columns, design.getPageWidth(), 9);
+
+      return design;
+    } catch (IOException err) {
+      throw new JasperReportViewException(err, ERROR_IO, err.getMessage());
+    } catch (JRException err) {
+      throw new JasperReportViewException(err, ERROR_JASPER_FILE_FORMAT, err.getMessage());
+    }
+  }
+
+  private void setCustomizedJasperTemplateForRequisitionReport(
+          JasperReportsMultiFormatView jasperView) throws JasperReportViewException {
+    try (InputStream inputStream = getClass().getResourceAsStream(REQUISITION_REPORT_DIR)) {
+      File reportTempFile = createTempFile("requisitionReport_temp", ".jasper");
+      JasperReport report = JasperCompileManager.compileReport(inputStream);
+
+      try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+           ObjectOutputStream out = new ObjectOutputStream(bos)) {
+
+        out.writeObject(report);
+        writeByteArrayToFile(reportTempFile, bos.toByteArray());
+
+        jasperView.setUrl(reportTempFile.toURI().toURL().toString());
+      }
+    } catch (IOException err) {
+      throw new JasperReportViewException(err, ERROR_IO, err.getMessage());
+    } catch (JRException err) {
+      throw new JasperReportViewException(err, ERROR_JASPER_FILE_FORMAT, err.getMessage());
+    }
   }
 
   private <T> T getIfPresent(BaseReferenceDataService<T> service, UUID id) {

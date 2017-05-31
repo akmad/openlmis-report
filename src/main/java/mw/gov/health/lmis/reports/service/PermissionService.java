@@ -3,7 +3,10 @@ package mw.gov.health.lmis.reports.service;
 import static mw.gov.health.lmis.reports.i18n.PermissionMessageKeys.ERROR_NO_PERMISSION;
 
 import mw.gov.health.lmis.reports.dto.external.DetailedRoleAssignmentDto;
+import mw.gov.health.lmis.reports.dto.external.RequisitionDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.stereotype.Service;
 
 import mw.gov.health.lmis.reports.dto.external.ResultDto;
@@ -27,6 +30,7 @@ public class PermissionService {
           UUID.fromString("f28d0ebd-7276-4453-bc3c-48556a4bd25a");
   public static final UUID ORDER_ID =
           UUID.fromString("3c9d1e80-1e45-4adb-97d9-208b6fdceeec");
+  public static final String REQUISITION_VIEW = "REQUISITION_VIEW";
 
   @Autowired
   private AuthenticationHelper authenticationHelper;
@@ -52,12 +56,26 @@ public class PermissionService {
     }
   }
 
+  /**
+   * Checks if current user has permission to view a requisition.
+   */
+  public void canViewRequisition(RequisitionDto requisition) {
+    checkPermission(REQUISITION_VIEW, requisition.getProgram().getId(),
+            requisition.getFacility().getId(), null);
+  }
+
   public void canViewReportsOrOrders() {
     checkAnyPermission(Arrays.asList(REPORTS_VIEW, ORDERS_VIEW));
   }
 
   private void checkPermission(String rightName) {
     if (!hasPermission(rightName)) {
+      throw new PermissionMessageException(new Message(ERROR_NO_PERMISSION, rightName));
+    }
+  }
+
+  private void checkPermission(String rightName, UUID program, UUID facility, UUID warehouse) {
+    if (!hasPermission(rightName, program, facility, warehouse)) {
       throw new PermissionMessageException(new Message(ERROR_NO_PERMISSION, rightName));
     }
   }
@@ -75,6 +93,20 @@ public class PermissionService {
     UserDto user = authenticationHelper.getCurrentUser();
     RightDto right = authenticationHelper.getRight(rightName);
     ResultDto<Boolean> result = userReferenceDataService.hasRight(user.getId(), right.getId());
+    return null != result && result.getResult();
+  }
+
+  private Boolean hasPermission(String rightName, UUID program, UUID facility, UUID warehouse) {
+    OAuth2Authentication authentication = (OAuth2Authentication) SecurityContextHolder.getContext()
+            .getAuthentication();
+    if (authentication.isClientOnly()) {
+      return true;
+    }
+    UserDto user = authenticationHelper.getCurrentUser();
+    RightDto right = authenticationHelper.getRight(rightName);
+    ResultDto<Boolean> result = userReferenceDataService.hasRight(
+            user.getId(), right.getId(), program, facility, warehouse
+    );
     return null != result && result.getResult();
   }
 

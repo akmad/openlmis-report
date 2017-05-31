@@ -128,6 +128,24 @@ resourceTypes:
 /api:
 
   /reports:
+      /requisitions/{id}/print:
+        uriParameters:
+            id:
+                displayName: requisitionId
+                type: string
+                required: true
+                repeat: false
+        get:
+            is: [ secured ]
+            description: Print requisition to a pdf file.
+            responses:
+                200:
+                    body:
+                      application/pdf:
+                404:
+                    body:
+                      application/json:
+                        schema: localizedMessage
       /districts:
           displayName: Districts
           get:
