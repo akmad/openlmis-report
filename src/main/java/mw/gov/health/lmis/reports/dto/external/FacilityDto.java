@@ -12,6 +12,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FacilityDto {
+
+  public static final Integer DISTRICT_LEVEL = 3;
+
   private UUID id;
   private String code;
   private String name;

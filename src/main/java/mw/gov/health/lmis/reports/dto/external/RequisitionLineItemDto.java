@@ -13,6 +13,10 @@ import java.util.UUID;
 @Setter
 public class RequisitionLineItemDto {
 
+  public static final String BEGINNING_BALANCE = "beginningBalance";
+  public static final String ADJUSTED_CONSUMPTION = "adjustedConsumption";
+  public static final String AVERAGE_CONSUMPTION = "averageConsumption";
+
   private UUID id;
   private OrderableDto orderable;
   private Integer beginningBalance;
