@@ -164,7 +164,7 @@
 				<textElement>
 					<font size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Zone:]]></text>
+				<text><![CDATA[District:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="420" y="45" width="60" height="10" uuid="f01ca8e1-24ca-4e6e-8ae5-148769220580"/>
