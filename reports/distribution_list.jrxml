@@ -81,7 +81,7 @@ WHERE
 	programs.name = $P{program}
 	AND ($P{district} IS NULL OR zones.id IN (SELECT id FROM findChildZones))
 	AND periods.id IN (SELECT id FROM findPreviousPeriods LIMIT 3)
-	AND requisitions.status = 'APPROVED'
+	AND requisitions.status = 'AUTHORIZED'
 	AND facilities.active = TRUE]]>
 	</queryString>
 	<field name="periodname" class="java.lang.String"/>
