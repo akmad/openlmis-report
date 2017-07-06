@@ -60,15 +60,15 @@ FROM requisition.requisition_line_items
   JOIN referencedata.processing_periods ON 
    requisition.requisitions.processingperiodid = referencedata.processing_periods.id 
   JOIN referencedata.geographic_zones ON 
-   referencedata.facilities.geographiczoneid = referencedata.geographic_zones.id 
+   referencedata.facilities.geographiczoneid = referencedata.geographic_zones.id
   JOIN referencedata.geographic_levels ON
   referencedata.geographic_zones.levelid = referencedata.geographic_levels.id
-WHERE 
+WHERE
    referencedata.programs.name = $P{program}
    AND referencedata.processing_periods.name = $P{period}
    AND ($P{district} IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
   AND referencedata.facilities.active = true
-  AND requisition.requisitions.status = ANY('{APPROVED,RELEASED}')
+  AND (requisition.requisitions.status = 'APPROVED' OR requisition.requisitions.status = 'RELEASED')
 ORDER BY referencedata.facilities.name DESC,
   referencedata.orderable_display_categories.displayorder ASC,
   referencedata.program_orderables.displayorder ASC,

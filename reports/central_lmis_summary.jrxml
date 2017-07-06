@@ -54,7 +54,7 @@ WHERE
    referencedata.programs.name = $P{program}
    AND referencedata.processing_periods.name = $P{period}
   AND referencedata.facilities.active = true
-  AND requisition.requisitions.status = ANY('{APPROVED,RELEASED}')
+  AND (requisition.requisitions.status = 'APPROVED' OR requisition.requisitions.status = 'RELEASED')
 GROUP BY category, productcode, productname, unitofissue, geographiczone, orderable_display_categories.displayorder, program_orderables.displayorder
 ORDER BY geographiczone DESC, 
   orderable_display_categories.displayorder ASC,
