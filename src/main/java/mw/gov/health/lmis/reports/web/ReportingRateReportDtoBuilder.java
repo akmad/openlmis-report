@@ -4,14 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mw.gov.health.lmis.reports.dto.ReportingRateReportDto;
+import mw.gov.health.lmis.reports.dto.external.BasicRequisitionDto;
 import mw.gov.health.lmis.reports.dto.external.FacilityDto;
 import mw.gov.health.lmis.reports.dto.external.GeographicZoneDto;
 import mw.gov.health.lmis.reports.dto.external.ProcessingPeriodDto;
 import mw.gov.health.lmis.reports.dto.external.ProgramDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionCompletionDto;
-import mw.gov.health.lmis.reports.dto.external.RequisitionDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionStatusDto;
-import mw.gov.health.lmis.reports.dto.external.StatusChangeDto;
+import mw.gov.health.lmis.reports.dto.external.StatusLogEntryDto;
 import mw.gov.health.lmis.reports.service.referencedata.FacilityReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.GeographicZoneReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.PeriodReferenceDataService;
@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -120,7 +119,7 @@ public class ReportingRateReportDtoBuilder {
       LocalDate dueDate = period.getEndDate().plusDays(dueDays);
 
       for (FacilityDto facility : facilities) {
-        Page<RequisitionDto> requisitions = requisitionService
+        Page<BasicRequisitionDto> requisitions = requisitionService
             .search(facility.getId(), program.getId(), null, null,
                     period.getId(), null, null, false);
 
@@ -149,20 +148,23 @@ public class ReportingRateReportDtoBuilder {
   }
 
   void updateCompletionsWithRequisitions(
-      CompletionCounter completions, List<RequisitionDto> requisitions, LocalDate dueDate) {
+      CompletionCounter completions, List<BasicRequisitionDto> requisitions, LocalDate dueDate) {
     int missed = completions.getMissed();
     int late = completions.getLate();
     int onTime = completions.getOnTime();
 
     if (!requisitions.isEmpty()) {
-      for (RequisitionDto requisition : requisitions) {
-        Optional<StatusChangeDto> entry = requisition.getStatusHistory().stream()
-            .filter(statusChange -> statusChange.getStatus() == REQUIRED_STATUS)
-            .findFirst();
-        if (!entry.isPresent()) {
+      for (BasicRequisitionDto requisition : requisitions) {
+        if (requisition.getStatusChanges() == null) {
+
+          continue;
+        }
+        StatusLogEntryDto entry = requisition.getStatusChanges().getOrDefault(
+            REQUIRED_STATUS, null);
+        if (entry == null) {
           missed++;
         } else {
-          LocalDate submissionDate = entry.get().getCreatedDate().toLocalDate();
+          LocalDate submissionDate = entry.getChangeDate().toLocalDate();
           if (submissionDate.isAfter(dueDate)) {
             late++;
           } else {

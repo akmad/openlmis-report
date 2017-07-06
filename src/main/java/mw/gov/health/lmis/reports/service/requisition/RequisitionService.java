@@ -1,9 +1,11 @@
 package mw.gov.health.lmis.reports.service.requisition;
 
+import mw.gov.health.lmis.reports.dto.external.BasicRequisitionDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionStatusDto;
 import mw.gov.health.lmis.utils.RequestParameters;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -32,22 +34,23 @@ public class RequisitionService extends BaseRequisitionService<RequisitionDto> {
   /**
    * Finds requisitions matching all of the provided parameters.
    */
-  public Page<RequisitionDto> search(UUID facility, UUID program, ZonedDateTime initiatedDateFrom,
-                                     ZonedDateTime initiatedDateTo, UUID processingPeriod,
-                                     UUID supervisoryNode, Set<RequisitionStatusDto>
-                                             requisitionStatuses, Boolean emergency) {
+  public Page<BasicRequisitionDto> search(UUID facility, UUID program,
+                                          ZonedDateTime initiatedDateFrom,
+                                          ZonedDateTime initiatedDateTo, UUID processingPeriod,
+                                          UUID supervisoryNode, Set<RequisitionStatusDto>
+                                              requisitionStatuses, Boolean emergency) {
     String commaDelimitedStatuses = (requisitionStatuses == null) ? null :
-            requisitionStatuses.stream().map(Enum::name).collect(Collectors.joining(","));
+        requisitionStatuses.stream().map(Enum::name).collect(Collectors.joining(","));
     RequestParameters parameters = RequestParameters.init()
-            .set("facility", facility)
-            .set("program", program)
-            .set("initiatedDateFrom", initiatedDateFrom)
-            .set("initiatedDateTo", initiatedDateTo)
-            .set("processingPeriod", processingPeriod)
-            .set("supervisoryNode", supervisoryNode)
-            .set("requisitionStatus", commaDelimitedStatuses)
-            .set("emergency", emergency);
+        .set("facility", facility)
+        .set("program", program)
+        .set("initiatedDateFrom", initiatedDateFrom)
+        .set("initiatedDateTo", initiatedDateTo)
+        .set("processingPeriod", processingPeriod)
+        .set("supervisoryNode", supervisoryNode)
+        .set("requisitionStatus", commaDelimitedStatuses)
+        .set("emergency", emergency);
 
-    return getPage("search", parameters);
+    return getPage("search", parameters, null, HttpMethod.GET, BasicRequisitionDto.class);
   }
 }

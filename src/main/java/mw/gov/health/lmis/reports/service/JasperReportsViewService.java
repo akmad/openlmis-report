@@ -13,6 +13,7 @@ import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
 
 import mw.gov.health.lmis.reports.dto.ReportingRateReportDto;
 import mw.gov.health.lmis.reports.dto.RequisitionReportDto;
+import mw.gov.health.lmis.reports.dto.external.BasicRequisitionDto;
 import mw.gov.health.lmis.reports.dto.external.FacilityDto;
 import mw.gov.health.lmis.reports.dto.external.GeographicZoneDto;
 import mw.gov.health.lmis.reports.dto.external.OrderDto;
@@ -415,7 +416,7 @@ public class JasperReportsViewService {
     // find active facilities that are missing R&R
     for (FacilityDto facility : facilities) {
       if (facility.getActive()) {
-        Page<RequisitionDto> requisitions = requisitionService.search(
+        Page<BasicRequisitionDto> requisitions = requisitionService.search(
                 facility.getId(), program.getId(), null, null, processingPeriod.getId(),
                 null, validStatuses, null);
         if (requisitions.getTotalElements() == 0) {
