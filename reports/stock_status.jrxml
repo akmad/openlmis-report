@@ -28,7 +28,7 @@
 	<parameter name="imagesDirectory" class="java.lang.String" isForPrompting="false"/>
 	<queryString language="plsql">
 		<![CDATA[WITH RECURSIVE findChildZones AS (
-  SELECT * FROM referencedata.geographic_zones WHERE name = $P{district}
+  SELECT * FROM referencedata.geographic_zones WHERE name = $P{district}::varchar
   UNION ALL
   SELECT referencedata.geographic_zones.* FROM referencedata.geographic_zones JOIN findChildZones ON findChildZones.id = referencedata.geographic_zones.parentId
 )
@@ -61,9 +61,9 @@ FROM requisition.requisition_line_items
   JOIN referencedata.geographic_levels ON
   referencedata.geographic_zones.levelid = referencedata.geographic_levels.id
 WHERE 
-   referencedata.programs.name = $P{program}
-   AND referencedata.processing_periods.name = $P{period}
-   AND ($P{district} IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
+   referencedata.programs.name = $P{program}::varchar
+   AND referencedata.processing_periods.name = $P{period}::varchar
+   AND ($P{district}::varchar IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
   AND referencedata.facilities.active = true
   AND (requisition.requisitions.status = 'APPROVED' OR requisition.requisitions.status = 'RELEASED')
 ORDER BY referencedata.facilities.name DESC,

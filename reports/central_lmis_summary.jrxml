@@ -51,8 +51,8 @@ FROM requisition.requisition_line_items
   JOIN referencedata.geographic_levels ON
   referencedata.geographic_zones.levelid = referencedata.geographic_levels.id
 WHERE 
-   referencedata.programs.name = $P{program}
-   AND referencedata.processing_periods.name = $P{period}
+   referencedata.programs.name = $P{program}::varchar
+   AND referencedata.processing_periods.name = $P{period}::varchar
   AND referencedata.facilities.active = true
   AND (requisition.requisitions.status = 'APPROVED' OR requisition.requisitions.status = 'RELEASED')
 GROUP BY category, productcode, productname, unitofissue, geographiczone, orderable_display_categories.displayorder, program_orderables.displayorder
