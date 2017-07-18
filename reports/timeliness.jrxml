@@ -13,28 +13,28 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="reportType" value="Timeliness Report"/>
-	<import value="mw.gov.health.lmis.reports.dto.external.*"/>
+	<import value="org.openlmis.reports.dto.external.*"/>
 	<style name="Row" mode="Transparent">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></conditionExpression>
 			<style backcolor="#F3F3F3"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="district" class="mw.gov.health.lmis.reports.dto.external.GeographicZoneDto">
+	<parameter name="district" class="org.openlmis.reports.dto.external.GeographicZoneDto">
 		<property name="displayName" value="District"/>
 		<property name="selectExpression" value="/api/reports/districts"/>
 		<property name="selectProperty" value="id"/>
 		<property name="displayProperty" value="name"/>
 		<property name="required" value="false"/>
 	</parameter>
-	<parameter name="program" class="mw.gov.health.lmis.reports.dto.external.ProgramDto">
+	<parameter name="program" class="org.openlmis.reports.dto.external.ProgramDto">
 		<property name="displayName" value="Program Name"/>
 		<property name="selectExpression" value="/api/reports/programs"/>
 		<property name="selectProperty" value="id"/>
 		<property name="displayProperty" value="name"/>
 		<property name="required" value="true"/>
 	</parameter>
-	<parameter name="period" class="mw.gov.health.lmis.reports.dto.external.ProcessingPeriodDto">
+	<parameter name="period" class="org.openlmis.reports.dto.external.ProcessingPeriodDto">
 		<property name="displayName" value="Period Name"/>
 		<property name="selectExpression" value="/api/reports/processingPeriods"/>
 		<property name="selectProperty" value="id"/>
@@ -63,7 +63,7 @@
 	<field name="goLiveDate" class="java.time.LocalDate">
 		<fieldDescription><![CDATA[goLiveDate]]></fieldDescription>
 	</field>
-	<field name="type" class="mw.gov.health.lmis.reports.dto.external.FacilityTypeDto">
+	<field name="type" class="org.openlmis.reports.dto.external.FacilityTypeDto">
 		<fieldDescription><![CDATA[type]]></fieldDescription>
 	</field>
 	<field name="supportedPrograms" class="java.util.List">
@@ -72,10 +72,10 @@
 	<field name="enabled" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[enabled]]></fieldDescription>
 	</field>
-	<field name="operator" class="mw.gov.health.lmis.reports.dto.external.FacilityOperatorDto">
+	<field name="operator" class="org.openlmis.reports.dto.external.FacilityOperatorDto">
 		<fieldDescription><![CDATA[operator]]></fieldDescription>
 	</field>
-	<field name="geographicZone" class="mw.gov.health.lmis.reports.dto.external.GeographicZoneDto">
+	<field name="geographicZone" class="org.openlmis.reports.dto.external.GeographicZoneDto">
 		<fieldDescription><![CDATA[geographicZone]]></fieldDescription>
 	</field>
 	<field name="name" class="java.lang.String">
@@ -90,7 +90,7 @@
 	<field name="class" class="java.lang.Class">
 		<fieldDescription><![CDATA[class]]></fieldDescription>
 	</field>
-	<field name="thirdLevel" class="mw.gov.health.lmis.reports.dto.external.GeographicZoneDto">
+	<field name="thirdLevel" class="org.openlmis.reports.dto.external.GeographicZoneDto">
 		<fieldDescription><![CDATA[thirdLevel]]></fieldDescription>
 	</field>
 	<background>

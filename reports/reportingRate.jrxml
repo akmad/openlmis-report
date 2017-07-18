@@ -6,7 +6,7 @@
 	<property name="reportType" value="Reporting Rate Report"/>
 	<import value="java.lang.*"/>
 	<import value="java.util.*"/>
-	<import value="mw.gov.health.lmis.reports.dto.*"/>
+	<import value="org.openlmis.reports.dto.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<import value="java.util.stream.*"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">

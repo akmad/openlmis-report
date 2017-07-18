@@ -13,14 +13,14 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="reportType" value="Order Report"/>
-	<import value="mw.gov.health.lmis.reports.dto.external.*"/>
+	<import value="org.openlmis.reports.dto.external.*"/>
 	<style name="Row" mode="Transparent">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></conditionExpression>
 			<style backcolor="#F3F3F3"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="order" class="mw.gov.health.lmis.reports.dto.external.OrderDto">
+	<parameter name="order" class="org.openlmis.reports.dto.external.OrderDto">
 		<property name="displayName" value="Order"/>
 		<property name="selectExpression" value="/api/orders"/>
 		<property name="selectProperty" value="id"/>
@@ -35,7 +35,7 @@
 	<field name="orderedQuantity" class="java.lang.Long">
 		<fieldDescription><![CDATA[orderedQuantity]]></fieldDescription>
 	</field>
-	<field name="orderable" class="mw.gov.health.lmis.reports.dto.external.OrderableDto">
+	<field name="orderable" class="org.openlmis.reports.dto.external.OrderableDto">
 		<fieldDescription><![CDATA[orderable]]></fieldDescription>
 	</field>
 	<field name="id" class="java.util.UUID">

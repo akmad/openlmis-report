@@ -9,4 +9,4 @@ INSERT INTO jasper_templates VALUES ('3c9d1e80-1e45-4adb-97d9-208b6fdceeec', '\x
 -- Data for Name: template_parameters; Type: TABLE DATA; Schema: reports; Owner: postgres
 --
 
-INSERT INTO template_parameters VALUES ('28d181f5-0aab-4af9-900e-9b8d6fcacee9', 'mw.gov.health.lmis.reports.dto.external.OrderDto', NULL, NULL, 'Order', 'order', '/api/orders', 'id', 'orderCode', true, '3c9d1e80-1e45-4adb-97d9-208b6fdceeec');
+INSERT INTO template_parameters VALUES ('28d181f5-0aab-4af9-900e-9b8d6fcacee9', 'org.openlmis.reports.dto.external.OrderDto', NULL, NULL, 'Order', 'order', '/api/orders', 'id', 'orderCode', true, '3c9d1e80-1e45-4adb-97d9-208b6fdceeec');

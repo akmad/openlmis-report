@@ -46,7 +46,7 @@ services:
 
   image:
     build: .
-    image: openlmismw/reports
+    image: openlmis/reports
 
   db:
     image: openlmis/postgres:9.6
@@ -55,4 +55,4 @@ services:
   log:
     image: openlmis/rsyslog:1
     volumes:
-      - '../logs/mw/reports:/var/log'
+      - '../logs/reports:/var/log'

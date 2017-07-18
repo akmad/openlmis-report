@@ -1,2 +1,2 @@
-# OpenLMIS Malawi Reporting Service
-Service for managing and printing reports for Malawi OpenLMIS implementation.
+# OpenLMIS Reporting Service
+This repository holds the files for the OpenLMIS Reports Independent Service.
