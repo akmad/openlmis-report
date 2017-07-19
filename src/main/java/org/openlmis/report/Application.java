@@ -46,12 +46,10 @@ import java.util.Locale;
 import org.openlmis.report.domain.BaseEntity;
 import org.openlmis.report.i18n.ExposedMessageSourceImpl;
 import org.openlmis.report.security.UserNameProvider;
-import org.openlmis.report.settings.domain.ConfigurationSetting;
 
 @SpringBootApplication
 @ImportResource("applicationContext.xml")
-@EntityScan(basePackageClasses = {BaseEntity.class, ConfigurationSetting.class},
-    basePackages = "org.openlmis.util.converter")
+@EntityScan(basePackageClasses = {BaseEntity.class})
 public class Application {
   private static Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
