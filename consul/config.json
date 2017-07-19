@@ -1,15 +1,15 @@
 {
   "service": {
-    "Name": "reports",
+    "Name": "report",
     "Port": 8080,
     "Tags": ["openlmis-service"]
   },
   "raml": "src/main/resources/api-definition.yaml",
   "path": [
-    "reports",
-    "reports/docs",
-    "reports/docs/<all>",
-    "reports/webjars",
-    "reports/webjars/<all>"
+    "report",
+    "report/docs",
+    "report/docs/<all>",
+    "report/webjars",
+    "report/webjars/<all>"
   ]
 }

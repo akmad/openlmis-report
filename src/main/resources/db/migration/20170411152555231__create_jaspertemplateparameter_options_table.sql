@@ -1,5 +1,5 @@
 --
--- Name: jaspertemplateparameter_options; Type: TABLE; Schema: reports; Owner: postgres
+-- Name: jaspertemplateparameter_options; Type: TABLE; Schema: report; Owner: postgres
 --
 
 CREATE TABLE jaspertemplateparameter_options (
@@ -8,7 +8,7 @@ CREATE TABLE jaspertemplateparameter_options (
 );
 
 --
--- Name: jaspertemplateparameter_options fkpxphnoksec55h63evgb3obfxq; Type: FK CONSTRAINT; Schema: reports; Owner: postgres
+-- Name: jaspertemplateparameter_options fkpxphnoksec55h63evgb3obfxq; Type: FK CONSTRAINT; Schema: report; Owner: postgres
 --
 
 ALTER TABLE ONLY jaspertemplateparameter_options

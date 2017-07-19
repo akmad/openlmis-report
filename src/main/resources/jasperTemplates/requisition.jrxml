@@ -26,11 +26,11 @@
 	<import value="java.util.*"/>
 	<import value="org.joda.money.format.*"/>
 	<import value="org.joda.money.*"/>
-	<import value="org.openlmis.reports.dto.external.*"/>
+	<import value="org.openlmis.report.dto.external.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<import value="java.text.*"/>
 	<import value="java.util.stream.*"/>
-	<parameter name="template" class="org.openlmis.reports.dto.external.RequisitionTemplateDto" isForPrompting="false">
+	<parameter name="template" class="org.openlmis.report.dto.external.RequisitionTemplateDto" isForPrompting="false">
 		<property name="displayName" value="template"/>
 	</parameter>
 	<parameter name="subreport" class="net.sf.jasperreports.engine.design.JasperDesign" isForPrompting="false">
@@ -42,7 +42,7 @@
 	<field name="nonFullSupply" class="java.util.List">
 		<fieldDescription><![CDATA[nonFullSupply]]></fieldDescription>
 	</field>
-	<field name="requisition" class="org.openlmis.reports.dto.external.RequisitionDto">
+	<field name="requisition" class="org.openlmis.report.dto.external.RequisitionDto">
 		<fieldDescription><![CDATA[requisition]]></fieldDescription>
 	</field>
 	<field name="fullSupply" class="java.util.List">
@@ -51,11 +51,11 @@
 	<field name="fullSupplyTotalCost" class="java.math.BigDecimal"/>
 	<field name="nonFullSupplyTotalCost" class="java.math.BigDecimal"/>
 	<field name="totalCost" class="java.math.BigDecimal"/>
-	<field name="initiatedBy" class="org.openlmis.reports.dto.external.UserDto"/>
+	<field name="initiatedBy" class="org.openlmis.report.dto.external.UserDto"/>
 	<field name="initiatedDate" class="java.time.ZonedDateTime"/>
-	<field name="submittedBy" class="org.openlmis.reports.dto.external.UserDto"/>
+	<field name="submittedBy" class="org.openlmis.report.dto.external.UserDto"/>
 	<field name="submittedDate" class="java.time.ZonedDateTime"/>
-	<field name="authorizedBy" class="org.openlmis.reports.dto.external.UserDto"/>
+	<field name="authorizedBy" class="org.openlmis.report.dto.external.UserDto"/>
 	<field name="authorizedDate" class="java.time.ZonedDateTime"/>
 	<background>
 		<band splitType="Stretch"/>

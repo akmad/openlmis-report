@@ -1,13 +1,13 @@
 #%RAML 0.8
 ---
-title: OpenLMIS Reports API
+title: OpenLMIS Report API
 version: "@version@"
 baseUri: "@baseUrl@"
 protocols: [ HTTP, HTTPS ]
 
 documentation:
     - title: Getting Started
-      content: Welcome to the OpenLMIS reports-service documentation.
+      content: Welcome to the OpenLMIS report-service documentation.
 
 schemas:
 
@@ -127,7 +127,7 @@ resourceTypes:
 
 /api:
 
-  /reports:
+  /report:
       /requisitions/{id}/print:
         uriParameters:
             id:

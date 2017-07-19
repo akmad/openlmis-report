@@ -1,5 +1,5 @@
 --
--- Name: jasper_templates; Type: TABLE; Schema: reports; Owner: postgres; Tablespace:
+-- Name: jasper_templates; Type: TABLE; Schema: report; Owner: postgres; Tablespace:
 --
 
 CREATE TABLE jasper_templates (
@@ -12,7 +12,7 @@ CREATE TABLE jasper_templates (
 
 
 --
--- Name: template_parameters; Type: TABLE; Schema: reports; Owner: postgres; Tablespace:
+-- Name: template_parameters; Type: TABLE; Schema: report; Owner: postgres; Tablespace:
 --
 
 CREATE TABLE template_parameters (
@@ -31,7 +31,7 @@ CREATE TABLE template_parameters (
 
 
 --
--- Name: configuration_settings; Type: TABLE; Schema: reports; Owner: postgres; Tablespace:
+-- Name: configuration_settings; Type: TABLE; Schema: report; Owner: postgres; Tablespace:
 --
 
 CREATE TABLE configuration_settings (
@@ -41,7 +41,7 @@ CREATE TABLE configuration_settings (
 
 
 --
--- Name: jasper_templates_pkey; Type: CONSTRAINT; Schema: reports; Owner: postgres; Tablespace:
+-- Name: jasper_templates_pkey; Type: CONSTRAINT; Schema: report; Owner: postgres; Tablespace:
 --
 
 ALTER TABLE ONLY jasper_templates
@@ -49,7 +49,7 @@ ALTER TABLE ONLY jasper_templates
 
 
 --
--- Name: template_parameters_pkey; Type: CONSTRAINT; Schema: reports; Owner: postgres; Tablespace:
+-- Name: template_parameters_pkey; Type: CONSTRAINT; Schema: report; Owner: postgres; Tablespace:
 --
 
 ALTER TABLE ONLY template_parameters
@@ -57,7 +57,7 @@ ALTER TABLE ONLY template_parameters
 
 
 --
--- Name: configuration_settings_pkey; Type: CONSTRAINT; Schema: reports; Owner: postgres; Tablespace:
+-- Name: configuration_settings_pkey; Type: CONSTRAINT; Schema: report; Owner: postgres; Tablespace:
 --
 
 ALTER TABLE ONLY configuration_settings
@@ -65,7 +65,7 @@ ALTER TABLE ONLY configuration_settings
 
 
 --
--- Name: uk_5878s5vb2v4y53vun95nrdvgw; Type: CONSTRAINT; Schema: reports; Owner: postgres; Tablespace:
+-- Name: uk_5878s5vb2v4y53vun95nrdvgw; Type: CONSTRAINT; Schema: report; Owner: postgres; Tablespace:
 --
 
 ALTER TABLE ONLY jasper_templates
@@ -73,7 +73,7 @@ ALTER TABLE ONLY jasper_templates
 
 
 --
--- Name: fk_qww3p7ho2t5jyutkllrh64khr; Type: FK CONSTRAINT; Schema: reports; Owner: postgres
+-- Name: fk_qww3p7ho2t5jyutkllrh64khr; Type: FK CONSTRAINT; Schema: report; Owner: postgres
 --
 
 ALTER TABLE ONLY template_parameters

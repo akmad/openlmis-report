@@ -1,8 +1,8 @@
 version: "2"
 services:
 
-  reports:
-    image: openlmis/reports
+  report:
+    image: openlmis/report
     links:
       - db
       - log
@@ -17,4 +17,4 @@ services:
   log:
     image: openlmis/rsyslog:1
     volumes:
-      - '../logs/reports:/var/log'
+      - '../logs/report:/var/log'

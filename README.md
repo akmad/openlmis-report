@@ -1,5 +1,5 @@
-# OpenLMIS Reports Service
-This repository holds the files for the OpenLMIS Reports Independent Service.
+# OpenLMIS Report Service
+This repository holds the files for the OpenLMIS Report Independent Service.
 
 ## Prerequisites
 * Docker 1.11+
@@ -9,17 +9,17 @@ This repository holds the files for the OpenLMIS Reports Independent Service.
 1. Fork/clone this repository from GitHub.
 
  ```shell
- git clone https://github.com/OpenLMIS/openlmis-reports.git
+ git clone https://github.com/OpenLMIS/openlmis-report.git
  ```
 2. Add an environment file called `.env` to the root folder of the project, with the required 
 project settings and credentials. For a starter environment file, you can use [this 
 one](https://github.com/OpenLMIS/openlmis-config/blob/master/.env). e.g.
 
  ```shell
- cd openlmis-reports
+ cd openlmis-report
  curl -LO https://raw.githubusercontent.com/OpenLMIS/openlmis-config/master/.env
  ```
-3. Develop w/ Docker by running `docker-compose run --service-ports reports`.
+3. Develop w/ Docker by running `docker-compose run --service-ports report`.
 See [Developing w/ Docker](#devdocker). You should now be in an interactive shell inside
 the newly created development environment.
 4. Run `gradle build` to build. After the build steps finish, you should see 'Build Successful'.
@@ -95,13 +95,13 @@ https://github.com/OpenLMIS/openlmis-template-service/blob/master/README.md#debu
 
 ### Demo Data
 You can use a standard data set for demonstration purposes. To do so, first follow the Quick Start
-until step 3 is done: https://github.com/OpenLMIS/openlmis-reports/blob/master/README.md#quickstart.
+until step 3 is done: https://github.com/OpenLMIS/openlmis-report/blob/master/README.md#quickstart.
 Then, before `gradle bootRun`, use `gradle demoDataSeed`. This will generate a sql input file under
 `./demo-data` directory.
 
 To insert this data into the database, finish the Quick Start steps,
 and then outside of container's interactive shell, run:
-`docker exec -i openlmisreports_db_1 psql -Upostgres open_lmis < demo-data/input.sql`
+`docker exec -i openlmisreport_db_1 psql -Upostgres open_lmis < demo-data/input.sql`
 
 ## Production by Spring Profile
 

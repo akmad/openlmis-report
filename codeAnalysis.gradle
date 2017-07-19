@@ -33,8 +33,8 @@ configure(checkApiIsRaml) {
 //Usage: gradle sonarqube
 sonarqube {
     properties {
-        property "sonar.projectName", "OpenLMIS Reports"
-        property "sonar.projectKey", "org.sonarqube:openlmis-reports"
+        property "sonar.projectName", "OpenLMIS Report"
+        property "sonar.projectKey", "org.sonarqube:openlmis-report"
         property "sonar.host.url", "http://sonar.openlmis.org"
         property "sonar.projectVersion", version
         property "sonar.java.coveragePlugin", "jacoco"
