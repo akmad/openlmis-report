@@ -33,10 +33,10 @@ configure(checkApiIsRaml) {
 //Usage: gradle sonarqube
 sonarqube {
     properties {
-        property "sonar.projectName", "Reports Service"
+        property "sonar.projectName", "OpenLMIS Reports"
         property "sonar.projectKey", "org.sonarqube:openlmis-reports"
-        property "sonar.projectVersion", version
         property "sonar.host.url", "http://sonar.openlmis.org"
+        property "sonar.projectVersion", version
         property "sonar.java.coveragePlugin", "jacoco"
         //Tells SonarQube where the unit tests execution reports are
         property "sonar.junit.reportsPath", "build/test-results/test"
@@ -44,6 +44,6 @@ sonarqube {
         property "sonar.jacoco.reportPath", "build/jacoco/test.exec"
         //Tells SonarQube where the integration tests code coverage report is
         property "sonar.jacoco.itReportPath", "build/jacoco/integrationTest.exec"
-    properties["sonar.tests"] += sourceSets.integrationTest.java
+        properties["sonar.tests"] += sourceSets.integrationTest.java
     }
 }
