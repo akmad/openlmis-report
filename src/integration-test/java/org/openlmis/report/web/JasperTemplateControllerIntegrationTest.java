@@ -47,7 +47,7 @@ import org.openlmis.report.service.JasperReportsViewService;
 
 @SuppressWarnings("PMD.TooManyMethods")
 public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationTest {
-  private static final String RESOURCE_URL = "/api/report/templates/malawi";
+  private static final String RESOURCE_URL = "/api/report/templates/common";
   private static final String ID_URL = RESOURCE_URL + "/{id}";
   private static final String FORMAT_PARAM = "format";
   private static final String REPORT_URL = ID_URL + "/{" + FORMAT_PARAM + "}";

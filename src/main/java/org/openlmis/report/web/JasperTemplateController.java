@@ -53,7 +53,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @Transactional
-@RequestMapping("/api/report/templates/malawi")
+@RequestMapping("/api/report/templates/common")
 public class JasperTemplateController extends BaseController {
   private static final Logger LOGGER = Logger.getLogger(JasperTemplateController.class);
 

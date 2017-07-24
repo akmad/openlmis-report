@@ -209,7 +209,7 @@ resourceTypes:
                           body:
                             application/json:
                               schema: localizedErrorResponse
-      /templates/malawi:
+      /templates/commons:
           displayName: Report Template
           post:
               is: [ secured ]
