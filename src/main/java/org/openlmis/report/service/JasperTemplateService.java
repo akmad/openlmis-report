@@ -24,16 +24,16 @@ import org.openlmis.report.domain.JasperTemplate;
 import org.openlmis.report.domain.JasperTemplateParameter;
 import org.openlmis.report.domain.JasperTemplateParameterDependency;
 import org.openlmis.report.exception.ReportingException;
+import org.openlmis.report.exception.ValidationMessageException;
 import org.openlmis.report.repository.JasperTemplateRepository;
+import org.openlmis.report.service.referencedata.RightReferenceDataService;
+import org.openlmis.report.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,11 +44,9 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static java.io.File.createTempFile;
-import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_CREATION;
+import static org.openlmis.report.i18n.AuthorizationMessageKeys.ERROR_RIGHT_NOT_FOUND;
 import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_EMPTY;
 import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INCORRECT_TYPE;
 import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INVALID;
@@ -67,6 +65,9 @@ public class JasperTemplateService {
   @Autowired
   private JasperTemplateRepository jasperTemplateRepository;
 
+  @Autowired
+  private RightReferenceDataService rightReferenceDataService;
+
   /**
    * Saves a template with given name.
    * If template already exists, only description and required rights are updated.
@@ -79,6 +80,7 @@ public class JasperTemplateService {
   public JasperTemplate saveTemplate(
       MultipartFile file, String name, String description, List<String> requiredRights)
       throws ReportingException {
+    validateRequiredRights(requiredRights);
     JasperTemplate jasperTemplate = jasperTemplateRepository.findByName(name);
 
     if (jasperTemplate == null) {
@@ -99,9 +101,50 @@ public class JasperTemplateService {
   }
 
   /**
+   * Map request parameters to the template parameters in the template. If there are no template
+   * parameters, returns an empty Map.
+   *
+   * @param request  request with parameters
+   * @param template template with parameters
+   * @return Map of matching parameters, empty Map if none match
+   */
+  public Map<String, Object> mapRequestParametersToTemplate(
+      HttpServletRequest request,JasperTemplate template) {
+    List<JasperTemplateParameter> templateParameters = template.getTemplateParameters();
+    if (templateParameters == null) {
+      return new HashMap<>();
+    }
+
+    Map<String, String[]> requestParameterMap = request.getParameterMap();
+    Map<String, Object> map = new HashMap<>();
+
+    for (JasperTemplateParameter templateParameter : templateParameters) {
+      String templateParameterName = templateParameter.getName();
+
+      for (String requestParamName : requestParameterMap.keySet()) {
+
+        if (templateParameterName.equalsIgnoreCase(requestParamName)) {
+          String requestParamValue = "";
+          if (requestParameterMap.get(templateParameterName).length > 0) {
+            requestParamValue = requestParameterMap.get(templateParameterName)[0];
+          }
+
+          if (!(isBlank(requestParamValue)
+              || "null".equals(requestParamValue)
+              || "undefined".equals(requestParamValue))) {
+            map.put(templateParameterName, requestParamValue);
+          }
+        }
+      }
+    }
+
+    return map;
+  }
+
+  /**
    * Validate ".jrmxl" file and insert this template to database.
    */
-  public void validateFileAndInsertTemplate(JasperTemplate jasperTemplate, MultipartFile file)
+  void validateFileAndInsertTemplate(JasperTemplate jasperTemplate, MultipartFile file)
       throws ReportingException {
     throwIfTemplateWithSameNameAlreadyExists(jasperTemplate.getName());
     validateFileAndSetData(jasperTemplate, file);
@@ -109,10 +152,17 @@ public class JasperTemplateService {
   }
 
   /**
+   * Insert template and template parameters to database.
+   */
+  void saveWithParameters(JasperTemplate jasperTemplate) {
+    jasperTemplateRepository.save(jasperTemplate);
+  }
+
+  /**
    * Validate ".jrmxl" file and insert if template not exist. If this name of template already
    * exist, remove older template and insert new.
    */
-  public void validateFileAndSaveTemplate(JasperTemplate jasperTemplate, MultipartFile file)
+  private void validateFileAndSaveTemplate(JasperTemplate jasperTemplate, MultipartFile file)
       throws ReportingException {
     JasperTemplate templateTmp = jasperTemplateRepository.findByName(jasperTemplate.getName());
     if (templateTmp != null) {
@@ -120,28 +170,6 @@ public class JasperTemplateService {
     }
     validateFileAndSetData(jasperTemplate, file);
     saveWithParameters(jasperTemplate);
-  }
-
-  /**
-   * Insert template and template parameters to database.
-   */
-  public void saveWithParameters(JasperTemplate jasperTemplate) {
-    jasperTemplateRepository.save(jasperTemplate);
-  }
-
-  /**
-   * Convert template from ".jasper" format in database to ".jrxml"(extension) format.
-   */
-  public File convertJasperToXml(JasperTemplate jasperTemplate) throws ReportingException {
-    try (InputStream inputStream = new ByteArrayInputStream(jasperTemplate.getData());
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-      JasperCompileManager.writeReportToXmlStream(inputStream, outputStream);
-      File xmlReport = createTempFile(jasperTemplate.getName(), ".jrxml");
-      writeByteArrayToFile(xmlReport, outputStream.toByteArray());
-      return xmlReport;
-    } catch (JRException | IOException ex) {
-      throw new ReportingException(ex, ERROR_REPORTING_CREATION);
-    }
   }
 
   /**
@@ -247,48 +275,6 @@ public class JasperTemplateService {
     return jasperTemplateParameter;
   }
 
-  /**
-   * Map request parameters to the template parameters in the template. If there are no template
-   * parameters, returns an empty Map.
-   *
-   * @param request  request with parameters
-   * @param template template with parameters
-   * @return Map of matching parameters, empty Map if none match
-   */
-  public Map<String, Object> mapRequestParametersToTemplate(HttpServletRequest request,
-      JasperTemplate template) {
-
-    List<JasperTemplateParameter> templateParameters = template.getTemplateParameters();
-    if (templateParameters == null) {
-      return new HashMap<>();
-    }
-
-    Map<String, String[]> requestParameterMap = request.getParameterMap();
-    Map<String, Object> map = new HashMap<>();
-
-    for (JasperTemplateParameter templateParameter : templateParameters) {
-      String templateParameterName = templateParameter.getName();
-
-      for (String requestParamName : requestParameterMap.keySet()) {
-
-        if (templateParameterName.equalsIgnoreCase(requestParamName)) {
-          String requestParamValue = "";
-          if (requestParameterMap.get(templateParameterName).length > 0) {
-            requestParamValue = requestParameterMap.get(templateParameterName)[0];
-          }
-
-          if (!(isBlank(requestParamValue)
-              || "null".equals(requestParamValue)
-              || "undefined".equals(requestParamValue))) {
-            map.put(templateParameterName, requestParamValue);
-          }
-        }
-      }
-    }
-
-    return map;
-  }
-
   private void throwIfTemplateWithSameNameAlreadyExists(String name) throws ReportingException {
     if (jasperTemplateRepository.findByName(name) != null) {
       throw new ReportingException(ERROR_REPORTING_TEMPLATE_EXIST);
@@ -340,5 +326,13 @@ public class JasperTemplateService {
     }
 
     return new ArrayList<>();
+  }
+
+  private void validateRequiredRights(List<String> rights) {
+    for (String right : rights) {
+      if (rightReferenceDataService.findRight(right) == null) {
+        throw new ValidationMessageException(new Message(ERROR_RIGHT_NOT_FOUND, right));
+      }
+    }
   }
 }

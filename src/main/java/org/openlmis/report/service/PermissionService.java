@@ -25,8 +25,6 @@ import org.openlmis.report.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 import static org.openlmis.report.i18n.PermissionMessageKeys.ERROR_NO_PERMISSION;
 
 @Service
@@ -46,11 +44,23 @@ public class PermissionService {
 
   /**
    * Check whether the user has REPORTS_VIEW permission.
-   * @param templateId (optional) id of the report; if it equals to Aggregate Orders,
-   *                   the user can have either the ORDERS_VIEW or REPORTS_VIEW permission
    */
-  public void canViewReports(UUID templateId) {
+  public void canViewReports() {
     checkPermission(REPORTS_VIEW);
+  }
+
+  /**
+   * Checks whether user has the given set of rights.
+   * Throws {@link PermissionMessageException} if doesn't have all of these permissions.
+   *
+   * @param rights names of rights to check
+   */
+  public void validatePermissions(String... rights) {
+    for (String right : rights) {
+      if (!hasPermission(right)) {
+        throw new PermissionMessageException(new Message(ERROR_NO_PERMISSION, right));
+      }
+    }
   }
 
   private void checkPermission(String rightName) {

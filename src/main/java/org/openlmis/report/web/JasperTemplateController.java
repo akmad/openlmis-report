@@ -40,8 +40,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -82,14 +82,14 @@ public class JasperTemplateController extends BaseController {
       @RequestPart("file") MultipartFile file, String name, String description,
       String[] requiredRights) throws ReportingException {
     permissionService.canEditReportTemplates();
-    List<String> rightList = new ArrayList<>();
-    if (requiredRights != null) {
-      rightList.addAll(Arrays.asList(requiredRights));
-    }
 
     LOGGER.debug("Saving template with name: " + name);
-    JasperTemplate template = jasperTemplateService.saveTemplate(
-        file, name, description, rightList);
+
+    List<String> rightList = requiredRights == null
+        ? Collections.emptyList() : Arrays.asList(requiredRights);
+
+    JasperTemplate template = jasperTemplateService
+        .saveTemplate(file, name, description, rightList);
 
     LOGGER.debug("Saved template with id: " + template.getId());
   }
@@ -103,7 +103,7 @@ public class JasperTemplateController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public List<JasperTemplateDto> getAllTemplates() {
-    permissionService.canViewReports(null);
+    permissionService.canViewReports();
     return JasperTemplateDto.newInstance(jasperTemplateRepository.findAll());
   }
 
@@ -117,12 +117,11 @@ public class JasperTemplateController extends BaseController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public JasperTemplateDto getTemplate(@PathVariable("id") UUID templateId) {
-    permissionService.canViewReports(templateId);
-    JasperTemplate jasperTemplate =
-        jasperTemplateRepository.findOne(templateId);
+    permissionService.canViewReports();
+
+    JasperTemplate jasperTemplate = jasperTemplateRepository.findOne(templateId);
     if (jasperTemplate == null) {
-      throw new NotFoundMessageException(new Message(
-          ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId));
+      throw new NotFoundMessageException(new Message(ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId));
     }
 
     return JasperTemplateDto.newInstance(jasperTemplate);
@@ -159,14 +158,16 @@ public class JasperTemplateController extends BaseController {
   public ModelAndView generateReport(
       HttpServletRequest request, @PathVariable("id") UUID templateId,
       @PathVariable("format") String format) throws JasperReportViewException {
-    permissionService.canViewReports(templateId);
+    permissionService.canViewReports();
 
     JasperTemplate template = jasperTemplateRepository.findOne(templateId);
-
     if (template == null) {
-      throw new NotFoundMessageException(new Message(
-          ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId));
+      throw new NotFoundMessageException(new Message(ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId));
     }
+
+    List<String> requiredRights = template.getRequiredRights();
+    permissionService.validatePermissions(
+        requiredRights.toArray(new String[requiredRights.size()]));
 
     Map<String, Object> map = jasperTemplateService.mapRequestParametersToTemplate(
         request, template

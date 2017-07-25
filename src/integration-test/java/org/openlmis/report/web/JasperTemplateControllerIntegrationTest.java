@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.openlmis.report.domain.JasperTemplate;
 import org.openlmis.report.dto.JasperTemplateDto;
 import org.openlmis.report.exception.JasperReportViewException;
+import org.openlmis.report.exception.PermissionMessageException;
 import org.openlmis.report.repository.JasperTemplateRepository;
 import org.openlmis.report.service.JasperReportsViewService;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,7 +29,9 @@ import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiForm
 
 import guru.nidi.ramltester.junit.RamlMatchers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -41,6 +44,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -67,7 +71,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
   @Test
   public void shouldGetAllTemplates() {
     // given
-    JasperTemplate[] templates = { generateTemplate(), generateTemplate() };
+    JasperTemplate[] templates = { generateExistentTemplate(), generateExistentTemplate() };
     given(jasperTemplateRepository.findAll()).willReturn(Arrays.asList(templates));
 
     // when
@@ -91,7 +95,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
   @Test
   public void shouldDeleteExistentTemplate() {
     // given
-    JasperTemplate template = generateTemplate();
+    JasperTemplate template = generateExistentTemplate();
 
     // when
     restAssured.given()
@@ -132,7 +136,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
   @Test
   public void shouldGetExistentTemplate() {
     // given
-    JasperTemplate template = generateTemplate();
+    JasperTemplate template = generateExistentTemplate();
 
     // when
     JasperTemplateDto result = restAssured.given()
@@ -192,6 +196,32 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
   }
 
   @Test
+  public void generateReportShouldRejectWhenUserHasNoReportSpecificRight() {
+    // given
+    String deniedPermission = "USERS_MANAGE";
+
+    JasperTemplate template = generateExistentTemplate();
+    template.setRequiredRights(Collections.singletonList(deniedPermission));
+
+    PermissionMessageException ex = mockPermissionException(deniedPermission);
+    doThrow(ex).when(permissionService).validatePermissions(any(String[].class));
+
+    // when
+    restAssured.given()
+        .queryParam(ACCESS_TOKEN, getToken())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .pathParam("id", template.getId())
+        .pathParam(FORMAT_PARAM, "pdf")
+        .when()
+        .get(REPORT_URL)
+        .then()
+        .statusCode(403);
+
+    // then
+    assertThat(RAML_ASSERT_MESSAGE, restAssured.getLastReport(), RamlMatchers.hasNoViolations());
+  }
+
+  @Test
   public void shouldGenerateReportInPdfFormat() throws JasperReportViewException {
     testGenerateReportInGivenFormat("application/pdf", "pdf");
   }
@@ -216,7 +246,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
   private void testGenerateReportInGivenFormat(String contentType, String formatParam)
       throws JasperReportViewException {
     // given
-    JasperTemplate template = generateTemplate();
+    JasperTemplate template = generateExistentTemplate();
 
     JasperReportsMultiFormatView view = mock(JasperReportsMultiFormatView.class);
     given(view.getContentType()).willReturn(contentType);
@@ -239,15 +269,16 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
         .statusCode(200);
   }
 
-  private JasperTemplate generateTemplate() {
-    return generateTemplate(UUID.randomUUID());
+  private JasperTemplate generateExistentTemplate() {
+    return generateExistentTemplate(UUID.randomUUID());
   }
 
-  private JasperTemplate generateTemplate(UUID id) {
+  private JasperTemplate generateExistentTemplate(UUID id) {
     JasperTemplate template = new JasperTemplate();
 
     template.setId(id);
     template.setName("name");
+    template.setRequiredRights(new ArrayList<>());
 
     given(jasperTemplateRepository.findOne(id)).willReturn(template);
 

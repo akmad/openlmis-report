@@ -23,14 +23,6 @@ public class MessageKeys {
   // General
   protected static final String SERVICE = "report";
   protected static final String SERVICE_ERROR = join(SERVICE, "error");
-  protected static final String REQUISITION_ERROR = "requisition.error";
-
-  public static final String ERROR_IO = REQUISITION_ERROR + ".io";
-  public static final String ERROR_JASPER_FILE_FORMAT = REQUISITION_ERROR + ".jasper.file.format";
-  public static final String STATUS_CHANGE_USER_SYSTEM =
-          REQUISITION_ERROR + ".statusChange.user.system";
-  public static final String ERROR_REQUISITION_NOT_FOUND = REQUISITION_ERROR
-          + ".requisitionNotFound";
 
   protected static final String NOT_FOUND = "notFound";
 
