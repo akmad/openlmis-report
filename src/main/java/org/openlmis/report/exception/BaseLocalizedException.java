@@ -15,8 +15,9 @@
 
 package org.openlmis.report.exception;
 
-import lombok.Getter;
 import org.openlmis.report.utils.Message;
+
+import lombok.Getter;
 
 @Getter
 public class BaseLocalizedException extends Exception {

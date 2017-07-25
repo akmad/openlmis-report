@@ -15,25 +15,16 @@
 
 package org.openlmis.report.service;
 
-import static java.io.File.createTempFile;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_CREATION;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_EMPTY;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INCORRECT_TYPE;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INVALID;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_MISSING;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_IO;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_PARAMETER_INCORRECT_TYPE;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_PARAMETER_MISSING;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_TEMPLATE_EXIST;
-import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 
+import org.openlmis.report.domain.JasperTemplate;
+import org.openlmis.report.domain.JasperTemplateParameter;
+import org.openlmis.report.domain.JasperTemplateParameterDependency;
+import org.openlmis.report.exception.ReportingException;
+import org.openlmis.report.repository.JasperTemplateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,19 +44,59 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.openlmis.report.domain.JasperTemplate;
-import org.openlmis.report.domain.JasperTemplateParameter;
-import org.openlmis.report.domain.JasperTemplateParameterDependency;
-import org.openlmis.report.exception.ReportingException;
-import org.openlmis.report.repository.JasperTemplateRepository;
+import static java.io.File.createTempFile;
+import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_CREATION;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_EMPTY;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INCORRECT_TYPE;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INVALID;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_MISSING;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_IO;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_PARAMETER_INCORRECT_TYPE;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_PARAMETER_MISSING;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_TEMPLATE_EXIST;
 
 @Service
 @SuppressWarnings("PMD.TooManyMethods")
 public class JasperTemplateService {
-  protected static final String REPORT_TYPE_PROPERTY = "reportType";
+  static final String REPORT_TYPE_PROPERTY = "reportType";
+  private static final String DEFAULT_REPORT_TYPE = "Consistency Report";
 
   @Autowired
   private JasperTemplateRepository jasperTemplateRepository;
+
+  /**
+   * Saves a template with given name.
+   * If template already exists, only description and required rights are updated.
+   *
+   * @param file report file
+   * @param name name of report
+   * @param description report's description
+   * @return saved report template
+   */
+  public JasperTemplate saveTemplate(
+      MultipartFile file, String name, String description, List<String> requiredRights)
+      throws ReportingException {
+    JasperTemplate jasperTemplate = jasperTemplateRepository.findByName(name);
+
+    if (jasperTemplate == null) {
+      jasperTemplate = JasperTemplate.builder()
+          .name(name)
+          .type(DEFAULT_REPORT_TYPE)
+          .description(description)
+          .requiredRights(requiredRights)
+          .build();
+    } else {
+      jasperTemplate.setDescription(description);
+      jasperTemplate.getRequiredRights().clear();
+      jasperTemplate.getRequiredRights().addAll(requiredRights);
+    }
+
+    validateFileAndSaveTemplate(jasperTemplate, file);
+    return jasperTemplate;
+  }
 
   /**
    * Validate ".jrmxl" file and insert this template to database.

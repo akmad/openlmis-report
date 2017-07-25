@@ -116,14 +116,6 @@ public class JasperTemplateParameter extends BaseEntity {
   @Setter
   private Boolean required;
 
-  @PrePersist
-  @PreUpdate
-  private void preSave() {
-    if (dependencies != null) {
-      dependencies.forEach(dependency -> dependency.setParameter(this));
-    }
-  }
-
   /**
    * Create new instance of JasperTemplateParameter based on given
    * {@link Importer}
@@ -174,6 +166,14 @@ public class JasperTemplateParameter extends BaseEntity {
         .map(JasperTemplateParameterDependencyDto::newInstance)
         .collect(Collectors.toList())
     );
+  }
+
+  @PrePersist
+  @PreUpdate
+  private void preSave() {
+    if (dependencies != null) {
+      dependencies.forEach(dependency -> dependency.setParameter(this));
+    }
   }
 
   public interface Exporter {

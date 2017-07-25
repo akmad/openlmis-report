@@ -27,8 +27,7 @@ import org.openlmis.report.domain.JasperTemplateParameter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class JasperTemplateParameterDto
-    implements JasperTemplateParameter.Importer, JasperTemplateParameter.Exporter {
+public class JasperTemplateParameterDto implements JasperTemplateParameter.Exporter {
 
   private UUID id;
   private String name;

@@ -15,24 +15,22 @@
 
 package org.openlmis.report.dto;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import org.openlmis.report.domain.JasperTemplate;
+import org.openlmis.report.domain.JasperTemplateParameter;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.openlmis.report.domain.JasperTemplate;
-import org.openlmis.report.domain.JasperTemplateParameter;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class JasperTemplateDto implements JasperTemplate.Importer, JasperTemplate.Exporter {
+public class JasperTemplateDto implements JasperTemplate.Exporter {
 
   @Getter
   @Setter
@@ -54,15 +52,13 @@ public class JasperTemplateDto implements JasperTemplate.Importer, JasperTemplat
   @Setter
   private byte[] data;
 
+  @Getter
   @Setter
-  private List<JasperTemplateParameterDto> templateParameters;
+  private List<String> requiredRights;
 
-  @Override
-  public List<JasperTemplateParameter.Importer> getTemplateParameters() {
-    return new ArrayList<>(
-        Optional.ofNullable(templateParameters).orElse(Collections.emptyList())
-    );
-  }
+  @Getter
+  @Setter
+  private List<JasperTemplateParameter.Exporter> templateParameters;
 
   /**
    * Create new list of JasperTemplateDto based on given list of {@link JasperTemplate}

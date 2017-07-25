@@ -40,6 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -54,7 +55,6 @@ import static org.openlmis.report.i18n.JasperMessageKeys.ERROR_JASPER_TEMPLATE_N
 @RequestMapping("/api/report/templates/common")
 public class JasperTemplateController extends BaseController {
   private static final Logger LOGGER = Logger.getLogger(JasperTemplateController.class);
-  private static final String CONSISTENCY_REPORT = "Consistency Report";
 
   @Autowired
   private JasperTemplateService jasperTemplateService;
@@ -78,23 +78,18 @@ public class JasperTemplateController extends BaseController {
   @RequestMapping(method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   public void createJasperReportTemplate(
-      @RequestPart("file") MultipartFile file, String name, String description)
+      @RequestPart("file") MultipartFile file,
+      @RequestPart("name") String name,
+      @RequestPart(value = "description", required = false) String description,
+      @RequestPart(value = "requiredRights", required = false) String[] requiredRights)
       throws ReportingException {
     permissionService.canEditReportTemplates();
 
-    JasperTemplate jasperTemplateToUpdate = jasperTemplateRepository.findByName(name);
-    if (jasperTemplateToUpdate == null) {
-      LOGGER.debug("Creating new template");
-      jasperTemplateToUpdate = new JasperTemplate(
-          name, null, CONSISTENCY_REPORT, description, null);
-      jasperTemplateService.validateFileAndInsertTemplate(jasperTemplateToUpdate, file);
-    } else {
-      LOGGER.debug("Template found, updating template");
-      jasperTemplateToUpdate.setDescription(description);
-      jasperTemplateService.validateFileAndSaveTemplate(jasperTemplateToUpdate, file);
-    }
+    LOGGER.debug("Saving template with name: " + name);
+    JasperTemplate template = jasperTemplateService.saveTemplate(
+        file, name, description, Arrays.asList(requiredRights));
 
-    LOGGER.debug("Saved template with id: " + jasperTemplateToUpdate.getId());
+    LOGGER.debug("Saved template with id: " + template.getId());
   }
 
   /**

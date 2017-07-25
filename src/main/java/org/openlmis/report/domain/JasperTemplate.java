@@ -19,14 +19,18 @@ package org.openlmis.report.domain;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import java.util.ArrayList;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -34,11 +38,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+@Builder
 @Entity
 @Table(name = "jasper_templates")
 @NoArgsConstructor
@@ -65,6 +65,11 @@ public class JasperTemplate extends BaseEntity {
   @Setter
   private String description;
 
+  @ElementCollection
+  @Getter
+  @Setter
+  private List<String> requiredRights;
+
   @OneToMany(
       mappedBy = "template",
       cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE},
@@ -74,49 +79,6 @@ public class JasperTemplate extends BaseEntity {
   @Getter
   @Setter
   private List<JasperTemplateParameter> templateParameters;
-
-  /**
-   * Create a new instance of Jasper template based on data from {@link Importer}
-   *
-   * @param importer instance of {@link Importer}
-   * @return new instance od template.
-   */
-  public static JasperTemplate newInstance(Importer importer) {
-    JasperTemplate jasperTemplate = new JasperTemplate();
-
-    jasperTemplate.setId(importer.getId());
-    jasperTemplate.setName(importer.getName());
-    jasperTemplate.setData(importer.getData());
-    jasperTemplate.setType(importer.getType());
-    jasperTemplate.setDescription(importer.getDescription());
-    jasperTemplate.setTemplateParameters(new ArrayList<>());
-
-    if (importer.getTemplateParameters() != null) {
-      importer.getTemplateParameters().forEach(tp -> jasperTemplate.getTemplateParameters()
-          .add(JasperTemplateParameter.newInstance(tp)));
-    }
-
-    return jasperTemplate;
-  }
-
-  /**
-   * Copy values of attributes into new or updated Template.
-   *
-   * @param jasperTemplate Template with new values.
-   */
-  public void updateFrom(JasperTemplate jasperTemplate) {
-    this.name = jasperTemplate.getName();
-    this.data = jasperTemplate.getData();
-    this.templateParameters = jasperTemplate.getTemplateParameters();
-    this.type = jasperTemplate.getType();
-    this.description = jasperTemplate.getDescription();
-  }
-
-  @PrePersist
-  @PreUpdate
-  private void preSave() {
-    forEachParameter(line -> line.setTemplate(this));
-  }
 
   /**
    * Export this object to the specified exporter (DTO).
@@ -131,9 +93,12 @@ public class JasperTemplate extends BaseEntity {
     exporter.setType(type);
   }
 
-  private void forEachParameter(Consumer<JasperTemplateParameter> consumer) {
-    Optional.ofNullable(templateParameters)
-        .ifPresent(list -> list.forEach(consumer));
+  @PrePersist
+  @PreUpdate
+  private void preSave() {
+    if (templateParameters != null) {
+      templateParameters.forEach(line -> line.setTemplate(this));
+    }
   }
 
   public interface Exporter {
@@ -147,20 +112,6 @@ public class JasperTemplate extends BaseEntity {
 
     void setDescription(String description);
 
-  }
-
-  public interface Importer {
-    UUID getId();
-
-    String getName();
-
-    byte[] getData();
-
-    String getType();
-
-    String getDescription();
-
-    List<JasperTemplateParameter.Importer> getTemplateParameters();
-
+    void setRequiredRights(List<String> rights);
   }
 }
