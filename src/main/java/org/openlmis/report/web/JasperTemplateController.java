@@ -40,6 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -78,16 +79,17 @@ public class JasperTemplateController extends BaseController {
   @RequestMapping(method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   public void createJasperReportTemplate(
-      @RequestPart("file") MultipartFile file,
-      @RequestPart("name") String name,
-      @RequestPart(value = "description", required = false) String description,
-      @RequestPart(value = "requiredRights", required = false) String[] requiredRights)
-      throws ReportingException {
+      @RequestPart("file") MultipartFile file, String name, String description,
+      String[] requiredRights) throws ReportingException {
     permissionService.canEditReportTemplates();
+    List<String> rightList = new ArrayList<>();
+    if (requiredRights != null) {
+      rightList.addAll(Arrays.asList(requiredRights));
+    }
 
     LOGGER.debug("Saving template with name: " + name);
     JasperTemplate template = jasperTemplateService.saveTemplate(
-        file, name, description, Arrays.asList(requiredRights));
+        file, name, description, rightList);
 
     LOGGER.debug("Saved template with id: " + template.getId());
   }
