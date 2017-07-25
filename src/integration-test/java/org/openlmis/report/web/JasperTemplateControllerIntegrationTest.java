@@ -15,6 +15,25 @@
 
 package org.openlmis.report.web;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.openlmis.report.domain.JasperTemplate;
+import org.openlmis.report.dto.JasperTemplateDto;
+import org.openlmis.report.exception.JasperReportViewException;
+import org.openlmis.report.repository.JasperTemplateRepository;
+import org.openlmis.report.service.JasperReportsViewService;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
+
+import guru.nidi.ramltester.junit.RamlMatchers;
+
+import java.util.Arrays;
+import java.util.Properties;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -24,26 +43,6 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-
-import org.openlmis.report.service.PermissionService;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
-
-import java.util.Arrays;
-import java.util.Properties;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-
-import guru.nidi.ramltester.junit.RamlMatchers;
-import org.openlmis.report.domain.JasperTemplate;
-import org.openlmis.report.dto.JasperTemplateDto;
-import org.openlmis.report.exception.JasperReportViewException;
-import org.openlmis.report.repository.JasperTemplateRepository;
-import org.openlmis.report.service.JasperReportsViewService;
 
 @SuppressWarnings("PMD.TooManyMethods")
 public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationTest {
@@ -68,8 +67,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
   @Test
   public void shouldGetAllTemplates() {
     // given
-    JasperTemplate[] templates = { generateTemplate(), generateTemplate(),
-            generateTemplate(PermissionService.AGGREGATE_ORDERS_ID) };
+    JasperTemplate[] templates = { generateTemplate(), generateTemplate() };
     given(jasperTemplateRepository.findAll()).willReturn(Arrays.asList(templates));
 
     // when

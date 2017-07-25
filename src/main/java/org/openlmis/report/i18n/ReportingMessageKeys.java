@@ -32,8 +32,6 @@ public class ReportingMessageKeys extends MessageKeys {
   public static final String ERROR_REPORTING_CLASS_NOT_FOUND = join(ERROR, "class", "notFound");
   public static final String ERROR_REPORTING_CREATION = join(ERROR, CREATION);
   public static final String ERROR_REPORTING_FILE_EMPTY = join(ERROR, FILE, EMPTY);
-  public static final String ERROR_REPORTING_TEMPLATE_PARAMETER_INVALID =
-      join(ERROR, TEMPLATE, PARAMETER, INVALID);
   public static final String ERROR_REPORTING_FILE_INCORRECT_TYPE =
       join(ERROR, FILE, INCORRECT_TYPE);
   public static final String ERROR_REPORTING_FILE_INVALID = join(ERROR, FILE, INVALID);
@@ -44,6 +42,4 @@ public class ReportingMessageKeys extends MessageKeys {
       join(ERROR, PARAMETER, MISSING);
   public static final String ERROR_REPORTING_TEMPLATE_EXIST =
       join(ERROR, TEMPLATE, EXISTS);
-  public static final String ERROR_REPORTING_TEMPLATE_NOT_FOUND =
-      join(ERROR, TEMPLATE, NOT_FOUND);
 }

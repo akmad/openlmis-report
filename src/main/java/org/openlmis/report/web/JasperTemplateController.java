@@ -15,9 +15,17 @@
 
 package org.openlmis.report.web;
 
-import static org.openlmis.report.i18n.JasperMessageKeys.ERROR_JASPER_TEMPLATE_NOT_FOUND;
-
 import org.apache.log4j.Logger;
+import org.openlmis.report.domain.JasperTemplate;
+import org.openlmis.report.dto.JasperTemplateDto;
+import org.openlmis.report.exception.JasperReportViewException;
+import org.openlmis.report.exception.NotFoundMessageException;
+import org.openlmis.report.exception.ReportingException;
+import org.openlmis.report.repository.JasperTemplateRepository;
+import org.openlmis.report.service.JasperReportsViewService;
+import org.openlmis.report.service.JasperTemplateService;
+import org.openlmis.report.service.PermissionService;
+import org.openlmis.report.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -32,35 +40,20 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
 
-import org.openlmis.report.domain.JasperTemplate;
-import org.openlmis.report.dto.JasperTemplateDto;
-import org.openlmis.report.exception.JasperReportViewException;
-import org.openlmis.report.exception.NotFoundMessageException;
-import org.openlmis.report.exception.ReportingException;
-import org.openlmis.report.repository.JasperTemplateRepository;
-import org.openlmis.report.service.JasperReportsViewService;
-import org.openlmis.report.service.JasperTemplateService;
-import org.openlmis.report.service.PermissionService;
-import org.openlmis.report.utils.Message;
-
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static org.openlmis.report.i18n.JasperMessageKeys.ERROR_JASPER_TEMPLATE_NOT_FOUND;
 
 @Controller
 @Transactional
 @RequestMapping("/api/report/templates/common")
 public class JasperTemplateController extends BaseController {
   private static final Logger LOGGER = Logger.getLogger(JasperTemplateController.class);
-
-  private static final String TIMELINESS_REPORT = "Timeliness Report";
-  private static final String REPORTING_RATE_REPORT = "Reporting Rate Report";
-  private static final String ORDER_REPORT = "Order Report";
-  private static final int DUE_DAYS = 10;
   private static final String CONSISTENCY_REPORT = "Consistency Report";
 
   @Autowired
@@ -114,12 +107,7 @@ public class JasperTemplateController extends BaseController {
   @ResponseBody
   public List<JasperTemplateDto> getAllTemplates() {
     permissionService.canViewReports(null);
-    return JasperTemplateDto.newInstance(jasperTemplateRepository.findAll())
-        .stream()
-        // filter out the Aggregate Orders Report
-        .filter(template -> !(template.getId().equals(PermissionService.AGGREGATE_ORDERS_ID)
-                || template.getId().equals(PermissionService.ORDER_ID)))
-        .collect(Collectors.toList());
+    return JasperTemplateDto.newInstance(jasperTemplateRepository.findAll());
   }
 
   /**
@@ -171,11 +159,9 @@ public class JasperTemplateController extends BaseController {
    */
   @RequestMapping(value = "/{id}/{format}", method = RequestMethod.GET)
   @ResponseBody
-  public ModelAndView generateReport(HttpServletRequest request,
-                                     @PathVariable("id") UUID templateId,
-                                     @PathVariable("format") String format)
-      throws JasperReportViewException {
-
+  public ModelAndView generateReport(
+      HttpServletRequest request, @PathVariable("id") UUID templateId,
+      @PathVariable("format") String format) throws JasperReportViewException {
     permissionService.canViewReports(templateId);
 
     JasperTemplate template = jasperTemplateRepository.findOne(templateId);
@@ -191,17 +177,8 @@ public class JasperTemplateController extends BaseController {
     map.put("format", format);
     map.put("imagesDirectory", "images/");
 
-    JasperReportsMultiFormatView jasperView;
-
-    if (REPORTING_RATE_REPORT.equals(template.getType())) {
-      map.putIfAbsent("DueDays", String.valueOf(DUE_DAYS));
-
-      jasperView = jasperReportsViewService.getReportingRateJasperReportsView(
-          template, request, map
-      );
-    } else {
-      jasperView = jasperReportsViewService.getJasperReportsView(template, request);
-    }
+    JasperReportsMultiFormatView jasperView = jasperReportsViewService
+        .getJasperReportsView(template, request);
 
     String fileName = template.getName().replaceAll("\\s+", "_");
     String contentDisposition = "inline; filename=" + fileName + "." + format;
@@ -210,14 +187,7 @@ public class JasperTemplateController extends BaseController {
         .getContentDispositionMappings()
         .setProperty(format, contentDisposition.toLowerCase(Locale.ENGLISH));
 
-    String templateType = template.getType();
-    if (TIMELINESS_REPORT.equals(templateType)) {
-      return jasperReportsViewService.getTimelinessJasperReportView(jasperView, map);
-    } else if (ORDER_REPORT.equals(templateType)) {
-      return jasperReportsViewService.getOrderJasperReportView(jasperView, map);
-    } else {
-      return new ModelAndView(jasperView, map);
-    }
+    return new ModelAndView(jasperView, map);
   }
 
 }
