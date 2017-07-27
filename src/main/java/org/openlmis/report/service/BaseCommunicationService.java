@@ -171,7 +171,7 @@ public abstract class BaseCommunicationService<T> {
 
     try {
       ResponseEntity<P[]> response = restTemplate.exchange(createUri(url, params),
-              method, createEntity(payload, authorizationService.obtainAccessToken()),
+              method, createEntity(authorizationService.obtainAccessToken(), payload),
               type);
 
       return Stream.of(response.getBody()).collect(Collectors.toList());
@@ -207,7 +207,7 @@ public abstract class BaseCommunicationService<T> {
       ResponseEntity<PageImplRepresentation<P>> response = restTemplate.exchange(
               createUri(url, params),
               method,
-              createEntity(payload, authorizationService.obtainAccessToken()),
+              createEntity(authorizationService.obtainAccessToken(), payload),
               new DynamicPageTypeReference<>(type)
 
       );
