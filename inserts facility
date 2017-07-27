@@ -1,0 +1,11 @@
+INSERT INTO referencedata.facilities (id, active, code, enabled, name, openlmisaccessible, geographiczoneid, operatedbyid, typeid)
+  VALUES ('9bbd69c1-e20f-48f5-aae4-26dcd8aa7602', TRUE, 'CD1', TRUE, 'TEST UNASSIGNED', TRUE, '0bbd69c1-e20f-48f5-aae4-26dcd8aa7602', '9456c3e9-c4a6-4a28-9e08-47ceb16a4121', 'ac1d268b-ce10-455f-bf87-9c667da8f060');
+
+INSERT INTO referencedata.supported_programs (id, active, facilityid, programid)
+  VALUES ('9bbd69c1-e20f-48f5-aae4-26dcd8aa7602', TRUE, '9bbd69c1-e20f-48f5-aae4-26dcd8aa7602', 'dce17f2e-af3e-40ad-8e00-3496adef44c3');
+
+INSERT INTO referencedata.supported_programs (id, active, facilityid, programid)
+  VALUES ('8bbd69c1-e20f-48f5-aae4-26dcd8aa7602', TRUE, '9bbd69c1-e20f-48f5-aae4-26dcd8aa7602', '10845cb9-d365-4aaa-badd-b4fa39c6a26a');
+  
+DELETE FROM referencedata.role_rights AS r WHERE r.rightid = 'e101d2b8-6a0f-4af6-a5de-a9576b4ebc50';
+

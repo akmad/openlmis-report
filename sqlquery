@@ -1,0 +1,93 @@
+SELECT
+  DISTINCT facilities.code AS facility_code,
+  facilities.name AS facility_name,
+  facility_types.name AS facility_type,
+  programs.name AS program_name,
+  (
+    WITH RECURSIVE findSupervisoryNodes AS (
+      SELECT
+        nodes.id,
+        nodes.parentid
+      FROM
+        referencedata.supervisory_nodes AS nodes
+      WHERE
+        nodes.facilityid = facilities.id
+      UNION ALL
+        SELECT
+          nodes.id,
+          nodes.parentid
+        FROM
+          referencedata.supervisory_nodes AS nodes
+        JOIN
+          findSupervisoryNodes ON findSupervisoryNodes.parentid = nodes.id
+    )
+    
+    SELECT
+      string_agg(DISTINCT roles.name, ', ')
+    FROM
+      findSupervisoryNodes AS nodes
+      JOIN referencedata.role_assignments AS role_assignments ON role_assignments.supervisorynodeid = nodes.id
+      JOIN referencedata.users AS users ON users.id = role_assignments.userid
+      JOIN referencedata.roles AS roles ON roles.id = role_assignments.roleid
+      JOIN referencedata.role_rights AS role_rights ON role_rights.roleid = roles.id
+      JOIN referencedata.rights AS rights ON rights.id = role_rights.rightid
+    WHERE
+      (role_assignments.supervisorynodeid IN (SELECT id FROM findSupervisoryNodes) OR users.homefacilityid = facilities.id)
+      AND rights.name IN ('REQUISITION_VIEW', 'REQUISITION_CREATE', 'REQUISITION_DELETE', 'REQUISITION_AUTHORIZE', 'REQUISITION_APPROVE')
+      AND role_assignments.programid = sets.programid
+      
+  ) AS assigned_roles,
+  supervisory_nodes.code AS supervisory_node
+FROM
+  referencedata.supported_programs AS sets
+  JOIN referencedata.programs AS programs ON programs.id = sets.programid
+  JOIN referencedata.facilities AS facilities ON facilities.id = sets.facilityid
+  JOIN referencedata.facility_types AS facility_types ON facility_types.id = facilities.typeid
+  FULL OUTER JOIN referencedata.supervisory_nodes AS supervisory_nodes ON supervisory_nodes.facilityid = facilities.id
+WHERE
+  sets.active = TRUE
+  AND (
+    (
+      WITH RECURSIVE findSupervisoryNodes AS (
+        SELECT
+          nodes.id,
+          nodes.parentid
+        FROM
+          referencedata.supervisory_nodes AS nodes
+        WHERE
+          nodes.id = supervisory_nodes.id
+        UNION ALL
+          SELECT
+            nodes.id,
+            nodes.parentid
+          FROM
+            referencedata.supervisory_nodes AS nodes
+          JOIN
+            findSupervisoryNodes ON findSupervisoryNodes.parentid = nodes.id
+      ), findSupervisingUsers AS (
+        SELECT
+          COUNT (DISTINCT users.id) AS count,
+          rights.name AS right
+        FROM
+          referencedata.users AS users
+          JOIN referencedata.role_assignments AS role_assignments ON role_assignments.userid = users.id
+          JOIN referencedata.role_rights AS role_rights ON role_rights.roleid = role_assignments.roleid
+          JOIN referencedata.rights AS rights ON rights.id = role_rights.rightid
+        WHERE
+          CASE WHEN supervisory_nodes.id IS NOT NULL THEN
+            role_assignments.supervisorynodeid IN (SELECT id FROM findSupervisoryNodes)
+          ELSE
+            users.homefacilityid = facilities.id
+          END
+            AND rights.name IN ('REQUISITION_VIEW', 'REQUISITION_CREATE', 'REQUISITION_DELETE', 'REQUISITION_AUTHORIZE', 'REQUISITION_APPROVE')
+            AND role_assignments.programid = sets.programid
+        GROUP BY
+          rights.name
+      )
+      
+      SELECT COUNT(1) FROM findSupervisingUsers WHERE count = 0
+    ) = 0
+  )
+ORDER BY
+  facilities.name
+;

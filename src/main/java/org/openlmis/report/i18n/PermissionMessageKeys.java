@@ -16,7 +16,7 @@
 package org.openlmis.report.i18n;
 
 public class PermissionMessageKeys extends MessageKeys {
-  public static String ERROR = join(SERVICE_ERROR, "permission");
+  private static final String ERROR = join(SERVICE_ERROR, "permission");
 
-  public static String ERROR_NO_PERMISSION = join(ERROR, "no", "permission");
+  public static final String ERROR_NO_PERMISSION = join(ERROR, "no", "permission");
 }
