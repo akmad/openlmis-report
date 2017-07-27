@@ -33,7 +33,7 @@ import org.openlmis.report.utils.RequestParameters;
 
 @Service
 public class AuthorizationService {
-  public static final String ACCESS_TOKEN = "access_token";
+  private static final String ACCESS_TOKEN = "access_token";
 
   @Value("${auth.server.clientId}")
   private String clientId;

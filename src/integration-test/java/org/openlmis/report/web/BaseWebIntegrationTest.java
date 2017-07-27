@@ -67,7 +67,6 @@ import org.openlmis.report.utils.Message;
 public abstract class BaseWebIntegrationTest {
   protected static final String BASE_URL = System.getenv("BASE_URL");
   protected static final String CONTENT_TYPE = "Content-Type";
-  protected static final String ACCESS_TOKEN = "access_token";
   protected static final String RAML_ASSERT_MESSAGE =
       "HTTP request/response should match RAML definition.";
 
@@ -129,8 +128,8 @@ public abstract class BaseWebIntegrationTest {
     return any(UUID.class);
   }
 
-  protected String getToken() {
-    return UUID.randomUUID().toString();
+  protected String getTokenHeader() {
+    return "Bearer " + UUID.randomUUID().toString();
   }
 
   protected void mockExternalAuthorization() {
