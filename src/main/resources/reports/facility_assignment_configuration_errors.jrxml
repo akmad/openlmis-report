@@ -13,7 +13,7 @@
   (
     SELECT string_agg(programs.name, ', ')
     FROM referencedata.programs AS programs
-    WHERE programs.id IN (SELECT subsets.programid FROM referencedata.supported_programs AS subsets WHERE subsets.facilityid = facilities.id)
+    WHERE programs.id IN (SELECT subsets.programid FROM referencedata.supported_programs AS subsets WHERE subsets.facilityid = facilities.id AND subsets.active = TRUE)
   ) AS program_names,
   (
     WITH RECURSIVE findSupervisoryNodes AS (
@@ -37,7 +37,7 @@
     WHERE
       (role_assignments.supervisorynodeid IN (SELECT id FROM findSupervisoryNodes) OR users.homefacilityid = facilities.id)
       AND rights.name IN ('REQUISITION_VIEW', 'REQUISITION_CREATE', 'REQUISITION_DELETE', 'REQUISITION_AUTHORIZE', 'REQUISITION_APPROVE')
-      AND role_assignments.programid IN (SELECT subsets.programid FROM referencedata.supported_programs AS subsets WHERE subsets.facilityid = facilities.id)
+      AND role_assignments.programid IN (SELECT subsets.programid FROM referencedata.supported_programs AS subsets WHERE subsets.facilityid = facilities.id AND subsets.active = TRUE)
   ) AS assigned_roles,
   (
     SELECT string_agg(DISTINCT nodes.code, ', ')
