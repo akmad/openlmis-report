@@ -51,7 +51,7 @@ import static org.mockito.Mockito.verify;
 
 @SuppressWarnings("PMD.TooManyMethods")
 public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationTest {
-  private static final String RESOURCE_URL = "/api/report/templates/common";
+  private static final String RESOURCE_URL = "/api/reports/templates/common";
   private static final String ID_URL = RESOURCE_URL + "/{id}";
   private static final String FORMAT_PARAM = "format";
   private static final String REPORT_URL = ID_URL + "/{" + FORMAT_PARAM + "}";
@@ -67,7 +67,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
     mockUserAuthenticated();
   }
 
-  // GET /api/report/templates
+  // GET /api/reports/templates
 
   @Test
   public void shouldGetAllTemplates() {
@@ -91,7 +91,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
     assertThat(RAML_ASSERT_MESSAGE, restAssured.getLastReport(), RamlMatchers.hasNoViolations());
   }
 
-  // DELETE /api/report/templates
+  // DELETE /api/reports/templates
 
   @Test
   public void shouldDeleteExistentTemplate() {
@@ -132,7 +132,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
     assertThat(RAML_ASSERT_MESSAGE, restAssured.getLastReport(), RamlMatchers.hasNoViolations());
   }
 
-  // GET /api/report/templates/{id}
+  // GET /api/reports/templates/{id}
 
   @Test
   public void shouldGetExistentTemplate() {
@@ -174,7 +174,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
     assertThat(RAML_ASSERT_MESSAGE, restAssured.getLastReport(), RamlMatchers.hasNoViolations());
   }
 
-  // GET /api/report/templates/{id}/{format}
+  // GET /api/reports/templates/{id}/{format}
 
   @Test
   public void generateReportShouldReturnNotFoundWhenReportTemplateDoesNotExist() {

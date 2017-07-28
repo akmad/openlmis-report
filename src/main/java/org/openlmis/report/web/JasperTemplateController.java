@@ -53,7 +53,7 @@ import static org.openlmis.report.i18n.JasperMessageKeys.ERROR_JASPER_TEMPLATE_N
 
 @Controller
 @Transactional
-@RequestMapping("/api/report/templates/common")
+@RequestMapping("/api/reports/templates/common")
 public class JasperTemplateController extends BaseController {
   private static final Logger LOGGER = Logger.getLogger(JasperTemplateController.class);
 

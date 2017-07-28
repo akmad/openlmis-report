@@ -134,7 +134,7 @@ resourceTypes:
 
 /api:
 
-  /report:
+  /reports:
       /requisitions/{id}/print:
         uriParameters:
             id:
