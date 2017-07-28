@@ -72,10 +72,6 @@ public class PermissionServiceTest {
 
     // when
     permissionService.canViewReports();
-
-    // then
-    verify(userReferenceDataService, atLeastOnce())
-        .hasRight(user.getId(), right.getId());
   }
 
   @Test
@@ -102,10 +98,6 @@ public class PermissionServiceTest {
 
     // when
     permissionService.canEditReportTemplates();
-
-    // then
-    verify(userReferenceDataService, atLeastOnce())
-        .hasRight(user.getId(), right.getId());
   }
 
   @Test
@@ -129,7 +121,7 @@ public class PermissionServiceTest {
   }
 
   @Test(expected = PermissionMessageException.class)
-  public void shouldNotRejectMultiplePermissionsWhenUserDoesNotHaveEveryRight() {
+  public void shouldRejectMultiplePermissionsWhenUserDoesNotHaveEveryRight() {
     // given
     UserDto user = mockUserLoggedIn();
     RightDto viewRight = mockRightFound(REPORTS_VIEW);
@@ -140,12 +132,6 @@ public class PermissionServiceTest {
 
     // when
     permissionService.validatePermissions(REPORTS_VIEW, REPORT_TEMPLATES_EDIT);
-
-    // then
-    verify(userReferenceDataService, atLeastOnce())
-        .hasRight(user.getId(), viewRight.getId());
-    verify(userReferenceDataService, atLeastOnce())
-        .hasRight(user.getId(), editRight.getId());
   }
 
   private UserDto mockUserLoggedIn() {

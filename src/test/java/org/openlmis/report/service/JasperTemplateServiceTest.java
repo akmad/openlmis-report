@@ -32,6 +32,7 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.openlmis.report.domain.JasperTemplate;
 import org.openlmis.report.domain.JasperTemplateParameter;
+import org.openlmis.report.dto.external.RightDto;
 import org.openlmis.report.exception.ReportingException;
 import org.openlmis.report.exception.ValidationMessageException;
 import org.openlmis.report.repository.JasperTemplateRepository;
@@ -45,11 +46,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -61,10 +64,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.openlmis.report.i18n.AuthorizationMessageKeys.ERROR_RIGHT_NOT_FOUND;
 import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_EMPTY;
 import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INCORRECT_TYPE;
 import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INVALID;
@@ -114,17 +120,71 @@ public class JasperTemplateServiceTest {
     template = mock(JasperTemplate.class);
   }
 
-  @Test(expected = ValidationMessageException.class)
+  @Test
+  public void shouldSaveValidNonExistentTemplate() throws Exception {
+    // given
+    given(jasperTemplateRepository.findByName(anyString()))
+        .willReturn(null);
+
+    // when
+    testSaveTemplate(DISPLAY_NAME);
+  }
+
+  @Test
+  public void shouldUpdateValidExistentTemplate() throws Exception {
+    // given
+    UUID oldId = UUID.randomUUID();
+
+    JasperTemplate oldTemplate = new JasperTemplate();
+    oldTemplate.setName(DISPLAY_NAME);
+    oldTemplate.setId(oldId);
+    oldTemplate.setRequiredRights(new ArrayList<>());
+
+    given(jasperTemplateRepository.findByName(anyString()))
+        .willReturn(oldTemplate);
+
+    // when
+    JasperTemplate template = testSaveTemplate(DISPLAY_NAME);
+
+    // then
+    assertEquals(template.getId(), oldId);
+  }
+
+  private JasperTemplate testSaveTemplate(String name) throws ReportingException {
+    JasperTemplateService service = spy(jasperTemplateService);
+    MultipartFile file = mock(MultipartFile.class);
+    String description = "description";
+    List<String> requiredRights = Collections.singletonList("USERS_MANAGE");
+
+    given(rightReferenceDataService.findRight(requiredRights.get(0)))
+        .willReturn(new RightDto());
+
+    // validating and saving file is checked by other tests
+    doNothing().when(service)
+        .validateFileAndSaveTemplate(any(JasperTemplate.class), eq(file));
+
+    // when
+    JasperTemplate resultTemplate = service.saveTemplate(file, name, description, requiredRights);
+
+    // then
+    assertEquals(name, resultTemplate.getName());
+    assertEquals(description, resultTemplate.getDescription());
+    assertEquals(requiredRights, resultTemplate.getRequiredRights());
+
+    return resultTemplate;
+  }
+
+  @Test
   public void shouldThrowErrorIfReportRequiredRightDoesNotExist() throws Exception {
+    expectedException.expect(ValidationMessageException.class);
+    expectedException.expectMessage(ERROR_RIGHT_NOT_FOUND);
+
     // given
     String rejectedRight = "REPORTS_DELETE";
     given(rightReferenceDataService.findRight(rejectedRight)).willReturn(null);
 
     // when
     jasperTemplateService.saveTemplate(null, null, null, Collections.singletonList(rejectedRight));
-
-    // then
-    verify(rightReferenceDataService, atLeastOnce()).findRight(rejectedRight);
   }
   
   @Test

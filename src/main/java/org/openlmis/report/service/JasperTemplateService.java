@@ -163,7 +163,7 @@ public class JasperTemplateService {
    * Validate ".jrmxl" file and insert if template not exist. If this name of template already
    * exist, remove older template and insert new.
    */
-  private void validateFileAndSaveTemplate(JasperTemplate jasperTemplate, MultipartFile file)
+  void validateFileAndSaveTemplate(JasperTemplate jasperTemplate, MultipartFile file)
       throws ReportingException {
     JasperTemplate templateTmp = jasperTemplateRepository.findByName(jasperTemplate.getName());
     if (templateTmp != null) {
