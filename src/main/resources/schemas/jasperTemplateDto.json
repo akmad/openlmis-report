@@ -29,6 +29,14 @@
       },
       "uniqueItems": false
     },
+    "requiredRights": {
+      "type": ["array", "null"],
+      "title": "requiredRights",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": false
+    },
     "type": {
       "type": ["string", "null"],
       "title": "type"

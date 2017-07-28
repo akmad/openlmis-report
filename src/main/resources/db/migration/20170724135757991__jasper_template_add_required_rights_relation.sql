@@ -8,9 +8,9 @@ CREATE TABLE jaspertemplate_requiredrights (
 );
 
 --
--- Name: jaspertemplate_requiredrights pk_jaspertemplate_requiredrights__jasper_templates; Type: PK CONSTRAINT; Schema: report; Owner: postgres
+-- Name: jaspertemplate_requiredrights fk_jaspertemplate_requiredrights__jasper_templates; Type: FK CONSTRAINT; Schema: report; Owner: postgres
 --
 
 ALTER TABLE ONLY jaspertemplate_requiredrights
-    ADD CONSTRAINT pk_jaspertemplate_requiredrights__jasper_templates
+    ADD CONSTRAINT fk_jaspertemplate_requiredrights__jasper_templates
     FOREIGN KEY (jaspertemplateid) REFERENCES jasper_templates(id);

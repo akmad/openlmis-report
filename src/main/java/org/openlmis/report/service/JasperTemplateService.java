@@ -143,6 +143,7 @@ public class JasperTemplateService {
 
   /**
    * Validate ".jrmxl" file and insert this template to database.
+   * Throws reporting exception if an error occurs during file validation or parsing,
    */
   void validateFileAndInsertTemplate(JasperTemplate jasperTemplate, MultipartFile file)
       throws ReportingException {

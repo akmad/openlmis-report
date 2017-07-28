@@ -29,8 +29,8 @@ import static org.openlmis.report.i18n.PermissionMessageKeys.ERROR_NO_PERMISSION
 
 @Service
 public class PermissionService {
-  public static final String REPORT_TEMPLATES_EDIT = "REPORT_TEMPLATES_EDIT";
-  public static final String REPORTS_VIEW = "REPORTS_VIEW";
+  static final String REPORT_TEMPLATES_EDIT = "REPORT_TEMPLATES_EDIT";
+  static final String REPORTS_VIEW = "REPORTS_VIEW";
 
   @Autowired
   private AuthenticationHelper authenticationHelper;

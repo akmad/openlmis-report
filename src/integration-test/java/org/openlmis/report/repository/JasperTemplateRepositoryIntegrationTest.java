@@ -15,13 +15,16 @@
 
 package org.openlmis.report.repository;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Test;
+import org.openlmis.report.domain.JasperTemplate;
+import org.openlmis.report.domain.JasperTemplateParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.openlmis.report.domain.JasperTemplate;
+import java.util.Collections;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class JasperTemplateRepositoryIntegrationTest extends
     BaseCrudRepositoryIntegrationTest<JasperTemplate> {
@@ -45,10 +48,31 @@ public class JasperTemplateRepositoryIntegrationTest extends
 
   @Test
   public void shouldFindTemplateByName() {
+    // given
     jasperTemplateRepository.save(generateInstance());
 
+    // when
     JasperTemplate found = jasperTemplateRepository.findByName(NAME);
 
+    // then
     assertThat(found.getName(), is(NAME));
   }
+
+  @Test
+  public void shouldBindParametersToTemplateOnSave() {
+    // given
+    JasperTemplateParameter templateParameter = new JasperTemplateParameter();
+    templateParameter.setName("parameter");
+    templateParameter.setRequired(true);
+
+    JasperTemplate template = generateInstance();
+    template.setTemplateParameters(Collections.singletonList(templateParameter));
+
+    // when
+    JasperTemplate result = jasperTemplateRepository.save(template);
+
+    // then
+    assertEquals(templateParameter.getTemplate().getId(), result.getId());
+  }
+
 }

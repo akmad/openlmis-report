@@ -15,29 +15,6 @@
 
 package org.openlmis.report.service;
 
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_EMPTY;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INCORRECT_TYPE;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INVALID;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_MISSING;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_PARAMETER_MISSING;
-import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_TEMPLATE_EXIST;
-import static org.openlmis.report.service.JasperTemplateService.REPORT_TYPE_PROPERTY;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.arrayContaining;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.doNothing;
-import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.spy;
-import static org.powermock.api.mockito.PowerMockito.whenNew;
-
 import net.sf.jasperreports.engine.JRExpression;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRPropertiesMap;
@@ -53,6 +30,12 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
+import org.openlmis.report.domain.JasperTemplate;
+import org.openlmis.report.domain.JasperTemplateParameter;
+import org.openlmis.report.exception.ReportingException;
+import org.openlmis.report.exception.ValidationMessageException;
+import org.openlmis.report.repository.JasperTemplateRepository;
+import org.openlmis.report.service.referencedata.RightReferenceDataService;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
@@ -70,10 +53,30 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.openlmis.report.domain.JasperTemplate;
-import org.openlmis.report.domain.JasperTemplateParameter;
-import org.openlmis.report.exception.ReportingException;
-import org.openlmis.report.repository.JasperTemplateRepository;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_EMPTY;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INCORRECT_TYPE;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_INVALID;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_FILE_MISSING;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_PARAMETER_MISSING;
+import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_TEMPLATE_EXIST;
+import static org.openlmis.report.service.JasperTemplateService.REPORT_TYPE_PROPERTY;
+import static org.powermock.api.mockito.PowerMockito.doNothing;
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.spy;
+import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(BlockJUnit4ClassRunner.class)
@@ -83,6 +86,9 @@ public class JasperTemplateServiceTest {
 
   @Mock
   private JasperTemplateRepository jasperTemplateRepository;
+
+  @Mock
+  private RightReferenceDataService rightReferenceDataService;
 
   @InjectMocks
   private JasperTemplateService jasperTemplateService;
@@ -106,6 +112,19 @@ public class JasperTemplateServiceTest {
   public void setUp() {
     request = mock(HttpServletRequest.class);
     template = mock(JasperTemplate.class);
+  }
+
+  @Test(expected = ValidationMessageException.class)
+  public void shouldThrowErrorIfReportRequiredRightDoesNotExist() throws Exception {
+    // given
+    String rejectedRight = "REPORTS_DELETE";
+    given(rightReferenceDataService.findRight(rejectedRight)).willReturn(null);
+
+    // when
+    jasperTemplateService.saveTemplate(null, null, null, Collections.singletonList(rejectedRight));
+
+    // then
+    verify(rightReferenceDataService, atLeastOnce()).findRight(rejectedRight);
   }
   
   @Test

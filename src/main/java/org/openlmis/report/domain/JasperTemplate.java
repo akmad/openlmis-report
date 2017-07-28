@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -66,6 +67,7 @@ public class JasperTemplate extends BaseEntity {
   private String description;
 
   @ElementCollection
+  @CollectionTable
   @Getter
   @Setter
   private List<String> requiredRights;
