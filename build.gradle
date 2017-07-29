@@ -72,6 +72,15 @@ check {
     dependsOn integrationTest
 }
 
+assemble {
+    dependsOn ramlToHtml
+    dependsOn ramlToSwagger
+    dependsOn copyRamlHtmlToBuild
+    dependsOn copyConsulRegistrationToBuild
+    dependsOn jacocoTestReport
+    dependsOn demoDataSeed
+}
+
 build {
     dependsOn jacocoTestReport
     dependsOn check
