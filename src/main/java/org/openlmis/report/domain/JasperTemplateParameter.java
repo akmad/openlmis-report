@@ -85,6 +85,16 @@ public class JasperTemplateParameter extends BaseEntity {
   @Column(columnDefinition = TEXT_COLUMN_DEFINITION)
   @Getter
   @Setter
+  private String selectMethod;
+
+  @Column(columnDefinition = TEXT_COLUMN_DEFINITION)
+  @Getter
+  @Setter
+  private String selectBody;
+
+  @Column(columnDefinition = TEXT_COLUMN_DEFINITION)
+  @Getter
+  @Setter
   private String selectProperty;
 
   @Column(columnDefinition = TEXT_COLUMN_DEFINITION)
@@ -130,6 +140,8 @@ public class JasperTemplateParameter extends BaseEntity {
     jasperTemplateParameter.setDisplayName(importer.getDisplayName());
     jasperTemplateParameter.setDefaultValue(importer.getDefaultValue());
     jasperTemplateParameter.setSelectExpression(importer.getSelectExpression());
+    jasperTemplateParameter.setSelectMethod(importer.getSelectMethod());
+    jasperTemplateParameter.setSelectBody(importer.getSelectBody());
     jasperTemplateParameter.setDescription(importer.getDescription());
     jasperTemplateParameter.setDataType(importer.getDataType());
     jasperTemplateParameter.setSelectProperty(importer.getSelectProperty());
@@ -157,6 +169,8 @@ public class JasperTemplateParameter extends BaseEntity {
     exporter.setDefaultValue(defaultValue);
     exporter.setDisplayName(displayName);
     exporter.setSelectExpression(selectExpression);
+    exporter.setSelectMethod(selectMethod);
+    exporter.setSelectBody(selectBody);
     exporter.setSelectProperty(selectProperty);
     exporter.setDisplayProperty(displayProperty);
     exporter.setRequired(required);
@@ -189,6 +203,10 @@ public class JasperTemplateParameter extends BaseEntity {
 
     void setSelectExpression(String selectExpression);
 
+    void setSelectMethod(String selectMethod);
+
+    void setSelectBody(String selectBody);
+
     void setDescription(String description);
 
     void setSelectProperty(String selectProperty);
@@ -214,6 +232,10 @@ public class JasperTemplateParameter extends BaseEntity {
     String getDataType();
 
     String getSelectExpression();
+
+    String getSelectMethod();
+
+    String getSelectBody();
 
     String getDescription();
 

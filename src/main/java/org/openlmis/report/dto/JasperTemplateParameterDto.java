@@ -35,6 +35,8 @@ public class JasperTemplateParameterDto implements JasperTemplateParameter.Expor
   private String defaultValue;
   private String dataType;
   private String selectExpression;
+  private String selectMethod;
+  private String selectBody;
   private String selectProperty;
   private String displayProperty;
   private String description;
