@@ -96,7 +96,7 @@ ORDER BY
 	<field name="assigned_roles" class="java.lang.String"/>
 	<field name="supervisory_nodes" class="java.lang.String"/>
 	<background>
-		<band splitType="Stretc"/>
+		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="60" splitType="Stretch">
@@ -111,7 +111,7 @@ ORDER BY
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Facility Assignment Configuration Errors]]></text>
+				<text><![CDATA[Facility Missing Configurations]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -119,7 +119,7 @@ ORDER BY
 		<band height="30">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="60" height="30" backcolor="#F5F5F5" uuid="8aa7ebbc-27ca-4eec-a861-4d3158bcd465"/>
+				<reportElement mode="Opaque" x="0" y="0" width="70" height="30" backcolor="#F5F5F5" uuid="8aa7ebbc-27ca-4eec-a861-4d3158bcd465"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -132,7 +132,7 @@ ORDER BY
 				<text><![CDATA[Facility Code]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="60" y="0" width="100" height="30" backcolor="#F5F5F5" uuid="b51d715c-7db4-4451-a802-5c70b65c4531"/>
+				<reportElement mode="Opaque" x="70" y="0" width="90" height="30" backcolor="#F5F5F5" uuid="b51d715c-7db4-4451-a802-5c70b65c4531"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -158,7 +158,7 @@ ORDER BY
 				<text><![CDATA[Facility Type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="230" y="0" width="90" height="30" backcolor="#F5F5F5" uuid="021854db-dc1c-450c-ad8a-b2741285a3dc"/>
+				<reportElement mode="Opaque" x="230" y="0" width="100" height="30" backcolor="#F5F5F5" uuid="021854db-dc1c-450c-ad8a-b2741285a3dc"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -171,7 +171,7 @@ ORDER BY
 				<text><![CDATA[Assigned Programs]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="320" y="0" width="130" height="30" backcolor="#F5F5F5" uuid="f2968725-4840-4f6c-aaa0-e4c2edb0da20"/>
+				<reportElement mode="Opaque" x="330" y="0" width="130" height="30" backcolor="#F5F5F5" uuid="f2968725-4840-4f6c-aaa0-e4c2edb0da20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -184,7 +184,7 @@ ORDER BY
 				<text><![CDATA[Assigned Roles]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="440" y="0" width="110" height="30" backcolor="#F5F5F5" uuid="d1f94026-2997-4430-a5bc-844449767fcc"/>
+				<reportElement mode="Opaque" x="460" y="0" width="90" height="30" backcolor="#F5F5F5" uuid="d1f94026-2997-4430-a5bc-844449767fcc"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -194,15 +194,15 @@ ORDER BY
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Assigned Supervisory Node]]></text>
+				<text><![CDATA[Assigned Superv. Node]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="30" splitType="Stretch">
+		<band height="40" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<textField>
-				<reportElement x="0" y="0" width="60" height="30" uuid="143238e8-aa81-485f-8631-796f1daa6e3b"/>
+				<reportElement x="0" y="0" width="70" height="40" uuid="143238e8-aa81-485f-8631-796f1daa6e3b"/>
 				<box padding="2">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -215,7 +215,7 @@ ORDER BY
 				<textFieldExpression><![CDATA[$F{facility_code}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="230" y="0" width="90" height="30" uuid="96257e14-e83c-432c-a63c-5b85c569bc0f"/>
+				<reportElement x="230" y="0" width="100" height="40" uuid="96257e14-e83c-432c-a63c-5b85c569bc0f"/>
 				<box padding="2">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -228,7 +228,7 @@ ORDER BY
 				<textFieldExpression><![CDATA[$F{program_names}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="160" y="0" width="70" height="30" uuid="431a0453-bdf2-42d4-8b7b-8c277c7498e9"/>
+				<reportElement x="160" y="0" width="70" height="40" uuid="431a0453-bdf2-42d4-8b7b-8c277c7498e9"/>
 				<box padding="2">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -241,7 +241,7 @@ ORDER BY
 				<textFieldExpression><![CDATA[$F{facility_type}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="60" y="0" width="100" height="30" uuid="9cb74a09-f5be-4ae1-a0a3-01a88b4b861c"/>
+				<reportElement x="70" y="0" width="90" height="40" uuid="9cb74a09-f5be-4ae1-a0a3-01a88b4b861c"/>
 				<box padding="2">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -254,7 +254,7 @@ ORDER BY
 				<textFieldExpression><![CDATA[$F{facility_name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="440" y="0" width="110" height="30" uuid="c9b4c4b7-a190-4157-86e0-6fb37d4f25e6"/>
+				<reportElement x="460" y="0" width="90" height="40" uuid="c9b4c4b7-a190-4157-86e0-6fb37d4f25e6"/>
 				<box padding="2">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -267,7 +267,7 @@ ORDER BY
 				<textFieldExpression><![CDATA[$F{supervisory_nodes}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="320" y="0" width="120" height="30" uuid="d4b07c8d-4a86-4e71-b6e4-3a2df32c8877"/>
+				<reportElement x="330" y="0" width="130" height="40" uuid="d4b07c8d-4a86-4e71-b6e4-3a2df32c8877"/>
 				<box padding="2">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
