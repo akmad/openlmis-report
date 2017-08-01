@@ -82,8 +82,8 @@ WHERE
           rights.name
       )
       
-      SELECT COUNT(1) FROM findSupervisingUsers WHERE count = 0
-    ) = 0
+      SELECT COUNT(*) FROM findSupervisingUsers WHERE count > 0
+    ) < 5
   )
 ORDER BY
   facilities.code
