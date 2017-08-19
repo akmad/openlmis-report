@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-05-29T19:06:45 -->
+<!-- 2017-08-18T13:49:25 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="order" pageWidth="595" pageHeight="842" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="6e843fe2-ce72-4257-a4c3-1df03728dc95">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -340,7 +340,7 @@ Lilongwe]]></text>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{orderedQuantity}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{approvedQuantity}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement style="Row" mode="Opaque" x="430" y="0" width="60" height="25" uuid="705a9a2d-09a6-4e17-976e-099da486f994">
@@ -372,7 +372,7 @@ Lilongwe]]></text>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{orderable}.getProgramOrderable($P{order}) != null && $F{orderedQuantity} != null && $F{orderable}.getProgramOrderable($P{order}).getPricePerPack() != null) ? $F{orderable}.getProgramOrderable($P{order}).getPricePerPack().multiply(new BigDecimal($F{orderedQuantity})) : ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{orderable}.getProgramOrderable($P{order}) != null && $F{approvedQuantity} != null && $F{orderable}.getProgramOrderable($P{order}).getPricePerPack() != null) ? $F{orderable}.getProgramOrderable($P{order}).getPricePerPack().multiply(new BigDecimal($F{approvedQuantity})) : ""]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
