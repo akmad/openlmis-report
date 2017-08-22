@@ -45,6 +45,11 @@ public class JasperTemplate extends BaseEntity {
   @Setter
   private String type;
 
+  @Column(columnDefinition = "boolean DEFAULT true")
+  @Getter
+  @Setter
+  private Boolean isDisplayed = true;
+
   @Column(columnDefinition = TEXT_COLUMN_DEFINITION)
   @Getter
   @Setter
@@ -74,6 +79,7 @@ public class JasperTemplate extends BaseEntity {
     jasperTemplate.setData(importer.getData());
     jasperTemplate.setType(importer.getType());
     jasperTemplate.setDescription(importer.getDescription());
+    jasperTemplate.setIsDisplayed(importer.getIsDisplayed());
     jasperTemplate.setTemplateParameters(new ArrayList<>());
 
     if (importer.getTemplateParameters() != null) {
@@ -95,6 +101,7 @@ public class JasperTemplate extends BaseEntity {
     this.templateParameters = jasperTemplate.getTemplateParameters();
     this.type = jasperTemplate.getType();
     this.description = jasperTemplate.getDescription();
+    this.isDisplayed = jasperTemplate.getIsDisplayed();
   }
 
   @PrePersist
@@ -114,6 +121,7 @@ public class JasperTemplate extends BaseEntity {
     exporter.setId(id);
     exporter.setName(name);
     exporter.setType(type);
+    exporter.setIsDisplayed(isDisplayed);
   }
 
   private void forEachParameter(Consumer<JasperTemplateParameter> consumer) {
@@ -132,6 +140,7 @@ public class JasperTemplate extends BaseEntity {
 
     void setDescription(String description);
 
+    void setIsDisplayed(Boolean isDisplayed);
   }
 
   public interface Importer {
@@ -147,5 +156,6 @@ public class JasperTemplate extends BaseEntity {
 
     List<JasperTemplateParameter.Importer> getTemplateParameters();
 
+    Boolean getIsDisplayed();
   }
 }

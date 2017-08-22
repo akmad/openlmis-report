@@ -28,6 +28,8 @@ public class PermissionService {
   public static final String ORDERS_VIEW = "ORDERS_VIEW";
   public static final UUID AGGREGATE_ORDERS_ID =
           UUID.fromString("f28d0ebd-7276-4453-bc3c-48556a4bd25a");
+  public static final UUID AGGREGATE_ORDERS_XLS_ID =
+      UUID.fromString("5e378334-d1fe-4915-902e-22ecd0a61f5b");
   public static final UUID ORDER_ID =
           UUID.fromString("3c9d1e80-1e45-4adb-97d9-208b6fdceeec");
   public static final String REQUISITION_VIEW = "REQUISITION_VIEW";

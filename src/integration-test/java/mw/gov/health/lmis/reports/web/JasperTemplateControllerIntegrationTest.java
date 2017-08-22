@@ -10,7 +10,6 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import mw.gov.health.lmis.reports.service.PermissionService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -54,7 +53,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
   public void shouldGetAllTemplates() {
     // given
     JasperTemplate[] templates = { generateTemplate(), generateTemplate(),
-            generateTemplate(PermissionService.AGGREGATE_ORDERS_ID) };
+            generateTemplate(false) };
     given(jasperTemplateRepository.findAll()).willReturn(Arrays.asList(templates));
 
     // when
@@ -227,14 +226,16 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
   }
 
   private JasperTemplate generateTemplate() {
-    return generateTemplate(UUID.randomUUID());
+    return generateTemplate(true);
   }
 
-  private JasperTemplate generateTemplate(UUID id) {
+  private JasperTemplate generateTemplate(Boolean isDisplayed) {
+    UUID id = UUID.randomUUID();
     JasperTemplate template = new JasperTemplate();
 
     template.setId(id);
     template.setName("name");
+    template.setIsDisplayed(isDisplayed);
 
     given(jasperTemplateRepository.findOne(id)).willReturn(template);
 

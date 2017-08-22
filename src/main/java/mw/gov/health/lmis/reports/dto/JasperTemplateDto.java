@@ -52,6 +52,10 @@ public class JasperTemplateDto implements JasperTemplate.Importer, JasperTemplat
 
   @Getter
   @Setter
+  private Boolean isDisplayed;
+
+  @Getter
+  @Setter
   private byte[] data;
 
   @Setter

@@ -1,6 +1,8 @@
 package mw.gov.health.lmis.reports.web;
 
 import static mw.gov.health.lmis.reports.i18n.JasperMessageKeys.ERROR_JASPER_TEMPLATE_NOT_FOUND;
+import static mw.gov.health.lmis.reports.service.PermissionService.AGGREGATE_ORDERS_ID;
+import static mw.gov.health.lmis.reports.service.PermissionService.AGGREGATE_ORDERS_XLS_ID;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ import mw.gov.health.lmis.reports.service.JasperTemplateService;
 import mw.gov.health.lmis.reports.service.PermissionService;
 import mw.gov.health.lmis.utils.Message;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -78,7 +81,7 @@ public class JasperTemplateController extends BaseController {
     if (jasperTemplateToUpdate == null) {
       LOGGER.debug("Creating new template");
       jasperTemplateToUpdate = new JasperTemplate(
-          name, null, CONSISTENCY_REPORT, description, null);
+          name, null, CONSISTENCY_REPORT, true, description, null);
       jasperTemplateService.validateFileAndInsertTemplate(jasperTemplateToUpdate, file);
     } else {
       LOGGER.debug("Template found, updating template");
@@ -101,9 +104,8 @@ public class JasperTemplateController extends BaseController {
     permissionService.canViewReports(null);
     return JasperTemplateDto.newInstance(jasperTemplateRepository.findAll())
         .stream()
-        // filter out the Aggregate Orders Report
-        .filter(template -> !(template.getId().equals(PermissionService.AGGREGATE_ORDERS_ID)
-                || template.getId().equals(PermissionService.ORDER_ID)))
+        // filter out templates that shouldn't be displayed
+        .filter(JasperTemplateDto::getIsDisplayed)
         .collect(Collectors.toList());
   }
 
@@ -163,7 +165,13 @@ public class JasperTemplateController extends BaseController {
 
     permissionService.canViewReports(templateId);
 
-    JasperTemplate template = jasperTemplateRepository.findOne(templateId);
+    JasperTemplate template;
+    if (AGGREGATE_ORDERS_ID.equals(templateId)
+        && Arrays.asList("xls", "csv").contains(format)) {
+      template = jasperTemplateRepository.findOne(AGGREGATE_ORDERS_XLS_ID);
+    } else {
+      template = jasperTemplateRepository.findOne(templateId);
+    }
 
     if (template == null) {
       throw new NotFoundMessageException(new Message(

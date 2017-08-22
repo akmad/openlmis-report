@@ -13,6 +13,7 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="reportType" value="Order Report"/>
+	<property name="isDisplayed" value="false"/>
 	<import value="mw.gov.health.lmis.reports.dto.external.*"/>
 	<style name="Row" mode="Transparent">
 		<conditionalStyle>
