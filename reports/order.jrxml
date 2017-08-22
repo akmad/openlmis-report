@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-08-18T13:49:25 -->
+<!-- 2017-08-22T18:29:11 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="order" pageWidth="595" pageHeight="842" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="6e843fe2-ce72-4257-a4c3-1df03728dc95">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -33,9 +33,6 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="orderedQuantity" class="java.lang.Long">
-		<fieldDescription><![CDATA[orderedQuantity]]></fieldDescription>
-	</field>
 	<field name="orderable" class="mw.gov.health.lmis.reports.dto.external.OrderableDto">
 		<fieldDescription><![CDATA[orderable]]></fieldDescription>
 	</field>
@@ -265,6 +262,7 @@ Lilongwe]]></text>
 	<detail>
 		<band height="25" splitType="Immediate">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<printWhenExpression><![CDATA[$F{approvedQuantity} > 0L]]></printWhenExpression>
 			<textField isStretchWithOverflow="true">
 				<reportElement style="Row" mode="Opaque" x="110" y="0" width="190" height="25" uuid="31100a38-97d8-400d-bf98-3b9039cd4d01">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
