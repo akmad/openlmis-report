@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-08-22T18:28:08 -->
+<!-- 2017-08-23T17:31:20 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aggregate_orders" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="843ea716-ea72-47f8-bbd7-b9050b973ed0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -123,116 +123,116 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 	<group name="Group1">
 		<groupExpression><![CDATA[$F{ProductName}]]></groupExpression>
 		<groupFooter>
-			<band height="25">
+			<band height="23">
 				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				<printWhenExpression><![CDATA[$V{OrderedQuantity_SUM}.intValue() > 0L]]></printWhenExpression>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Row" mode="Opaque" x="-1" y="0" width="40" height="25" uuid="fe7ef7b6-048c-4d22-a5d5-944da2c110ff"/>
+					<reportElement style="Row" mode="Opaque" x="-1" y="0" width="40" height="23" uuid="fe7ef7b6-048c-4d22-a5d5-944da2c110ff"/>
 					<box bottomPadding="1">
 						<pen lineColor="#3D9297"/>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="12"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Row" mode="Opaque" x="299" y="0" width="70" height="25" uuid="2d2ebaf8-ee4e-4d65-abc1-835f13af0b4d">
+					<reportElement style="Row" mode="Opaque" x="299" y="0" width="61" height="23" uuid="2d2ebaf8-ee4e-4d65-abc1-835f13af0b4d">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box bottomPadding="1">
 						<pen lineColor="#3D9297"/>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="12"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{PackSize}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Row" mode="Opaque" x="39" y="0" width="70" height="25" uuid="1149e8e1-3073-4450-bdf6-bfa15d0302ba">
+					<reportElement style="Row" mode="Opaque" x="39" y="0" width="70" height="23" uuid="1149e8e1-3073-4450-bdf6-bfa15d0302ba">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box bottomPadding="1">
 						<pen lineColor="#3D9297"/>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="12"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{ProductCode}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
-					<reportElement style="Row" mode="Opaque" x="489" y="0" width="66" height="25" uuid="5454bd52-8abc-4e75-a9d0-8d17ef2630dd">
+				<textField isStretchWithOverflow="true" pattern="#,##0.###;(#,##0.###-)">
+					<reportElement style="Row" mode="Opaque" x="480" y="0" width="75" height="23" uuid="5454bd52-8abc-4e75-a9d0-8d17ef2630dd">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box bottomPadding="1">
 						<pen lineColor="#3D9297"/>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="12"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{TotalPrice}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Row" mode="Opaque" x="109" y="0" width="190" height="25" uuid="fbd76509-bc78-4f8d-9bb2-1b7df951011b">
+					<reportElement style="Row" mode="Opaque" x="109" y="0" width="190" height="23" uuid="fbd76509-bc78-4f8d-9bb2-1b7df951011b">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box bottomPadding="1">
 						<pen lineColor="#3D9297"/>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="12"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{ProductName}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
-					<reportElement style="Row" mode="Opaque" x="429" y="0" width="60" height="25" uuid="f1f75eb0-8d25-4582-b9b4-f15d27f6d4f3">
+				<textField isStretchWithOverflow="true" pattern="#,##0.###;(#,##0.###-)">
+					<reportElement style="Row" mode="Opaque" x="420" y="0" width="60" height="23" uuid="f1f75eb0-8d25-4582-b9b4-f15d27f6d4f3">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box bottomPadding="1">
 						<pen lineColor="#3D9297"/>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="12"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{PricePerPack}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
-					<reportElement style="Row" mode="Opaque" x="369" y="0" width="60" height="25" uuid="8adee168-70fa-4d05-bc70-b12c83a95d21">
+				<textField isStretchWithOverflow="true" pattern="#,##0.###;(#,##0.###-)">
+					<reportElement style="Row" mode="Opaque" x="360" y="0" width="60" height="23" uuid="8adee168-70fa-4d05-bc70-b12c83a95d21">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box bottomPadding="1">
 						<pen lineColor="#3D9297"/>
-						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#3D9297"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#3D9297"/>
 						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="12"/>
+						<font size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{OrderedQuantity_SUM}]]></textFieldExpression>
 				</textField>
@@ -326,9 +326,9 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 		<band height="30">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<staticText>
-				<reportElement style="Row" mode="Opaque" x="490" y="0" width="65" height="30" backcolor="#3D9297" uuid="b4097036-98fa-431d-8a14-93ed7b182121"/>
+				<reportElement style="Row" mode="Opaque" x="480" y="0" width="75" height="30" backcolor="#3D9297" uuid="b4097036-98fa-431d-8a14-93ed7b182121"/>
 				<box>
-					<bottomPen lineWidth="1.0" lineColor="#3D9297"/>
+					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
@@ -338,7 +338,7 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 			<staticText>
 				<reportElement style="Row" mode="Opaque" x="110" y="0" width="190" height="30" backcolor="#3D9297" uuid="c77c5aa0-3c41-446c-96c0-ac1390e23819"/>
 				<box>
-					<bottomPen lineWidth="1.0" lineColor="#3D9297"/>
+					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
@@ -348,7 +348,7 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 			<staticText>
 				<reportElement style="Row" mode="Opaque" x="40" y="0" width="70" height="30" backcolor="#3D9297" uuid="b4df56c1-cc14-4063-a3d0-419601a4a4cc"/>
 				<box>
-					<bottomPen lineWidth="1.0" lineColor="#3D9297"/>
+					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
@@ -356,9 +356,9 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 				<text><![CDATA[Product Code]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Row" mode="Opaque" x="430" y="0" width="60" height="30" backcolor="#3D9297" uuid="fd73bff6-48bd-4d5d-9784-637a3809a8c3"/>
+				<reportElement style="Row" mode="Opaque" x="420" y="0" width="60" height="30" backcolor="#3D9297" uuid="fd73bff6-48bd-4d5d-9784-637a3809a8c3"/>
 				<box>
-					<bottomPen lineWidth="1.0" lineColor="#3D9297"/>
+					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
@@ -366,9 +366,9 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 				<text><![CDATA[Unit Price]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Row" mode="Opaque" x="300" y="0" width="70" height="30" backcolor="#3D9297" uuid="20c500e7-7db5-4fa2-9f42-a23f6459529d"/>
+				<reportElement style="Row" mode="Opaque" x="300" y="0" width="60" height="30" backcolor="#3D9297" uuid="20c500e7-7db5-4fa2-9f42-a23f6459529d"/>
 				<box rightPadding="10">
-					<bottomPen lineWidth="1.0" lineColor="#3D9297"/>
+					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
 				</box>
 				<textElement textAlignment="Left">
 					<font size="12"/>
@@ -376,9 +376,9 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 				<text><![CDATA[Unit of issue]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Row" mode="Opaque" x="370" y="0" width="60" height="30" backcolor="#3D9297" uuid="9bc3aa57-4e4c-4d76-b6ba-8489d7eb39a2"/>
+				<reportElement style="Row" mode="Opaque" x="360" y="0" width="60" height="30" backcolor="#3D9297" uuid="9bc3aa57-4e4c-4d76-b6ba-8489d7eb39a2"/>
 				<box>
-					<bottomPen lineWidth="1.0" lineColor="#3D9297"/>
+					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
@@ -388,7 +388,7 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 			<staticText>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="40" height="30" backcolor="#3D9297" uuid="59d47fd8-c229-4271-86af-cded1603e0c0"/>
 				<box>
-					<bottomPen lineWidth="1.0" lineColor="#3D9297"/>
+					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
@@ -447,6 +447,11 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 				</textElement>
 				<text><![CDATA[Date: ]]></text>
 			</staticText>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" forecolor="#3D9297" uuid="9de2f7ba-604d-4f1e-8be4-78ed55941f73">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+			</line>
 		</band>
 	</summary>
 </jasperReport>
