@@ -48,7 +48,7 @@ import mw.gov.health.lmis.reports.repository.JasperTemplateRepository;
 @SuppressWarnings("PMD.TooManyMethods")
 public class JasperTemplateService {
   protected static final String REPORT_TYPE_PROPERTY = "reportType";
-  protected static final String IS_DISPLAYED_PROPERTY = "displayed";
+  protected static final String IS_DISPLAYED_PROPERTY = "isDisplayed";
 
   @Autowired
   private JasperTemplateRepository jasperTemplateRepository;
