@@ -160,7 +160,7 @@ public class ReportingRateReportDtoBuilder {
           continue;
         }
         StatusLogEntryDto entry = requisition.getStatusChanges().getOrDefault(
-            REQUIRED_STATUS, null);
+            REQUIRED_STATUS.name(), null);
         if (entry == null) {
           missed++;
         } else {
@@ -175,7 +175,6 @@ public class ReportingRateReportDtoBuilder {
     } else {
       missed++;
     }
-
     completions.setMissed(missed);
     completions.setOnTime(onTime);
     completions.setLate(late);
