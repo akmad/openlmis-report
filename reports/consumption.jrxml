@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-04-25T15:12:53 -->
+<!-- 2017-08-24T16:32:01 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="consumption" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3d66f09f-0837-4d82-8c52-6ca433375f2e">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -39,21 +39,21 @@ SELECT referencedata.facilities.name AS FacilityName,
   referencedata.geographic_zones.name AS GeographicZoneName,
   referencedata.programs.name AS ProgramName
 FROM requisition.requisition_line_items
-  JOIN referencedata.orderables ON 
-   requisition.requisition_line_items.orderableid = referencedata.orderables.id 
-  JOIN requisition.requisitions ON 
-   requisition.requisition_line_items.requisitionid = requisition.requisitions.id 
-  JOIN referencedata.programs ON 
-   requisition.requisitions.programid = referencedata.programs.id 
-  JOIN referencedata.facilities ON 
-   requisition.requisitions.facilityid = referencedata.facilities.id 
-  JOIN referencedata.processing_periods ON 
-   requisition.requisitions.processingperiodid = referencedata.processing_periods.id 
-  JOIN referencedata.geographic_zones ON 
-   referencedata.facilities.geographiczoneid = referencedata.geographic_zones.id 
+  JOIN referencedata.orderables ON
+   requisition.requisition_line_items.orderableid = referencedata.orderables.id
+  JOIN requisition.requisitions ON
+   requisition.requisition_line_items.requisitionid = requisition.requisitions.id
+  JOIN referencedata.programs ON
+   requisition.requisitions.programid = referencedata.programs.id
+  JOIN referencedata.facilities ON
+   requisition.requisitions.facilityid = referencedata.facilities.id
+  JOIN referencedata.processing_periods ON
+   requisition.requisitions.processingperiodid = referencedata.processing_periods.id
+  JOIN referencedata.geographic_zones ON
+   referencedata.facilities.geographiczoneid = referencedata.geographic_zones.id
   JOIN referencedata.geographic_levels ON
   referencedata.geographic_zones.levelid = referencedata.geographic_levels.id
-WHERE 
+WHERE
    referencedata.programs.name = $P{program}::varchar
    AND referencedata.processing_periods.name = $P{period}::varchar
    AND ($P{district}::varchar IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
@@ -98,24 +98,6 @@ ORDER BY  referencedata.orderables.fullproductname DESC,
 			<band height="32">
 				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				<printWhenExpression><![CDATA[$V{REPORT_COUNT}.intValue() > 0]]></printWhenExpression>
-				<textField>
-					<reportElement x="0" y="0" width="170" height="15" uuid="3f456b30-1d52-473e-b326-17b356825b33"/>
-					<box rightPadding="20">
-						<pen lineColor="#D4D4D4"/>
-						<topPen lineWidth="1.0" lineColor="#D4D4D4"/>
-					</box>
-					<textElement textAlignment="Left"/>
-					<textFieldExpression><![CDATA[$F{geographiczonename}]]></textFieldExpression>
-				</textField>
-				<staticText>
-					<reportElement x="170" y="0" width="140" height="15" uuid="6961bb99-2c69-4f4b-b2e4-12c4c07269c3"/>
-					<box>
-						<pen lineColor="#D4D4D4"/>
-						<topPen lineWidth="1.0" lineColor="#D4D4D4"/>
-					</box>
-					<textElement textAlignment="Right"/>
-					<text><![CDATA[Total]]></text>
-				</staticText>
 				<textField evaluationTime="Auto" pattern="#,##0.00%">
 					<reportElement x="430" y="0" width="124" height="15" uuid="27b5b010-25a5-4169-acab-a5a72836b628"/>
 					<box rightPadding="20">
@@ -136,6 +118,15 @@ ORDER BY  referencedata.orderables.fullproductname DESC,
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$V{quantity_SUM}]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement x="0" y="0" width="310" height="15" uuid="60e04269-6392-44b1-8eb0-dd4a6c0750f4"/>
+					<box rightPadding="20">
+						<pen lineColor="#D4D4D4"/>
+						<topPen lineWidth="1.0" lineColor="#D4D4D4"/>
+					</box>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[Total]]></text>
+				</staticText>
 			</band>
 		</groupFooter>
 	</group>
@@ -236,13 +227,11 @@ ORDER BY  referencedata.orderables.fullproductname DESC,
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingAfter="0"/>
 				</textElement>
-				<text><![CDATA[Quality
+				<text><![CDATA[Quantity
 Consumed / Dispensed]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="430" y="0" width="124" height="40" uuid="d46d1acf-f2fb-42a1-9d4d-29730555175a">
-					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-				</reportElement>
+			<textField>
+				<reportElement x="430" y="0" width="124" height="40" uuid="97ffce8a-c19b-44c7-984f-25257b993e57"/>
 				<box topPadding="0" leftPadding="0" bottomPadding="2" rightPadding="20">
 					<pen lineColor="#D4D4D4"/>
 					<bottomPen lineWidth="1.0" lineColor="#D4D4D4"/>
@@ -250,8 +239,8 @@ Consumed / Dispensed]]></text>
 				<textElement textAlignment="Left" verticalAlignment="Bottom">
 					<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingAfter="0"/>
 				</textElement>
-				<text><![CDATA[% of district product consumption]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA["% of " + (($P{district} == null) ? "national" : "district") +  " product consumption"]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>
