@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-08-24T14:08:03 -->
+<!-- 2017-08-24T16:19:48 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aggregate_orders" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="843ea716-ea72-47f8-bbd7-b9050b973ed0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -148,7 +148,7 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Row" mode="Opaque" x="299" y="0" width="61" height="23" uuid="2d2ebaf8-ee4e-4d65-abc1-835f13af0b4d">
+					<reportElement style="Row" mode="Opaque" x="299" y="0" width="51" height="23" uuid="2d2ebaf8-ee4e-4d65-abc1-835f13af0b4d">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box bottomPadding="1">
@@ -164,7 +164,7 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 					<textFieldExpression><![CDATA[$F{PackSize}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Row" mode="Opaque" x="39" y="0" width="70" height="23" uuid="1149e8e1-3073-4450-bdf6-bfa15d0302ba">
+					<reportElement style="Row" mode="Opaque" x="39" y="0" width="61" height="23" uuid="1149e8e1-3073-4450-bdf6-bfa15d0302ba">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box bottomPadding="1">
@@ -180,7 +180,7 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 					<textFieldExpression><![CDATA[$F{ProductCode}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.###;(#,##0.###-)">
-					<reportElement style="Row" mode="Opaque" x="480" y="0" width="75" height="23" uuid="5454bd52-8abc-4e75-a9d0-8d17ef2630dd">
+					<reportElement style="Row" mode="Opaque" x="465" y="0" width="90" height="23" uuid="5454bd52-8abc-4e75-a9d0-8d17ef2630dd">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box bottomPadding="1">
@@ -196,7 +196,7 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 					<textFieldExpression><![CDATA[$V{TotalPrice}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement style="Row" mode="Opaque" x="109" y="0" width="190" height="23" uuid="fbd76509-bc78-4f8d-9bb2-1b7df951011b">
+					<reportElement style="Row" mode="Opaque" x="100" y="0" width="199" height="23" uuid="fbd76509-bc78-4f8d-9bb2-1b7df951011b">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box bottomPadding="1">
@@ -212,7 +212,7 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 					<textFieldExpression><![CDATA[$F{ProductName}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.###;(#,##0.###-)">
-					<reportElement style="Row" mode="Opaque" x="420" y="0" width="60" height="23" uuid="f1f75eb0-8d25-4582-b9b4-f15d27f6d4f3">
+					<reportElement style="Row" mode="Opaque" x="405" y="0" width="60" height="23" uuid="f1f75eb0-8d25-4582-b9b4-f15d27f6d4f3">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box bottomPadding="1">
@@ -228,7 +228,7 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 					<textFieldExpression><![CDATA[$F{PricePerPack}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="#,##0.###;(#,##0.###-)">
-					<reportElement style="Row" mode="Opaque" x="360" y="0" width="60" height="23" uuid="8adee168-70fa-4d05-bc70-b12c83a95d21">
+					<reportElement style="Row" mode="Opaque" x="350" y="0" width="55" height="23" uuid="8adee168-70fa-4d05-bc70-b12c83a95d21">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<box bottomPadding="1">
@@ -337,74 +337,76 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 		<band height="30">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<staticText>
-				<reportElement style="Row" mode="Opaque" x="480" y="0" width="75" height="30" backcolor="#3D9297" uuid="b4097036-98fa-431d-8a14-93ed7b182121"/>
+				<reportElement mode="Opaque" x="40" y="0" width="60" height="30" backcolor="#3D9297" uuid="d03287bf-2774-435e-ab4a-8bd2c35455c2"/>
 				<box>
 					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[Total Price]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Row" mode="Opaque" x="110" y="0" width="190" height="30" backcolor="#3D9297" uuid="c77c5aa0-3c41-446c-96c0-ac1390e23819"/>
-				<box>
-					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[Description]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Row" mode="Opaque" x="40" y="0" width="70" height="30" backcolor="#3D9297" uuid="b4df56c1-cc14-4063-a3d0-419601a4a4cc"/>
-				<box>
-					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="11"/>
 				</textElement>
 				<text><![CDATA[Product Code]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Row" mode="Opaque" x="420" y="0" width="60" height="30" backcolor="#3D9297" uuid="fd73bff6-48bd-4d5d-9784-637a3809a8c3"/>
+				<reportElement mode="Opaque" x="350" y="0" width="55" height="30" backcolor="#3D9297" uuid="c4eb56c2-67c8-4ded-bf34-f8463e4c1a35">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
 				<box>
 					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[Unit Price]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Row" mode="Opaque" x="300" y="0" width="60" height="30" backcolor="#3D9297" uuid="20c500e7-7db5-4fa2-9f42-a23f6459529d"/>
-				<box rightPadding="10">
-					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
-				</box>
-				<textElement textAlignment="Left">
-					<font size="12"/>
-				</textElement>
-				<text><![CDATA[Unit of issue]]></text>
-			</staticText>
-			<staticText>
-				<reportElement style="Row" mode="Opaque" x="360" y="0" width="60" height="30" backcolor="#3D9297" uuid="9bc3aa57-4e4c-4d76-b6ba-8489d7eb39a2"/>
-				<box>
-					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="11"/>
 				</textElement>
 				<text><![CDATA[Quantity]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Row" mode="Opaque" x="0" y="0" width="40" height="30" backcolor="#3D9297" uuid="59d47fd8-c229-4271-86af-cded1603e0c0"/>
+				<reportElement mode="Opaque" x="100" y="0" width="200" height="30" backcolor="#3D9297" uuid="2169bafc-6a9b-4779-af4f-ab65e70f22a9"/>
 				<box>
 					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="12"/>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="40" height="30" backcolor="#3D9297" uuid="9724276e-298b-4009-a062-c1edce2b9b81"/>
+				<box>
+					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
 				</textElement>
 				<text><![CDATA[Line#]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="465" y="0" width="90" height="30" backcolor="#3D9297" uuid="7250fbf7-8dc8-4451-8d42-c463372d26e1"/>
+				<box leftPadding="0">
+					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Total Price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="300" y="0" width="50" height="30" backcolor="#3D9297" uuid="b55288d9-66f8-49d8-bee3-d3e7e77b8549"/>
+				<box rightPadding="10">
+					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
+				</box>
+				<textElement textAlignment="Left">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Unit of issue]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="405" y="0" width="60" height="30" backcolor="#3D9297" uuid="40551e1a-6d2f-463f-8f18-b61030ddf2dd"/>
+				<box>
+					<bottomPen lineWidth="0.0" lineColor="#3D9297"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Unit Price]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
