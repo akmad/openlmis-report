@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-08-23T17:59:44 -->
+<!-- 2017-08-24T14:08:03 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aggregate_orders" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="843ea716-ea72-47f8-bbd7-b9050b973ed0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -119,6 +119,13 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 	<variable name="Approver" class="java.lang.String">
 		<variableExpression><![CDATA[($F{ApprovalDate} != null && $F{ApproverName} != null && !$F{ApprovalDate}.before($V{HighestApprovalDate})) ? $F{ApproverName} : $V{PreviousApprover}]]></variableExpression>
 		<initialValueExpression><![CDATA[$F{ApproverName}]]></initialValueExpression>
+	</variable>
+	<variable name="UniqueFacilities" class="java.util.HashSet">
+		<variableExpression><![CDATA[$V{UniqueFacilities}]]></variableExpression>
+		<initialValueExpression><![CDATA[new HashSet();]]></initialValueExpression>
+	</variable>
+	<variable name="UniqueFacilitiesPopulator" class="java.lang.Boolean">
+		<variableExpression><![CDATA[$V{UniqueFacilities}.add($F{FacilityName})]]></variableExpression>
 	</variable>
 	<group name="Group1">
 		<groupExpression><![CDATA[$F{ProductName}]]></groupExpression>
@@ -320,6 +327,10 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
 				</textElement>
 				<text><![CDATA[Ministry of Health, Malawi]]></text>
 			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement x="0" y="130" width="554" height="20" uuid="c0e7af0c-2485-4135-ad78-676bc6ba24cf"/>
+				<textFieldExpression><![CDATA["This Batch order incorporates the quantities ordered by the " + $V{UniqueFacilities}.size() + " facilities in " + $P{district}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
