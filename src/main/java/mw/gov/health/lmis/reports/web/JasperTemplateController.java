@@ -4,6 +4,10 @@ import static mw.gov.health.lmis.reports.i18n.JasperMessageKeys.ERROR_JASPER_TEM
 import static mw.gov.health.lmis.reports.service.PermissionService.AGGREGATE_ORDERS_ID;
 import static mw.gov.health.lmis.reports.service.PermissionService.AGGREGATE_ORDERS_XLS_ID;
 
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRVirtualizer;
+import net.sf.jasperreports.engine.fill.JRFileVirtualizer;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -178,11 +182,15 @@ public class JasperTemplateController extends BaseController {
           ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId));
     }
 
+    String tmpdir = System.getProperty("java.io.tmpdir");
+    JRVirtualizer virtualizer = new JRFileVirtualizer(2, tmpdir);
+
     Map<String, Object> map = jasperTemplateService.mapRequestParametersToTemplate(
         request, template
     );
     map.put("format", format);
     map.put("imagesDirectory", "images/");
+    map.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
 
     JasperReportsMultiFormatView jasperView;
 
