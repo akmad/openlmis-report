@@ -15,14 +15,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import static mw.gov.health.lmis.reports.dto.external.RequisitionLineItemDto.ADJUSTED_CONSUMPTION;
 import static mw.gov.health.lmis.reports.dto.external.RequisitionLineItemDto.AVERAGE_CONSUMPTION;
 import static mw.gov.health.lmis.reports.dto.external.RequisitionLineItemDto.BEGINNING_BALANCE;
 import static net.sf.jasperreports.engine.JRParameter.REPORT_LOCALE;
-import static net.sf.jasperreports.engine.JRParameter.REPORT_RESOURCE_BUNDLE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -55,10 +53,6 @@ public class ReportUtilsTest {
     Locale currentLocale = LocaleContextHolder.getLocale();
     assertTrue(map.containsKey(REPORT_LOCALE));
     assertEquals(map.get(REPORT_LOCALE), currentLocale);
-
-    ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", currentLocale);
-    assertTrue(map.containsKey(REPORT_RESOURCE_BUNDLE));
-    assertEquals(map.get(REPORT_RESOURCE_BUNDLE), resourceBundle);
   }
 
   @Test

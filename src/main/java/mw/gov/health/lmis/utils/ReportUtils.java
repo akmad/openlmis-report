@@ -11,11 +11,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import static net.sf.jasperreports.engine.JRParameter.REPORT_LOCALE;
-import static net.sf.jasperreports.engine.JRParameter.REPORT_RESOURCE_BUNDLE;
 
 public final class ReportUtils {
   private ReportUtils() {
@@ -31,9 +29,6 @@ public final class ReportUtils {
 
     Locale currentLocale = LocaleContextHolder.getLocale();
     params.put(REPORT_LOCALE, currentLocale);
-
-    ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", currentLocale);
-    params.put(REPORT_RESOURCE_BUNDLE, resourceBundle);
 
     return params;
   }
