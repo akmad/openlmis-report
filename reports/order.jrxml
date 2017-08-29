@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-08-24T16:20:01 -->
+<!-- 2017-08-28T13:21:53 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="order" pageWidth="595" pageHeight="842" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="6e843fe2-ce72-4257-a4c3-1df03728dc95">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -399,7 +399,8 @@ Lilongwe]]></text>
 		</band>
 	</detail>
 	<summary>
-		<band height="200">
+		<band height="320">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<staticText>
 				<reportElement x="0" y="80" width="100" height="20" uuid="03a21e09-32d8-4534-b3cc-76cc27c65e39"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -593,6 +594,217 @@ Lilongwe]]></text>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 			</line>
+			<staticText>
+				<reportElement x="0" y="190" width="80" height="20" uuid="5505c65d-a2b8-4266-abc8-3c15e28f445b"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Ordered By]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement key="" x="0" y="210" width="556" height="20" uuid="a93a18f3-12a5-40b7-8064-1d67c8c58e95"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+			</textField>
+			<staticText>
+				<reportElement x="80" y="190" width="80" height="20" uuid="ccf32a7a-df10-44db-bf8c-4ccca84ad7c3">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Office Held]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="190" width="70" height="20" uuid="65b419e0-d728-4f93-9e73-7b2c06620f84">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="190" width="120" height="20" uuid="e0df4c1f-fab4-44c5-9dd8-c239c6afdf5c"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Verified at CMST by]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="190" width="60" height="20" uuid="44fa5267-64bf-4bc2-93af-bde86de23011">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Office Held]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="190" width="70" height="20" uuid="756ab584-c4d6-49ad-9f21-9732979a75a2">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="481" y="190" width="74" height="20" uuid="f3f63bb8-8520-43e8-a1d3-abc2bfb395ce"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement key="" x="0" y="255" width="556" height="20" uuid="b35b613f-b92d-4830-86df-60367d38b8a0">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+			</textField>
+			<staticText>
+				<reportElement x="80" y="235" width="80" height="20" uuid="09dc92b4-28dd-4863-86ac-407201a6f2fd">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Office Held]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="235" width="80" height="20" uuid="71e70c1a-f8d5-45ba-88b2-89e4fda9293a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Approved by]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="235" width="70" height="20" uuid="de581761-4639-4916-82a6-75b80506a5ef">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="235" width="70" height="20" uuid="a63fe923-4e39-4665-8114-e5f661215a51">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="481" y="235" width="74" height="20" uuid="21c4e99a-3c6f-4bca-a256-4f7d2522859d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="235" width="120" height="20" uuid="bedeadcd-8346-49c8-ad42-d9c8eb2021c7"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Authorised at CMST by]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="235" width="60" height="20" uuid="39526957-bf73-46b5-b64d-43cc17d5a579">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Office Held]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement key="" x="0" y="300" width="556" height="20" uuid="4d4edf87-02ac-45cb-803d-2ef1220fc1d4">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+			</textField>
+			<staticText>
+				<reportElement x="80" y="280" width="80" height="20" uuid="6a2b6ff8-e956-48ad-8e8e-8e6d9c652fb5">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Office Held]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="280" width="80" height="20" uuid="03aabc16-a5a9-4208-b19c-13a24eacde46"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Assembled by]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="280" width="70" height="20" uuid="0b7a44d6-ca52-4a4f-b768-88ff5eef8c33">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="280" width="70" height="20" uuid="f86c1d94-dfe4-4621-b842-b07804f6a903">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Signature]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="481" y="280" width="74" height="20" uuid="f7de0e66-bd2c-42c2-959d-7d66577c8aea"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="230" y="280" width="120" height="20" uuid="98ce849f-20e8-417e-ad4b-b0875c1bc636"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Checked By]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="280" width="60" height="20" uuid="d1de2b5d-60de-499c-b46e-8e1fd4a2ffa3">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Office Held]]></text>
+			</staticText>
 		</band>
 	</summary>
 </jasperReport>
