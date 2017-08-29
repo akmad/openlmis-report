@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-08-21T18:05:41 -->
+<!-- 2017-08-29T13:43:52 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aggregate_orders" pageWidth="400" pageHeight="800" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="400" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="843ea716-ea72-47f8-bbd7-b9050b973ed0">
     <property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
     <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -121,6 +121,7 @@ WHERE
    AND ($P{program}::varchar IS NULL OR referencedata.programs.name = $P{program}::varchar)
    AND referencedata.processing_periods.name = $P{period}::varchar
    AND ($P{district}::varchar IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
+   AND fulfillment.order_line_items.approvedquantity > 0
    AND NOT (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
    			AND LOWER(referencedata.facilities.extraData ->> 'AggregateOrderMember') = 'false')
    AND referencedata.facility_types.name <> ALL ( ARRAY['Private Clinic', 'Private Hospital', 'District Health Office', 'CHAM', 'Central Hospital'] ) OR (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
@@ -245,7 +246,7 @@ ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC
             <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
             <printWhenExpression><![CDATA[$F{ProductName} != null]]></printWhenExpression>
             <crosstab ignoreWidth="true">
-                <reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="360" height="180" uuid="94873cd5-dc42-4f3b-8fe0-d1e2d622ab75">
+                <reportElement x="0" y="0" width="360" height="180" uuid="94873cd5-dc42-4f3b-8fe0-d1e2d622ab75">
                     <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
                     <property name="com.jaspersoft.studio.crosstab.style.header" value="Crosstab_CH"/>
                     <property name="com.jaspersoft.studio.crosstab.style.group" value="Crosstab_CG"/>
