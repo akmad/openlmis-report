@@ -7,11 +7,9 @@ import static mw.gov.health.lmis.reports.i18n.MessageKeys.ERROR_IO;
 import static mw.gov.health.lmis.reports.i18n.MessageKeys.ERROR_JASPER_FILE_FORMAT;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_CLASS_NOT_FOUND;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_IO;
-import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_TEMPLATE_PARAMETER_INVALID;
 import static net.sf.jasperreports.engine.export.JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN;
 import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
 
-import mw.gov.health.lmis.reports.dto.ReportingRateReportDto;
 import mw.gov.health.lmis.reports.dto.RequisitionReportDto;
 import mw.gov.health.lmis.reports.dto.external.BasicRequisitionDto;
 import mw.gov.health.lmis.reports.dto.external.FacilityDto;
@@ -33,7 +31,6 @@ import mw.gov.health.lmis.reports.service.referencedata.PeriodReferenceDataServi
 import mw.gov.health.lmis.reports.service.referencedata.ProgramReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.UserReferenceDataService;
 import mw.gov.health.lmis.reports.service.requisition.RequisitionService;
-import mw.gov.health.lmis.reports.web.ReportingRateReportDtoBuilder;
 import mw.gov.health.lmis.reports.web.RequisitionReportDtoBuilder;
 import mw.gov.health.lmis.utils.AuthenticationHelper;
 import mw.gov.health.lmis.utils.ReportUtils;
@@ -79,8 +76,6 @@ import javax.sql.DataSource;
 
 import mw.gov.health.lmis.reports.domain.JasperTemplate;
 import mw.gov.health.lmis.reports.exception.JasperReportViewException;
-import mw.gov.health.lmis.reports.exception.ValidationMessageException;
-import mw.gov.health.lmis.utils.Message;
 
 @Service
 public class JasperReportsViewService {
@@ -106,9 +101,6 @@ public class JasperReportsViewService {
 
   @Autowired
   private RequisitionService requisitionService;
-
-  @Autowired
-  private ReportingRateReportDtoBuilder reportingRateReportDtoBuilder;
 
   @Autowired
   private OrderService orderService;
@@ -197,74 +189,6 @@ public class JasperReportsViewService {
       throw new JasperReportViewException(
           exp, ERROR_REPORTING_CLASS_NOT_FOUND, JasperReport.class.getName());
     }
-  }
-
-  private Object processParameter(Map<String, Object> params, String key, boolean required,
-                                  Class paramType) {
-    Message errorMessage = new Message(ERROR_REPORTING_TEMPLATE_PARAMETER_INVALID, key);
-
-    try {
-      if (!params.containsKey(key)) {
-        if (required) {
-          throw new ValidationMessageException(errorMessage);
-        } else {
-          return null;
-        }
-      }
-      String paramValue = (String) params.get(key);
-
-      if (UUID.class.equals(paramType)) {
-        return UUID.fromString(paramValue);
-      } else if (Integer.class.equals(paramType)) {
-        return Integer.valueOf(paramValue);
-      }
-      return paramValue;
-    } catch (ClassCastException | IllegalArgumentException err) {
-      throw new ValidationMessageException(errorMessage, err);
-    }
-  }
-
-  /**
-   * Get customized Jasper Report View for Reporting Rate Report.
-   *
-   * @param jasperTemplate jasper template for report
-   * @param request http request for filling application context
-   * @param params template parameters populated with values from the request
-   * @return customized jasper view.
-   */
-  public JasperReportsMultiFormatView getReportingRateJasperReportsView(
-          JasperTemplate jasperTemplate, HttpServletRequest request, Map<String, Object> params)
-          throws JasperReportViewException {
-    JasperReportsMultiFormatView jasperView = new JasperReportsMultiFormatView();
-    setExportParams(jasperView);
-    jasperView.setUrl(getReportUrlForReportData(jasperTemplate));
-
-    UUID programId = (UUID) processParameter(params, "Program", true, UUID.class);
-    ProgramDto program = programReferenceDataService.findOne(programId);
-
-    UUID periodId = (UUID) processParameter(params, "Period", true, UUID.class);
-    ProcessingPeriodDto period = periodReferenceDataService.findOne(periodId);
-
-    UUID zoneId = (UUID) processParameter(params, "GeographicZone", false, UUID.class);
-    GeographicZoneDto zone = null;
-    if (zoneId != null) {
-      zone = geographicZoneReferenceDataService.findOne(zoneId);
-    }
-
-    Integer dueDays = (Integer) processParameter(params, "DueDays", false, Integer.class);
-    if (dueDays != null && dueDays < 0) {
-      throw new ValidationMessageException(
-              new Message(ERROR_REPORTING_TEMPLATE_PARAMETER_INVALID, "DueDays"));
-    }
-
-    ReportingRateReportDto reportDto = reportingRateReportDtoBuilder.build(program, period, zone,
-            dueDays);
-    params.put(DATASOURCE, new JRBeanCollectionDataSource(Collections.singletonList(reportDto)));
-
-    if (getApplicationContext(request) != null) {
-      jasperView.setApplicationContext(getApplicationContext(request));
-    }
-    return jasperView;
   }
 
   /**

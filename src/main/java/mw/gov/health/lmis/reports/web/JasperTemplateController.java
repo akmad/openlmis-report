@@ -50,9 +50,7 @@ public class JasperTemplateController extends BaseController {
   private static final Logger LOGGER = Logger.getLogger(JasperTemplateController.class);
 
   private static final String TIMELINESS_REPORT = "Timeliness Report";
-  private static final String REPORTING_RATE_REPORT = "Reporting Rate Report";
   private static final String ORDER_REPORT = "Order Report";
-  private static final int DUE_DAYS = 10;
   private static final String CONSISTENCY_REPORT = "Consistency Report";
 
   @Autowired
@@ -192,17 +190,8 @@ public class JasperTemplateController extends BaseController {
     map.put("imagesDirectory", "images/");
     map.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
 
-    JasperReportsMultiFormatView jasperView;
-
-    if (REPORTING_RATE_REPORT.equals(template.getType())) {
-      map.putIfAbsent("DueDays", String.valueOf(DUE_DAYS));
-
-      jasperView = jasperReportsViewService.getReportingRateJasperReportsView(
-          template, request, map
-      );
-    } else {
-      jasperView = jasperReportsViewService.getJasperReportsView(template, request);
-    }
+    JasperReportsMultiFormatView jasperView =
+        jasperReportsViewService.getJasperReportsView(template, request);
 
     String fileName = template.getName().replaceAll("\\s+", "_");
     String contentDisposition = "inline; filename=" + fileName + "." + format;
