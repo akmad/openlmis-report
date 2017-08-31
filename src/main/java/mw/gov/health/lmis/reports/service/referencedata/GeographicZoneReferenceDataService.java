@@ -39,6 +39,6 @@ public class GeographicZoneReferenceDataService
     parameters.put("levelNumber", levelNumber);
     parameters.put("parent", parent);
 
-    return findAll("search", RequestParameters.init(), parameters);
+    return getPage("search", RequestParameters.init(), parameters).getContent();
   }
 }
