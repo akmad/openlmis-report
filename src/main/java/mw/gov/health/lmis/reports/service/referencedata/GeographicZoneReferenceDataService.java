@@ -5,6 +5,7 @@ import mw.gov.health.lmis.utils.RequestParameters;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Service
@@ -34,11 +35,10 @@ public class GeographicZoneReferenceDataService
    * @return List of matched geographic zones.
    */
   public Collection<GeographicZoneDto> search(Integer levelNumber, UUID parent) {
-    RequestParameters parameters = RequestParameters
-        .init()
-        .set("levelNumber", levelNumber)
-        .set("parent", parent);
+    HashMap<String, Object> parameters = new HashMap<>();
+    parameters.put("levelNumber", levelNumber);
+    parameters.put("parent", parent);
 
-    return findAll("search", parameters);
+    return findAll("search", RequestParameters.init(), parameters);
   }
 }
