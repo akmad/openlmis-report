@@ -87,7 +87,7 @@ WHERE
    			AND LOWER(referencedata.facilities.extraData ->> 'AggregateOrderMember') = 'false')
    AND referencedata.facility_types.name <> ALL ( ARRAY['Private Clinic', 'Private Hospital', 'District Health Office', 'CHAM', 'Central Hospital'] ) OR (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
    			AND LOWER(referencedata.facilities.extraData ->> 'AggregateOrderMember') = 'true')
-ORDER BY  referencedata.orderables.code DESC, referencedata.facilities.name DESC]]>
+ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]]>
 	</queryString>
 	<field name="OrderCode" class="java.lang.String"/>
 	<field name="ApprovedQuantity" class="java.lang.Integer"/>
