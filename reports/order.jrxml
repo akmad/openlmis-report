@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-08-28T13:21:53 -->
+<!-- 2017-09-01T19:01:46 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="order" pageWidth="595" pageHeight="842" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="6e843fe2-ce72-4257-a4c3-1df03728dc95">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -51,6 +51,10 @@
 	<field name="approvedQuantity" class="java.lang.Long">
 		<fieldDescription><![CDATA[approvedQuantity]]></fieldDescription>
 	</field>
+	<variable name="VisibleRows" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[($F{approvedQuantity} > 0L) ? 1 : 0]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -329,7 +333,7 @@ Lilongwe]]></text>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$V{VisibleRows}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement style="Row" mode="Opaque" x="40" y="0" width="60" height="23" uuid="5c934beb-6a56-414f-b44b-039716390a2f">

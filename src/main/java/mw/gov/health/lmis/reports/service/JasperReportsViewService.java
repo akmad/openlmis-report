@@ -15,6 +15,7 @@ import mw.gov.health.lmis.reports.dto.external.BasicRequisitionDto;
 import mw.gov.health.lmis.reports.dto.external.FacilityDto;
 import mw.gov.health.lmis.reports.dto.external.GeographicZoneDto;
 import mw.gov.health.lmis.reports.dto.external.OrderDto;
+import mw.gov.health.lmis.reports.dto.external.OrderLineItemDto;
 import mw.gov.health.lmis.reports.dto.external.ProcessingPeriodDto;
 import mw.gov.health.lmis.reports.dto.external.ProgramDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionDto;
@@ -238,9 +239,12 @@ public class JasperReportsViewService {
         statusChange -> statusChange.setAuthor(
             getIfPresent(userReferenceDataService, statusChange.getAuthorId()))
     );
+    List<OrderLineItemDto> items = order.getOrderLineItems();
+    items.sort(Comparator.comparing(c -> c.getOrderable().getProductCode()));
+
     UserDto currentUser = authenticationHelper.getCurrentUser();
 
-    parameters.put(DATASOURCE, new JRBeanCollectionDataSource(order.getOrderLineItems()));
+    parameters.put(DATASOURCE, new JRBeanCollectionDataSource(items));
     parameters.put("order", order);
     parameters.put("user", currentUser.printName());
 
