@@ -29,11 +29,10 @@
 	</parameter>
 	<parameter name="adjustmentType" class="java.lang.String">
 		<property name="displayName" value="Adjustment Type"/>
-		<property name="selectExpression" value="/api/reports/stockAdjustmentReasons/search"/>
+		<property name="selectExpression" value="/api/stockCardLineItemReasons"/>
 		<property name="selectProperty" value="name"/>
 		<property name="displayProperty" value="name"/>
 		<property name="required" value="false"/>
-		<property name="dependencies" value="program:id:program"/>
 	</parameter>
 	<parameter name="imagesDirectory" class="java.lang.String" isForPrompting="false"/>
 	<queryString language="plsql">
@@ -47,12 +46,12 @@ SELECT
 	products.fullproductname AS productname,
 	products.dispensingunit AS dispensingunit,
 	facilities.name AS facilityname,
-	stock_adjustment_reasons.name AS adjustmenttype,
+	stock_card_line_item_reasons.name AS adjustmenttype,
 	stock_adjustments.quantity AS adjustmentquantity,
-	stock_adjustment_reasons.additive AS adjustmentadditivity
+	stock_card_line_item_reasons.reasontype AS reasontype
 FROM
 	requisition.stock_adjustments AS stock_adjustments
-	JOIN referencedata.stock_adjustment_reasons AS stock_adjustment_reasons ON stock_adjustment_reasons.id = stock_adjustments.reasonid
+    JOIN stockmanagement.stock_card_line_item_reasons AS stock_card_line_item_reasons ON stock_card_line_item_reasons.id = stock_adjustments.reasonid
 	JOIN requisition.requisition_line_items AS requisition_line_items ON requisition_line_items.id = stock_adjustments.requisitionlineitemid
 	JOIN requisition.requisitions AS requisitions ON requisitions.id = requisition_line_items.requisitionid
 	JOIN referencedata.processing_periods AS periods ON periods.id = requisitions.processingperiodid
@@ -65,13 +64,13 @@ WHERE
   	AND (requisitions.status = 'APPROVED' OR requisitions.status = 'RELEASED')
 	AND ($P{district}::varchar IS NULL OR zones.id IN (SELECT id FROM findChildZones))
 	AND periods.name = $P{period}::varchar
-	AND ($P{adjustmentType}::varchar IS NULL OR stock_adjustment_reasons.name = $P{adjustmentType}::varchar)]]>
+	AND ($P{adjustmentType}::varchar IS NULL OR stock_card_line_item_reasons.name = $P{adjustmentType}::varchar)]]>
 	</queryString>
 	<field name="productname" class="java.lang.String"/>
 	<field name="facilityname" class="java.lang.String"/>
 	<field name="adjustmenttype" class="java.lang.String"/>
 	<field name="adjustmentquantity" class="java.lang.Integer"/>
-	<field name="adjustmentadditivity" class="java.lang.Boolean"/>
+	<field name="reasontype" class="java.lang.String"/>
 	<field name="dispensingunit" class="java.lang.String"/>
 	<field name="programname" class="java.lang.String"/>
 	<variable name="Adjustment Quantity total for Adjustment Type" class="java.lang.Integer" resetType="Group" resetGroup="Adjustment Type Group" calculation="Sum">
@@ -81,7 +80,7 @@ WHERE
 		<variableExpression><![CDATA[$V{Additive Adjustment Quantity}]]></variableExpression>
 	</variable>
 	<variable name="Additive Adjustment Quantity" class="java.lang.Integer" resetType="None">
-		<variableExpression><![CDATA[Boolean.TRUE.equals($F{adjustmentadditivity}) ?
+		<variableExpression><![CDATA["CREDIT".equals($F{reasontype}) ?
 $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></variableExpression>
 	</variable>
 	<variable name="Adjustment Quantity total for Facility" class="java.lang.Integer" resetType="Group" resetGroup="Facility Group" calculation="Sum">

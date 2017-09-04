@@ -6,11 +6,9 @@ import mw.gov.health.lmis.reports.dto.external.GeographicZoneDto;
 import mw.gov.health.lmis.reports.dto.external.ProcessingPeriodDto;
 import mw.gov.health.lmis.reports.dto.external.ProcessingScheduleDto;
 import mw.gov.health.lmis.reports.dto.external.ProgramDto;
-import mw.gov.health.lmis.reports.dto.external.StockAdjustmentReasonDto;
 import mw.gov.health.lmis.reports.service.referencedata.GeographicZoneReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.PeriodReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.ProgramReferenceDataService;
-import mw.gov.health.lmis.reports.service.referencedata.StockAdjustmentReasonReferenceDataService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -41,9 +39,6 @@ public class ReportsControllerIntegrationTest extends BaseWebIntegrationTest {
 
   @MockBean
   private ProgramReferenceDataService programReferenceDataService;
-
-  @MockBean
-  private StockAdjustmentReasonReferenceDataService stockAdjustmentReasonReferenceDataService;
 
   @Before
   public void setUp() {
@@ -122,34 +117,6 @@ public class ReportsControllerIntegrationTest extends BaseWebIntegrationTest {
     assertThat(RAML_ASSERT_MESSAGE, restAssured.getLastReport(), RamlMatchers.hasNoViolations());
   }
 
-  // GET /api/reports/stockAdjustmentReasons/search
-
-  @Test
-  public void shouldGetStockAdjustmentReasonsByProgram() {
-    // given
-    UUID programId = UUID.randomUUID();
-    StockAdjustmentReasonDto[] reasons
-            = { generateStockAdjustmentReason(), generateStockAdjustmentReason() };
-    given(stockAdjustmentReasonReferenceDataService.search(programId))
-            .willReturn(Arrays.asList(reasons));
-
-    // when
-    StockAdjustmentReasonDto[] result = restAssured.given()
-            .queryParam(ACCESS_TOKEN, getToken())
-            .queryParam("program", programId)
-            .contentType(MediaType.APPLICATION_JSON_VALUE)
-            .when()
-            .get(RESOURCE_URL + "/stockAdjustmentReasons/search")
-            .then()
-            .statusCode(200)
-            .extract().as(StockAdjustmentReasonDto[].class);
-
-    // then
-    assertNotNull(result);
-    assertEquals(2, result.length);
-    assertThat(RAML_ASSERT_MESSAGE, restAssured.getLastReport(), RamlMatchers.hasNoViolations());
-  }
-
   private GeographicZoneDto generateGeographicZone() {
     GeographicZoneDto zone = new GeographicZoneDto();
     zone.setId(UUID.randomUUID());
@@ -197,17 +164,5 @@ public class ReportsControllerIntegrationTest extends BaseWebIntegrationTest {
     program.setShowNonFullSupplyTab(true);
 
     return program;
-  }
-
-  private StockAdjustmentReasonDto generateStockAdjustmentReason() {
-    StockAdjustmentReasonDto reason = new StockAdjustmentReasonDto();
-    reason.setId(UUID.randomUUID());
-    reason.setName(NAME);
-    reason.setDescription(DESCRIPTION);
-    reason.setAdditive(true);
-    reason.setDisplayOrder(1);
-    reason.setProgram(generateProgram());
-
-    return reason;
   }
 }

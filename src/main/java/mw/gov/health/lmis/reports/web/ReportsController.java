@@ -4,7 +4,6 @@ import mw.gov.health.lmis.reports.dto.external.GeographicZoneDto;
 import mw.gov.health.lmis.reports.dto.external.ProcessingPeriodDto;
 import mw.gov.health.lmis.reports.dto.external.ProgramDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionDto;
-import mw.gov.health.lmis.reports.dto.external.StockAdjustmentReasonDto;
 import mw.gov.health.lmis.reports.exception.JasperReportViewException;
 import mw.gov.health.lmis.reports.exception.NotFoundMessageException;
 import mw.gov.health.lmis.reports.i18n.MessageKeys;
@@ -13,7 +12,6 @@ import mw.gov.health.lmis.reports.service.PermissionService;
 import mw.gov.health.lmis.reports.service.referencedata.GeographicZoneReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.PeriodReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.ProgramReferenceDataService;
-import mw.gov.health.lmis.reports.service.referencedata.StockAdjustmentReasonReferenceDataService;
 import mw.gov.health.lmis.reports.service.requisition.RequisitionService;
 import mw.gov.health.lmis.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
@@ -46,9 +43,6 @@ public class ReportsController extends BaseController {
 
   @Autowired
   private ProgramReferenceDataService programReferenceDataService;
-
-  @Autowired
-  private StockAdjustmentReasonReferenceDataService stockAdjustmentReasonReferenceDataService;
 
   @Autowired
   private PermissionService permissionService;
@@ -118,20 +112,5 @@ public class ReportsController extends BaseController {
   public Collection<ProgramDto> getPrograms() {
     permissionService.canViewReportsOrOrders();
     return programReferenceDataService.findAll();
-  }
-
-  /**
-   * Retrieves StockAdjustmentReasons for a specified program
-   *
-   * @param programId the program id.
-   * @return a list of StockAdjustmentReasons.
-   */
-  @RequestMapping(value = "/stockAdjustmentReasons/search", method = RequestMethod.GET)
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public Collection<StockAdjustmentReasonDto> findStockAdjustmentReasonsByProgramId(
-          @RequestParam("program") UUID programId) {
-    permissionService.canViewReports(null);
-    return stockAdjustmentReasonReferenceDataService.search(programId);
   }
 }

@@ -50,14 +50,6 @@ schemas:
           "items": { "type": "object", "$ref":"schemas/program.json" }
       }
 
-  - stockAdjustmentReason: !include schemas/stockAdjustmentReason.json
-
-  - stockAdjustmentReasonArray: |
-      {
-          "type": "array",
-          "items": { "type": "object", "$ref": "schemas/stockAdjustmentReason.json" }
-      }
-
 traits:
     - secured:
           queryParameters:
@@ -188,27 +180,6 @@ resourceTypes:
                       body:
                         application/json:
                           schema: localizedErrorResponse
-      /stockAdjustmentReasons:
-          /search:
-              get:
-                  is: [ secured ]
-                  description: Search for Stock Adjustment Reasons.
-                  queryParameters:
-                      program:
-                          displayName: programId
-                          type: string
-                          required: true
-                          repeat: false
-                  responses:
-                      "200":
-                          body:
-                            application/json:
-                              schema: stockAdjustmentReasonArray
-                      "404":
-                      "403":
-                          body:
-                            application/json:
-                              schema: localizedErrorResponse
       /templates/malawi:
           displayName: Report Template
           post:
