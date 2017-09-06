@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-05-19T16:33:04 -->
+<!-- 2017-09-06T14:57:30 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="adjustments_summary_district" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="548a4d5f-1cb0-4fa0-b5f9-40a07c579f42">
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
@@ -59,7 +59,7 @@ SELECT
 	products.dispensingunit AS dispensingunit,
 	products.fullproductname AS productname,
 	products.code AS productcode,
-  	CASE 
+  	CASE
 		WHEN periods.id IN (SELECT id FROM findPreviousPeriods LIMIT 1) THEN 1
 		WHEN periods.id IN (SELECT id FROM findPreviousPeriods LIMIT 1 OFFSET 1) THEN 2
 		WHEN periods.id IN (SELECT id FROM findPreviousPeriods LIMIT 1 OFFSET 2) THEN 3
@@ -82,7 +82,8 @@ WHERE
 	AND ($P{district}::varchar IS NULL OR zones.id IN (SELECT id FROM findChildZones))
 	AND periods.id IN (SELECT id FROM findPreviousPeriods LIMIT 3)
   	AND (requisitions.status = 'APPROVED' OR requisitions.status = 'RELEASED')
-	AND facilities.active = TRUE]]>
+	AND facilities.active = TRUE
+ORDER BY facilitycode, productcategory, productcode]]>
 	</queryString>
 	<field name="periodname" class="java.lang.String"/>
 	<field name="periodnumber" class="java.lang.Integer"/>
@@ -122,14 +123,14 @@ WHERE
 	<variable name="Period 3 Name" class="java.lang.String">
 		<variableExpression><![CDATA[$F{periodnumber} == 3 ? $F{periodname} : $V{Period 3 Name}]]></variableExpression>
 	</variable>
-	<variable name="Period 1 Closing Balance" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{periodnumber} == 1 ? $F{stockonhand} + $F{approvedquantity} : 0]]></variableExpression>
+	<variable name="Period 1 Closing Balance" class="java.lang.Integer" resetType="Group" resetGroup="Product Code" calculation="Sum">
+		<variableExpression><![CDATA[$F{periodnumber} == 1 ? $F{stockonhand} : 0]]></variableExpression>
 	</variable>
-	<variable name="Period 2 Closing Balance" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{periodnumber} == 2 ? $F{stockonhand} + $F{approvedquantity} : 0]]></variableExpression>
+	<variable name="Period 2 Closing Balance" class="java.lang.Integer" resetType="Group" resetGroup="Product Code">
+		<variableExpression><![CDATA[$F{periodnumber} == 2 ? $F{stockonhand} : 0]]></variableExpression>
 	</variable>
-	<variable name="Period 3 Closing Balance" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{periodnumber} == 3 ? $F{stockonhand} + $F{approvedquantity} : 0]]></variableExpression>
+	<variable name="Period 3 Closing Balance" class="java.lang.Integer" resetType="Group" resetGroup="Product Code">
+		<variableExpression><![CDATA[$F{periodnumber} == 3 ? $F{stockonhand} : 0]]></variableExpression>
 	</variable>
 	<group name="Facility Code">
 		<groupExpression><![CDATA[$F{facilitycode}]]></groupExpression>
