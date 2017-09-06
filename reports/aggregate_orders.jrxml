@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-08-29T13:45:04 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aggregate_orders" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="843ea716-ea72-47f8-bbd7-b9050b973ed0">
+<!-- 2017-09-06T19:13:58 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aggregate_orders" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="843ea716-ea72-47f8-bbd7-b9050b973ed0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="isDisplayed" value="false"/>
@@ -40,7 +40,7 @@
   SELECT referencedata.geographic_zones.* FROM referencedata.geographic_zones JOIN findChildZones ON findChildZones.id = referencedata.geographic_zones.parentId
 )
 SELECT
-  fulfillment.order_line_items.approvedquantity as ApprovedQuantity,
+  fulfillment.order_line_items.packstoship as PacksToShip,
   fulfillment.orders.ordercode as OrderCode,
   referencedata.facilities.name AS FacilityName,
   referencedata.facilities.code AS FacilityCode,
@@ -82,7 +82,7 @@ WHERE
    AND ($P{program}::varchar IS NULL OR referencedata.programs.name = $P{program}::varchar)
    AND referencedata.processing_periods.name = $P{period}::varchar
    AND ($P{district}::varchar IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
-   AND fulfillment.order_line_items.approvedquantity > 0
+   AND fulfillment.order_line_items.packstoship > 0
    AND NOT (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
    			AND LOWER(referencedata.facilities.extraData ->> 'AggregateOrderMember') = 'false')
    AND referencedata.facility_types.name <> ALL ( ARRAY['Private Clinic', 'Private Hospital', 'District Health Office', 'CHAM', 'Central Hospital'] ) OR (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
@@ -90,7 +90,7 @@ WHERE
 ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]]>
 	</queryString>
 	<field name="OrderCode" class="java.lang.String"/>
-	<field name="ApprovedQuantity" class="java.lang.Integer"/>
+	<field name="PacksToShip" class="java.lang.Integer"/>
 	<field name="FacilityName" class="java.lang.String"/>
 	<field name="PeriodName" class="java.lang.String"/>
 	<field name="ProductCode" class="java.lang.String"/>
@@ -102,12 +102,12 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
 	<field name="PricePerPack" class="java.lang.Double"/>
 	<field name="ApprovalDate" class="java.sql.Timestamp"/>
 	<field name="ApproverName" class="java.lang.String"/>
-	<variable name="ApprovedQuantity_SUM" class="java.lang.Integer" resetType="Group" resetGroup="Group1" calculation="Sum">
-		<variableExpression><![CDATA[$F{ApprovedQuantity}]]></variableExpression>
+	<variable name="PacksToShip_SUM" class="java.lang.Integer" resetType="Group" resetGroup="Group1" calculation="Sum">
+		<variableExpression><![CDATA[$F{PacksToShip}]]></variableExpression>
 		<initialValueExpression><![CDATA[BigDecimal.ZERO]]></initialValueExpression>
 	</variable>
 	<variable name="TotalPrice" class="java.math.BigDecimal" resetType="Group" resetGroup="Group1" calculation="Sum">
-		<variableExpression><![CDATA[BigDecimal.valueOf($F{PricePerPack}).multiply(BigDecimal.valueOf($F{ApprovedQuantity}))]]></variableExpression>
+		<variableExpression><![CDATA[BigDecimal.valueOf($F{PricePerPack}).multiply(BigDecimal.valueOf($F{PacksToShip}))]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<variable name="HighestApprovalDate" class="java.sql.Timestamp" calculation="Highest">
@@ -129,7 +129,7 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
 		<variableExpression><![CDATA[$V{UniqueFacilities}.add($F{FacilityName})]]></variableExpression>
 	</variable>
 	<variable name="VisibleRows" class="java.lang.Integer" incrementType="Group" incrementGroup="Group1" calculation="Count">
-		<variableExpression><![CDATA[$V{ApprovedQuantity_SUM}.intValue() > 0L]]></variableExpression>
+		<variableExpression><![CDATA[$V{PacksToShip_SUM}.intValue() > 0L]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<group name="Group1">
@@ -137,7 +137,6 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
 		<groupFooter>
 			<band height="23">
 				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				<printWhenExpression><![CDATA[$V{ApprovedQuantity_SUM}.intValue() > 0L]]></printWhenExpression>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Row" mode="Opaque" x="-1" y="0" width="40" height="23" uuid="fe7ef7b6-048c-4d22-a5d5-944da2c110ff"/>
 					<box bottomPadding="1">
@@ -246,7 +245,7 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{ApprovedQuantity_SUM}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{PacksToShip_SUM}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -361,7 +360,7 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="11"/>
 				</textElement>
-				<text><![CDATA[Quantity]]></text>
+				<text><![CDATA[Quantity (packs)]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="100" y="0" width="200" height="30" backcolor="#3D9297" uuid="2169bafc-6a9b-4779-af4f-ab65e70f22a9"/>

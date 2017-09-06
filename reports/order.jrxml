@@ -39,20 +39,17 @@
 	<field name="id" class="java.util.UUID">
 		<fieldDescription><![CDATA[id]]></fieldDescription>
 	</field>
-	<field name="packsToShip" class="java.lang.Long">
-		<fieldDescription><![CDATA[packsToShip]]></fieldDescription>
-	</field>
 	<field name="class" class="java.lang.Class">
 		<fieldDescription><![CDATA[class]]></fieldDescription>
 	</field>
 	<field name="filledQuantity" class="java.lang.Long">
 		<fieldDescription><![CDATA[filledQuantity]]></fieldDescription>
 	</field>
-	<field name="approvedQuantity" class="java.lang.Long">
-		<fieldDescription><![CDATA[approvedQuantity]]></fieldDescription>
+	<field name="packsToShip" class="java.lang.Long">
+		<fieldDescription><![CDATA[packsToShip]]></fieldDescription>
 	</field>
 	<variable name="VisibleRows" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[($F{approvedQuantity} > 0L) ? 1 : 0]]></variableExpression>
+		<variableExpression><![CDATA[($F{packsToShip} > 0L) ? 1 : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<background>
@@ -231,7 +228,7 @@ Lilongwe]]></text>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="11"/>
 				</textElement>
-				<text><![CDATA[Quantity]]></text>
+				<text><![CDATA[Quantity (packs)]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="0" y="0" width="40" height="30" backcolor="#3D9297" uuid="3111b0a8-0dab-4723-9229-b26f2de64350"/>
@@ -288,7 +285,7 @@ Lilongwe]]></text>
 	<detail>
 		<band height="23" splitType="Immediate">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-			<printWhenExpression><![CDATA[$F{approvedQuantity} > 0L]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{packsToShip} > 0L]]></printWhenExpression>
 			<textField isStretchWithOverflow="true">
 				<reportElement style="Row" mode="Opaque" x="100" y="0" width="200" height="23" uuid="31100a38-97d8-400d-bf98-3b9039cd4d01">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -366,7 +363,7 @@ Lilongwe]]></text>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{approvedQuantity}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{packsToShip}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.###;(#,##0.###-)">
 				<reportElement style="Row" mode="Opaque" x="405" y="0" width="60" height="23" uuid="705a9a2d-09a6-4e17-976e-099da486f994">
@@ -398,7 +395,7 @@ Lilongwe]]></text>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{orderable}.getProgramOrderable($P{order}) != null && $F{approvedQuantity} != null && $F{orderable}.getProgramOrderable($P{order}).getPricePerPack() != null) ? $F{orderable}.getProgramOrderable($P{order}).getPricePerPack().multiply(new BigDecimal($F{approvedQuantity})) : ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{orderable}.getProgramOrderable($P{order}) != null && $F{packsToShip} != null && $F{orderable}.getProgramOrderable($P{order}).getPricePerPack() != null) ? $F{orderable}.getProgramOrderable($P{order}).getPricePerPack().multiply(new BigDecimal($F{packsToShip})) : ""]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
