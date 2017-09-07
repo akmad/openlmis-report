@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-09-06T19:13:58 -->
+<!-- 2017-09-07T12:08:17 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aggregate_orders" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="843ea716-ea72-47f8-bbd7-b9050b973ed0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -104,11 +104,11 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
 	<field name="ApproverName" class="java.lang.String"/>
 	<variable name="PacksToShip_SUM" class="java.lang.Integer" resetType="Group" resetGroup="Group1" calculation="Sum">
 		<variableExpression><![CDATA[$F{PacksToShip}]]></variableExpression>
-		<initialValueExpression><![CDATA[BigDecimal.ZERO]]></initialValueExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<variable name="TotalPrice" class="java.math.BigDecimal" resetType="Group" resetGroup="Group1" calculation="Sum">
 		<variableExpression><![CDATA[BigDecimal.valueOf($F{PricePerPack}).multiply(BigDecimal.valueOf($F{PacksToShip}))]]></variableExpression>
-		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+		<initialValueExpression><![CDATA[BigDecimal.ZERO]]></initialValueExpression>
 	</variable>
 	<variable name="HighestApprovalDate" class="java.sql.Timestamp" calculation="Highest">
 		<variableExpression><![CDATA[$F{ApprovalDate}]]></variableExpression>
@@ -137,6 +137,8 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
 		<groupFooter>
 			<band height="23">
 				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				<printWhenExpression><![CDATA[$V{PacksToShip_SUM} > 0
+]]></printWhenExpression>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Row" mode="Opaque" x="-1" y="0" width="40" height="23" uuid="fe7ef7b6-048c-4d22-a5d5-944da2c110ff"/>
 					<box bottomPadding="1">
