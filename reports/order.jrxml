@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-09-01T19:01:46 -->
+<!-- 2017-09-07T15:45:31 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="order" pageWidth="595" pageHeight="842" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="6e843fe2-ce72-4257-a4c3-1df03728dc95">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -429,8 +429,8 @@ Lilongwe]]></text>
 				</textElement>
 				<text><![CDATA[Approved By (Dist): ]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement key="" x="110" y="100" width="100" height="20" uuid="23ede21b-50f3-420e-acf5-57e1e890b731"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="" x="110" y="100" width="260" height="20" uuid="23ede21b-50f3-420e-acf5-57e1e890b731"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -440,7 +440,7 @@ Lilongwe]]></text>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{order}.getApprovedStatusChange().getAuthor().printName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{order}.getApprovedStatusChange().getAuthor().printName() + (($P{order}.getApprovedStatusChange().getAuthor().getEmail() != null) ? (" (" + $P{order}.getApprovedStatusChange().getAuthor().getEmail() + ")") : "")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="120" width="100" height="20" uuid="9fa486a9-4156-4ddf-bb90-01fcfc403ad4"/>
