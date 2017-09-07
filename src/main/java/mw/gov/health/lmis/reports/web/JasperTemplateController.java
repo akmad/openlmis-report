@@ -5,9 +5,11 @@ import static mw.gov.health.lmis.reports.service.PermissionService.AGGREGATE_ORD
 import static mw.gov.health.lmis.reports.service.PermissionService.AGGREGATE_ORDERS_XLS_ID;
 
 import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JRVirtualizationHelper;
 import net.sf.jasperreports.engine.JRVirtualizer;
-import net.sf.jasperreports.engine.fill.JRFileVirtualizer;
 
+import net.sf.jasperreports.engine.fill.JRSwapFileVirtualizer;
+import net.sf.jasperreports.engine.util.JRSwapFile;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -181,7 +183,9 @@ public class JasperTemplateController extends BaseController {
     }
 
     String tmpdir = System.getProperty("java.io.tmpdir");
-    JRVirtualizer virtualizer = new JRFileVirtualizer(2, tmpdir);
+    JRVirtualizer virtualizer = new JRSwapFileVirtualizer(
+        1000, new JRSwapFile(tmpdir, 4096, 200), true);
+    JRVirtualizationHelper.setThreadVirtualizer(virtualizer);
 
     Map<String, Object> map = jasperTemplateService.mapRequestParametersToTemplate(
         request, template
