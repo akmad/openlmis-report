@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-09-06T19:10:13 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aggregate_orders" pageWidth="400" pageHeight="800" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="400" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="843ea716-ea72-47f8-bbd7-b9050b973ed0">
+<!-- 2017-09-08T16:36:22 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aggregate_orders" pageWidth="600" pageHeight="800" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="600" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="843ea716-ea72-47f8-bbd7-b9050b973ed0">
     <property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
     <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
     <property name="com.jaspersoft.studio.unit." value="pixel"/>
     <property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
     <property name="net.sf.jasperreports.export.xls.one.page.per.sheet" value="false"/>
     <property name="isDisplayed" value="false"/>
+    <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
     <style name="Row" mode="Transparent">
         <conditionalStyle>
             <conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></conditionExpression>
@@ -124,7 +132,7 @@ WHERE
    AND fulfillment.order_line_items.packstoship > 0
    AND NOT (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
    			AND LOWER(referencedata.facilities.extraData ->> 'AggregateOrderMember') = 'false')
-   AND (referencedata.facility_types.name <> ALL ( ARRAY['Private Clinic', 'Private Hospital', 'District Health Office', 'CHAM', 'Central Hospital'] ) OR (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
+   AND (referencedata.facility_types.name <> ALL ( ARRAY['Private Clinic', 'Private Hospital', 'Districttest Health Office', 'CHAM', 'Central Hospital'] ) OR (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
    			AND LOWER(referencedata.facilities.extraData ->> 'AggregateOrderMember') = 'true'))
 ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]]>
     </queryString>
@@ -246,7 +254,7 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
             <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
             <printWhenExpression><![CDATA[$F{ProductName} != null]]></printWhenExpression>
             <crosstab ignoreWidth="true">
-                <reportElement x="0" y="0" width="360" height="180" uuid="94873cd5-dc42-4f3b-8fe0-d1e2d622ab75">
+                <reportElement x="0" y="0" width="600" height="180" uuid="94873cd5-dc42-4f3b-8fe0-d1e2d622ab75">
                     <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
                     <property name="com.jaspersoft.studio.crosstab.style.header" value="Crosstab_CH"/>
                     <property name="com.jaspersoft.studio.crosstab.style.group" value="Crosstab_CG"/>
@@ -256,7 +264,7 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
                 </reportElement>
                 <crosstabHeaderCell>
                     <cellContents mode="Opaque" style="Crosstab_CD">
-                        <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+                        <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
                         <textField>
                             <reportElement x="0" y="0" width="80" height="20" uuid="ba07a0e2-32d8-4e27-894d-dad5c8410599">
                                 <property name="com.jaspersoft.studio.unit.x" value="pixel"/>
@@ -264,11 +272,13 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
                             <textFieldExpression><![CDATA["Code"]]></textFieldExpression>
                         </textField>
                         <textField>
-                            <reportElement x="80" y="0" width="80" height="20" uuid="84a4ac27-46c7-4b54-887a-d0ab1dab70cc"/>
+                            <reportElement x="80" y="0" width="300" height="20" uuid="84a4ac27-46c7-4b54-887a-d0ab1dab70cc"/>
                             <textFieldExpression><![CDATA["Description"]]></textFieldExpression>
                         </textField>
                         <textField>
-                            <reportElement x="160" y="0" width="80" height="20" uuid="f269b52b-8892-4b0f-88d3-7d85961f5844"/>
+                            <reportElement x="380" y="0" width="80" height="20" uuid="f269b52b-8892-4b0f-88d3-7d85961f5844">
+                                <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+                            </reportElement>
                             <textFieldExpression><![CDATA["Uol"]]></textFieldExpression>
                         </textField>
                     </cellContents>
@@ -290,7 +300,7 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
                         <cellContents mode="Opaque" style="Crosstab_CT"/>
                     </crosstabTotalRowHeader>
                 </rowGroup>
-                <rowGroup name="ProductName" width="80" totalPosition="End">
+                <rowGroup name="ProductName" width="300" totalPosition="End">
                     <bucket class="java.lang.String">
                         <bucketExpression><![CDATA[$F{ProductName}]]></bucketExpression>
                     </bucket>
@@ -298,7 +308,7 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
                         <cellContents mode="Opaque" style="Crosstab_CH">
                             <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
                             <textField>
-                                <reportElement x="0" y="0" width="80" height="20" uuid="819202e6-0baf-48cd-9c9d-dafed899106d"/>
+                                <reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="300" height="20" uuid="819202e6-0baf-48cd-9c9d-dafed899106d"/>
                                 <textFieldExpression><![CDATA[$V{ProductName}]]></textFieldExpression>
                             </textField>
                         </cellContents>
@@ -339,7 +349,7 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
                     <crosstabTotalColumnHeader>
                         <cellContents mode="Opaque" style="Crosstab_CT">
                             <staticText>
-                                <reportElement x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="726ea6d0-0669-482f-b3ca-4d163aff4fa1"/>
+                                <reportElement x="0" y="0" width="80" height="20" forecolor="#FFFFFF" uuid="726ea6d0-0669-482f-b3ca-4d163aff4fa1"/>
                                 <text><![CDATA[Total FacilityName]]></text>
                             </staticText>
                         </cellContents>
@@ -360,11 +370,11 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
                         </textField>
                     </cellContents>
                 </crosstabCell>
-                <crosstabCell width="60" height="20" columnTotalGroup="FacilityName">
+                <crosstabCell width="80" height="20" columnTotalGroup="FacilityName">
                     <cellContents mode="Opaque" style="Crosstab_CT">
                         <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
                         <textField isBlankWhenNull="true">
-                            <reportElement positionType="FixRelativeToBottom" x="0" y="0" width="60" height="20" forecolor="#FFFFFF" uuid="7fd2d723-ca39-46ce-be28-2ee150f30029"/>
+                            <reportElement positionType="FixRelativeToBottom" x="0" y="0" width="80" height="20" forecolor="#FFFFFF" uuid="7fd2d723-ca39-46ce-be28-2ee150f30029"/>
                             <textFieldExpression><![CDATA[$V{packs}]]></textFieldExpression>
                         </textField>
                     </cellContents>
@@ -372,13 +382,13 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
                 <crosstabCell width="60" height="0" rowTotalGroup="ProductName">
                     <cellContents mode="Opaque" style="Crosstab_CG"/>
                 </crosstabCell>
-                <crosstabCell width="60" height="0" rowTotalGroup="ProductName" columnTotalGroup="FacilityName">
+                <crosstabCell width="80" height="0" rowTotalGroup="ProductName" columnTotalGroup="FacilityName">
                     <cellContents mode="Opaque" style="Crosstab_CT"/>
                 </crosstabCell>
                 <crosstabCell width="60" height="0" rowTotalGroup="PackSize">
                     <cellContents mode="Opaque" style="Crosstab_CG"/>
                 </crosstabCell>
-                <crosstabCell width="60" height="0" rowTotalGroup="PackSize" columnTotalGroup="FacilityName">
+                <crosstabCell width="80" height="0" rowTotalGroup="PackSize" columnTotalGroup="FacilityName">
                     <cellContents mode="Opaque" style="Crosstab_CT">
                         <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
                     </cellContents>
@@ -386,7 +396,7 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
                 <crosstabCell width="60" height="0" rowTotalGroup="ProductCode">
                     <cellContents mode="Opaque" style="Crosstab_CT"/>
                 </crosstabCell>
-                <crosstabCell width="60" height="0" rowTotalGroup="ProductCode" columnTotalGroup="FacilityName">
+                <crosstabCell width="80" height="0" rowTotalGroup="ProductCode" columnTotalGroup="FacilityName">
                     <cellContents mode="Opaque" style="Crosstab_CT">
                         <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
                     </cellContents>
