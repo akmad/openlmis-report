@@ -85,8 +85,8 @@ WHERE
    AND fulfillment.order_line_items.packstoship > 0
    AND NOT (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
    			AND LOWER(referencedata.facilities.extraData ->> 'AggregateOrderMember') = 'false')
-   AND referencedata.facility_types.name <> ALL ( ARRAY['Private Clinic', 'Private Hospital', 'District Health Office', 'CHAM', 'Central Hospital'] ) OR (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
-   			AND LOWER(referencedata.facilities.extraData ->> 'AggregateOrderMember') = 'true')
+   AND (referencedata.facility_types.name <> ALL ( ARRAY['Private Clinic', 'Private Hospital', 'District Health Office', 'CHAM', 'Central Hospital'] ) OR (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
+   			AND LOWER(referencedata.facilities.extraData ->> 'AggregateOrderMember') = 'true'))
 ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]]>
 	</queryString>
 	<field name="OrderCode" class="java.lang.String"/>
@@ -137,8 +137,7 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
 		<groupFooter>
 			<band height="23">
 				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				<printWhenExpression><![CDATA[$V{PacksToShip_SUM} > 0
-]]></printWhenExpression>
+				<printWhenExpression><![CDATA[$V{PacksToShip_SUM} > 0]]></printWhenExpression>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Row" mode="Opaque" x="-1" y="0" width="40" height="23" uuid="fe7ef7b6-048c-4d22-a5d5-944da2c110ff"/>
 					<box bottomPadding="1">
