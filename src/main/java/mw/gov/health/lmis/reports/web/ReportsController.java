@@ -27,6 +27,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -98,7 +100,9 @@ public class ReportsController extends BaseController {
   @ResponseBody
   public Collection<ProcessingPeriodDto> getProcessingPeriods() {
     permissionService.canViewReportsOrOrders();
-    return periodReferenceDataService.findAll();
+    List<ProcessingPeriodDto> periods = periodReferenceDataService.findAll();
+    Collections.reverse(periods);
+    return periods;
   }
 
   /**
