@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="adjustments_summary_district" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="548a4d5f-1cb0-4fa0-b5f9-40a07c579f42">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="adjustments_summary_district" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Error" uuid="548a4d5f-1cb0-4fa0-b5f9-40a07c579f42">
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1" value="groupHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.1" value="groupHeader"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.group.1" value="Product Group"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.group.1" value="Product Group"/>
 	<parameter name="period" class="java.lang.String">
 		<property name="displayName" value="Period Name"/>
 		<property name="selectExpression" value="/api/reports/processingPeriods"/>
@@ -95,6 +99,7 @@ $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></v
 		<groupHeader>
 			<band height="20">
 				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				<printWhenExpression><![CDATA[Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
 				<rectangle>
 					<reportElement x="0" y="0" width="555" height="20" backcolor="#C0C0C0" uuid="5fc73509-f27b-4051-9b0d-0430e9585241"/>
 					<graphicElement>
@@ -111,7 +116,7 @@ $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></v
 					<textFieldExpression><![CDATA[$F{productname}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="false">
-					<reportElement x="140" y="0" width="90" height="20" uuid="8402f03f-3e3a-42c7-9865-32b6b0dee2ba">
+					<reportElement x="140" y="0" width="99" height="20" uuid="8402f03f-3e3a-42c7-9865-32b6b0dee2ba">
 						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 						<printWhenExpression><![CDATA[$F{dispensingunit} != null]]></printWhenExpression>
 					</reportElement>
@@ -121,18 +126,58 @@ $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></v
 					<textFieldExpression><![CDATA[$F{dispensingunit}]]></textFieldExpression>
 				</textField>
 			</band>
+			<band height="20">
+				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				<printWhenExpression><![CDATA[Arrays.asList("csv", "xls").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
+				<staticText>
+					<reportElement x="40" y="0" width="140" height="20" uuid="0187cb09-a694-4ad6-b6d5-2322ddeb1407">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<text><![CDATA[Product]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="180" y="0" width="104" height="20" uuid="0e1d212b-8146-4cd7-8385-eff493d0800f">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<text><![CDATA[Facility Name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="364" y="0" width="100" height="20" uuid="429a7e8d-f187-4026-8beb-96a885690f28">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<text><![CDATA[Adjustment Type]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="464" y="0" width="90" height="20" uuid="b189204d-78a9-4a4f-affd-6d3d9567d5fc">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<text><![CDATA[Adjustment Quantity]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="284" y="0" width="80" height="20" uuid="7f548f67-961c-4198-b41a-31b7e4abea49"/>
+					<text><![CDATA[Dispensing Unit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="0" width="40" height="20" uuid="721959a4-3b54-438c-ac1c-315666ee8446">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<text><![CDATA[Line #]]></text>
+				</staticText>
+			</band>
 		</groupHeader>
 		<groupFooter>
 			<band height="20">
-				<printWhenExpression><![CDATA[$V{REPORT_COUNT}.intValue() > 0]]></printWhenExpression>
+				<printWhenExpression><![CDATA[$V{REPORT_COUNT}.intValue() > 0 && Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
 				<staticText>
-					<reportElement x="400" y="0" width="100" height="20" uuid="b4575a60-4d8c-41cd-abb7-70f6d11293d5">
+					<reportElement x="380" y="0" width="120" height="20" uuid="b4575a60-4d8c-41cd-abb7-70f6d11293d5">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
+					<box leftPadding="20"/>
 					<text><![CDATA[Total Adjustments]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="510" y="0" width="45" height="20" uuid="12366c95-43e1-4bda-8cde-1fd06302bb53"/>
+					<reportElement x="500" y="0" width="55" height="20" uuid="12366c95-43e1-4bda-8cde-1fd06302bb53"/>
+					<box leftPadding="5"/>
 					<textFieldExpression><![CDATA[$V{Adjustment Quantity total for Product}]]></textFieldExpression>
 				</textField>
 			</band>
@@ -142,16 +187,16 @@ $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></v
 		<groupExpression><![CDATA[$F{adjustmenttype}]]></groupExpression>
 		<groupFooter>
 			<band height="30">
-				<printWhenExpression><![CDATA[$V{REPORT_COUNT}.intValue() > 0]]></printWhenExpression>
+				<printWhenExpression><![CDATA[$V{REPORT_COUNT}.intValue() > 0 && Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="370" y="5" width="120" height="20" uuid="046569ed-ad5d-4012-a9ed-751d5b38c3d9">
+					<reportElement x="379" y="5" width="110" height="20" uuid="046569ed-ad5d-4012-a9ed-751d5b38c3d9">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					</reportElement>
 					<textFieldExpression><![CDATA["Total - " + $F{adjustmenttype}]]></textFieldExpression>
 				</textField>
 				<line>
-					<reportElement x="370" y="5" width="184" height="1" uuid="510d5d0d-f55a-4f1d-af95-1f74677a3aaf">
+					<reportElement x="379" y="5" width="175" height="1" uuid="510d5d0d-f55a-4f1d-af95-1f74677a3aaf">
 						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					</reportElement>
 					<graphicElement>
@@ -173,25 +218,69 @@ $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></v
 		<groupFooter>
 			<band height="20">
 				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				<printWhenExpression><![CDATA[$V{Line Count} > 0]]></printWhenExpression>
+				<printWhenExpression><![CDATA[$V{Line Count} > 0 && Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
 				<textField>
-					<reportElement x="0" y="0" width="34" height="20" uuid="3910b3d3-af42-4f84-86a3-5970c2e05580">
+					<reportElement x="0" y="0" width="40" height="20" uuid="3910b3d3-af42-4f84-86a3-5970c2e05580">
 						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<textFieldExpression><![CDATA[$V{Line Count}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="40" y="0" width="190" height="20" uuid="05b80422-e817-4738-ade5-8224822385fb"/>
+					<reportElement x="40" y="0" width="200" height="20" uuid="05b80422-e817-4738-ade5-8224822385fb"/>
 					<textFieldExpression><![CDATA[$F{facilityname}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="240" y="0" width="131" height="20" uuid="8cc6afbe-f92c-41d3-b6de-2569c774463b"/>
+					<reportElement x="240" y="0" width="140" height="20" uuid="8cc6afbe-f92c-41d3-b6de-2569c774463b"/>
 					<textFieldExpression><![CDATA[$F{adjustmenttype}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="380" y="0" width="110" height="20" uuid="0114aeb0-fcbd-4d52-b328-614352384632"/>
+					<box leftPadding="2"/>
 					<textFieldExpression><![CDATA[$V{Adjustment Quantity total for Facility}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				<printWhenExpression><![CDATA[$V{Line Count} > 0 && Arrays.asList("csv", "xls").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
+				<textField>
+					<reportElement x="180" y="0" width="104" height="20" uuid="f8bee16a-3b3f-4c30-a714-2b913c36d01e"/>
+					<textFieldExpression><![CDATA[$F{facilityname}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="364" y="0" width="100" height="20" uuid="4b7273d9-b59b-48a3-b937-ece374ed135b"/>
+					<textFieldExpression><![CDATA[$F{adjustmenttype}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="40" height="20" uuid="dd8a7094-9768-426b-b91e-5bb460193ce1">
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<textFieldExpression><![CDATA[$V{Line Count}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="464" y="0" width="90" height="20" uuid="0e21ace4-5096-4818-a9a8-35fde2eb4c79"/>
+					<box leftPadding="2"/>
+					<textFieldExpression><![CDATA[$V{Adjustment Quantity total for Facility}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement x="284" y="0" width="80" height="20" uuid="63386b44-8304-44a1-a78a-8ce46531e507">
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+						<printWhenExpression><![CDATA[$F{dispensingunit} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{dispensingunit}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement x="40" y="0" width="140" height="20" uuid="719b50e8-10d4-4bf0-8349-97cd8be6f307">
+						<printWhenExpression><![CDATA[$F{productname} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{productname}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -298,49 +387,55 @@ $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></v
 	<columnHeader>
 		<band height="40">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-			<staticText>
-				<reportElement x="20" y="0" width="60" height="20" uuid="77a39773-bbf9-40c4-93ea-34efe2cf5d15"/>
-				<text><![CDATA[Product]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="40" y="20" width="90" height="20" uuid="2b4f3fdd-a58a-4fd9-98c1-829ac7d36377"/>
-				<text><![CDATA[Facility Name]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="240" y="20" width="130" height="20" uuid="c53b02e5-aaab-4886-902a-c3546f911543">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<text><![CDATA[Adjustment Type]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="380" y="20" width="110" height="20" uuid="c96e692a-154f-473a-9015-6c37ac006c50">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<text><![CDATA[Adjustment Quantity]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="500" y="20" width="55" height="20" uuid="2e82c1f1-cc66-4ec0-b712-3a474db89cfd">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-				</reportElement>
-				<text><![CDATA[Total]]></text>
-			</staticText>
+			<printWhenExpression><![CDATA[Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
 			<line>
 				<reportElement x="0" y="38" width="555" height="1" uuid="dfca3e84-ac42-44c5-b49a-c4d3eae30165">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 			</line>
-			<staticText>
-				<reportElement x="140" y="21" width="90" height="18" uuid="a9c37d49-9c60-4328-baaa-94a02efe13be"/>
-				<text><![CDATA[Dispensing Unit]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="20" width="35" height="20" uuid="cc283573-003d-4923-a25f-2b35364b1ba3">
-					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+			<frame>
+				<reportElement x="0" y="0" width="555" height="40" uuid="752cc625-8c16-4ea1-95cc-255c4d9ae9d5">
+					<printWhenExpression><![CDATA[Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
 				</reportElement>
-				<text><![CDATA[Line #]]></text>
-			</staticText>
+				<staticText>
+					<reportElement x="20" y="0" width="110" height="20" uuid="77a39773-bbf9-40c4-93ea-34efe2cf5d15"/>
+					<text><![CDATA[Product]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="40" y="20" width="100" height="20" uuid="2b4f3fdd-a58a-4fd9-98c1-829ac7d36377"/>
+					<text><![CDATA[Facility Name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="240" y="20" width="140" height="20" uuid="c53b02e5-aaab-4886-902a-c3546f911543">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<text><![CDATA[Adjustment Type]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="380" y="20" width="120" height="20" uuid="c96e692a-154f-473a-9015-6c37ac006c50">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<text><![CDATA[Adjustment Quantity]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="500" y="20" width="55" height="20" uuid="2e82c1f1-cc66-4ec0-b712-3a474db89cfd">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<text><![CDATA[Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="140" y="20" width="100" height="19" uuid="a9c37d49-9c60-4328-baaa-94a02efe13be"/>
+					<text><![CDATA[Dispensing Unit]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="20" width="40" height="20" uuid="cc283573-003d-4923-a25f-2b35364b1ba3">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<text><![CDATA[Line #]]></text>
+				</staticText>
+			</frame>
 		</band>
 	</columnHeader>
 </jasperReport>

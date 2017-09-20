@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-05-17T16:10:20 -->
+<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="stock_imbalances" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f732ae30-fa4e-431f-89b3-5a7a1138e87e">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -46,32 +45,32 @@ SELECT referencedata.facilities.name AS facilityname,
   referencedata.geographic_zones.name AS geographiczonename,
   referencedata.programs.name AS programname,
   rli.MonthsOfStock as mos,
-  CASE 
+  CASE
       WHEN rli.MonthsOfStock = 0 THEN 'Stocked out'
       WHEN rli.MonthsOfStock < 3.00 THEN 'Understocked'
       WHEN rli.MonthsOfStock >= 6.00 THEN 'Overstocked'
       ELSE 'OK'
-  END AS stockstatus	
+  END AS stockstatus
 FROM requisition.requisition_line_items
   JOIN (SELECT id,
   CASE WHEN averageconsumption = 0 THEN NULL ELSE stockonhand::float / averageconsumption
   END AS MonthsOfStock
-  FROM requisition.requisition_line_items) AS rli ON requisition.requisition_line_items.id=rli.id 
-  JOIN referencedata.orderables ON 
-   requisition.requisition_line_items.orderableid = referencedata.orderables.id 
-  JOIN requisition.requisitions ON 
-   requisition.requisition_line_items.requisitionid = requisition.requisitions.id 
-  JOIN referencedata.programs ON 
-   requisition.requisitions.programid = referencedata.programs.id 
-  JOIN referencedata.facilities ON 
-   requisition.requisitions.facilityid = referencedata.facilities.id 
-  JOIN referencedata.processing_periods ON 
-   requisition.requisitions.processingperiodid = referencedata.processing_periods.id 
-  JOIN referencedata.geographic_zones ON 
-   referencedata.facilities.geographiczoneid = referencedata.geographic_zones.id 
+  FROM requisition.requisition_line_items) AS rli ON requisition.requisition_line_items.id=rli.id
+  JOIN referencedata.orderables ON
+   requisition.requisition_line_items.orderableid = referencedata.orderables.id
+  JOIN requisition.requisitions ON
+   requisition.requisition_line_items.requisitionid = requisition.requisitions.id
+  JOIN referencedata.programs ON
+   requisition.requisitions.programid = referencedata.programs.id
+  JOIN referencedata.facilities ON
+   requisition.requisitions.facilityid = referencedata.facilities.id
+  JOIN referencedata.processing_periods ON
+   requisition.requisitions.processingperiodid = referencedata.processing_periods.id
+  JOIN referencedata.geographic_zones ON
+   referencedata.facilities.geographiczoneid = referencedata.geographic_zones.id
   JOIN referencedata.geographic_levels ON
   referencedata.geographic_zones.levelid = referencedata.geographic_levels.id
-WHERE 
+WHERE
    referencedata.programs.name = $P{program}::varchar
    AND referencedata.processing_periods.name = $P{period}::varchar
    AND ($P{district}::varchar IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
@@ -96,6 +95,7 @@ ORDER BY referencedata.facilities.name DESC,
 		<groupHeader>
 			<band height="15">
 				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				<printWhenExpression><![CDATA[Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
 				<textField isBlankWhenNull="true">
 					<reportElement x="0" y="0" width="554" height="15" uuid="ca5f7836-1b08-4226-858d-08cea1f0328e">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -329,6 +329,17 @@ ORDER BY referencedata.facilities.name DESC,
 			<textField>
 				<reportElement x="110" y="0" width="150" height="15" uuid="b78d8dc7-9081-48ab-a7ae-0d6294ccc9da"/>
 				<textFieldExpression><![CDATA[$F{productname}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="110" height="15" uuid="01759b9d-1ae8-46bd-a967-ea77c85c498f">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<printWhenExpression><![CDATA[Arrays.asList("xls", "csv").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="2">
+					<pen lineWidth="0.0" lineColor="#B3B3B3"/>
+					<topPen lineWidth="1.0" lineColor="#D4D4D4"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{facilityname}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

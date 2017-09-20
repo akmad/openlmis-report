@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-05-15T18:16:47 -->
+<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="stock_status" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="843ea716-ea72-47f8-bbd7-b9050b973ed0">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="open_lmis"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1" value="columnHeader"/>
+	<property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.1" value="columnHeader"/>
+	<property name="net.sf.jasperreports.export.xls.one.page.per.sheet" value="false"/>
+	<property name="net.sf.jasperreports.export.csv.one.page.per.sheet" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.csv.remove.empty.space.between.rows" value="true"/>
 	<parameter name="program" class="java.lang.String">
 		<property name="displayName" value="Program Name"/>
 		<property name="selectExpression" value="/api/reports/programs"/>
@@ -45,22 +50,22 @@ FROM requisition.requisition_line_items
   JOIN (SELECT id,
   CASE WHEN averageconsumption = 0 THEN NULL ELSE stockonhand::float / averageconsumption
   END AS MonthsOfStock
-  FROM requisition.requisition_line_items) AS rli ON requisition.requisition_line_items.id=rli.id 
-  JOIN referencedata.orderables ON 
-   requisition.requisition_line_items.orderableid = referencedata.orderables.id 
-  JOIN requisition.requisitions ON 
-   requisition.requisition_line_items.requisitionid = requisition.requisitions.id 
-  JOIN referencedata.programs ON 
-   requisition.requisitions.programid = referencedata.programs.id 
-  JOIN referencedata.facilities ON 
-   requisition.requisitions.facilityid = referencedata.facilities.id 
-  JOIN referencedata.processing_periods ON 
-   requisition.requisitions.processingperiodid = referencedata.processing_periods.id 
-  JOIN referencedata.geographic_zones ON 
-   referencedata.facilities.geographiczoneid = referencedata.geographic_zones.id 
+  FROM requisition.requisition_line_items) AS rli ON requisition.requisition_line_items.id=rli.id
+  JOIN referencedata.orderables ON
+   requisition.requisition_line_items.orderableid = referencedata.orderables.id
+  JOIN requisition.requisitions ON
+   requisition.requisition_line_items.requisitionid = requisition.requisitions.id
+  JOIN referencedata.programs ON
+   requisition.requisitions.programid = referencedata.programs.id
+  JOIN referencedata.facilities ON
+   requisition.requisitions.facilityid = referencedata.facilities.id
+  JOIN referencedata.processing_periods ON
+   requisition.requisitions.processingperiodid = referencedata.processing_periods.id
+  JOIN referencedata.geographic_zones ON
+   referencedata.facilities.geographiczoneid = referencedata.geographic_zones.id
   JOIN referencedata.geographic_levels ON
   referencedata.geographic_zones.levelid = referencedata.geographic_levels.id
-WHERE 
+WHERE
    referencedata.programs.name = $P{program}::varchar
    AND referencedata.processing_periods.name = $P{period}::varchar
    AND ($P{district}::varchar IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
@@ -83,6 +88,7 @@ ORDER BY referencedata.facilities.name DESC,
 		<groupHeader>
 			<band height="60">
 				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				<printWhenExpression><![CDATA[Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
 				<textField isBlankWhenNull="true">
 					<reportElement x="80" y="0" width="274" height="20" uuid="ca5f7836-1b08-4226-858d-08cea1f0328e"/>
 					<textFieldExpression><![CDATA[$F{FacilityName}]]></textFieldExpression>
@@ -234,9 +240,98 @@ ORDER BY referencedata.facilities.name DESC,
 			</staticText>
 		</band>
 	</pageHeader>
+	<columnHeader>
+		<band height="15">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<printWhenExpression><![CDATA[Arrays.asList("xls", "csv").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
+			<staticText>
+				<reportElement x="395" y="0" width="80" height="15" uuid="8669cfa6-a280-4c7b-9eee-d7d84e3ed8f8">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box topPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[Average Monthly Consumption]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="175" y="0" width="140" height="15" uuid="b44960de-a631-40b3-80c5-a4ecf2a9acbe"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[Product name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="475" y="0" width="80" height="15" uuid="5ec3a8d8-eaec-449e-b2cd-f82f28de6b09"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[Months of Stock]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="315" y="0" width="80" height="15" uuid="2cf984d1-9b5f-4b00-b148-16b798e15f1d">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box topPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[Closing Balance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="115" y="0" width="60" height="15" uuid="9d12f106-a390-4105-9af1-4dd88553a0f1"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[Product code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="115" height="15" uuid="8ddee9d1-2704-4329-8266-ee79f7cd737a"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[Facility]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
 	<detail>
 		<band height="15" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<printWhenExpression><![CDATA[Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
 			<textField>
 				<reportElement x="440" y="0" width="114" height="15" uuid="13359167-bc7b-4585-ada9-19647b196b65">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -265,6 +360,47 @@ ORDER BY referencedata.facilities.name DESC,
 				<box rightPadding="20"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[($F{AMC} == null) ? "-" : $F{AMC}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="15">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<printWhenExpression><![CDATA[Arrays.asList("xls", "csv").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
+			<textField>
+				<reportElement x="475" y="0" width="80" height="15" uuid="e6c2bab8-c209-4961-83fe-08dc25eb5fd6">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<box rightPadding="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[($F{MOS} != null) ? String.format("%.2f", Double.valueOf($F{MOS})) : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="115" y="0" width="60" height="15" uuid="56f76e28-7887-47cc-b377-4c724c9b2d30"/>
+				<textFieldExpression><![CDATA[$F{ProductCode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="315" y="0" width="80" height="15" uuid="55f3471b-9349-4193-a247-c29d3d2f7321">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box rightPadding="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[($F{SOH} == null) ? "-" : $F{SOH}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="395" y="0" width="80" height="15" uuid="f66b3775-8ae4-4f7f-a3a3-99665c476293">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box rightPadding="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[($F{AMC} == null) ? "-" : $F{AMC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="175" y="0" width="140" height="15" uuid="f870bc56-623c-40d7-ace3-7dc49e799818"/>
+				<textFieldExpression><![CDATA[$F{ProductName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="115" height="15" uuid="83282ee7-3c91-444d-9372-b1ad484b2ccc"/>
+				<textFieldExpression><![CDATA[$F{FacilityName}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
