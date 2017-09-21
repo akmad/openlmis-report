@@ -484,7 +484,7 @@ GROUP BY geographiczonename]]>
 	<detail>
 		<band height="120">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-			<printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1 && !Arrays.asList("csv").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
 			<componentElement>
 				<reportElement x="0" y="20" width="555" height="60" uuid="1716c1a5-741a-4d63-b029-86edabe5f96b">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
@@ -495,7 +495,7 @@ GROUP BY geographiczonename]]>
 					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Period Table"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="ByMonth" uuid="d0eae084-5f9a-41be-9b99-cefa351a6b2d">
+					<datasetRun subDataset="ByMonth" uuid="6866ffed-82f9-4aa8-b38f-4caf953cd9cd">
 						<datasetParameter name="DueDays">
 							<datasetParameterExpression><![CDATA[$P{DueDays}]]></datasetParameterExpression>
 						</datasetParameter>
@@ -508,13 +508,20 @@ GROUP BY geographiczonename]]>
 						<datasetParameter name="GeographicZone">
 							<datasetParameterExpression><![CDATA[$P{GeographicZone}]]></datasetParameterExpression>
 						</datasetParameter>
+						<datasetParameter name="REPORT_PARAMETERS_MAP">
+							<datasetParameterExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}]]></datasetParameterExpression>
+						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
 					<jr:column width="83" uuid="bddbac36-e7a6-4e95-81d9-5e416d7dae27">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
 						<jr:columnHeader style="Table_CH" height="30">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 							<staticText>
-								<reportElement x="0" y="0" width="83" height="30" uuid="1dfa41cf-7344-4dbd-96f4-5f227215cea4"/>
+								<reportElement x="0" y="0" width="83" height="30" uuid="2107dada-373f-420d-b321-5da202551a5d">
+									<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+									<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+								</reportElement>
 								<box padding="2"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle"/>
 								<text><![CDATA[Periods]]></text>
@@ -530,7 +537,7 @@ GROUP BY geographiczonename]]>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="118" uuid="7cdf4b24-f89e-488c-95f9-baa3dd9fe67c">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="118" height="30" uuid="18437627-b70d-4a24-a301-f8b0acaa0ec9"/>
@@ -549,7 +556,7 @@ GROUP BY geographiczonename]]>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="118" uuid="356abb06-38d6-4f60-b8f1-48d1aca79e86">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="118" height="30" uuid="2b3610da-df75-4d52-beee-6cc1dc25f19f"/>
@@ -568,7 +575,7 @@ GROUP BY geographiczonename]]>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="118" uuid="39fbaedd-02c8-4405-80ae-ab95ea78c938">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="118" height="30" uuid="92db07b9-0cc8-462b-8d6c-1f13dca27c7f"/>
@@ -587,7 +594,7 @@ GROUP BY geographiczonename]]>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="118" uuid="7d25d6c5-211b-44b1-bfad-b13fd6b7bf16">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="118" height="30" uuid="6b549939-bb77-4aff-8bcf-2e8fb3f572a7">
@@ -611,11 +618,10 @@ GROUP BY geographiczonename]]>
 			</componentElement>
 		</band>
 		<band height="90">
-			<printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1 && Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
 			<staticText>
 				<reportElement mode="Opaque" x="0" y="0" width="555" height="20" forecolor="#FFFFFF" backcolor="#666666" uuid="7c06d4c6-e88a-46c0-bfae-4fde6763a279">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-					<printWhenExpression><![CDATA[Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
@@ -633,7 +639,7 @@ GROUP BY geographiczonename]]>
 					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Period Table"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="ByZone" uuid="e3f6f860-5935-40c7-ace8-4db46e3f64ca">
+					<datasetRun subDataset="ByZone" uuid="a95f5831-2ab5-410a-abaa-ed3683b08f43">
 						<datasetParameter name="DueDays">
 							<datasetParameterExpression><![CDATA[$P{DueDays}]]></datasetParameterExpression>
 						</datasetParameter>
@@ -646,11 +652,14 @@ GROUP BY geographiczonename]]>
 						<datasetParameter name="GeographicZone">
 							<datasetParameterExpression><![CDATA[$P{GeographicZone}]]></datasetParameterExpression>
 						</datasetParameter>
+						<datasetParameter name="REPORT_PARAMETERS_MAP">
+							<datasetParameterExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}]]></datasetParameterExpression>
+						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
 					<jr:column width="83" uuid="78d31c95-ced7-4700-a34f-d21fb9758a98">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
-						<jr:columnHeader style="Table_CH" height="30">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="83" height="30" uuid="7fa71eb4-df17-41d7-a7f4-13486a02659b"/>
 								<box padding="2"/>
@@ -668,8 +677,8 @@ GROUP BY geographiczonename]]>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="118" uuid="37f0c5d3-870c-44dd-b708-34760c787b36">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
-						<jr:columnHeader style="Table_CH" height="30">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="118" height="30" uuid="45afdcba-545c-4700-9984-c689db69084a"/>
 								<box padding="2"/>
@@ -687,8 +696,8 @@ GROUP BY geographiczonename]]>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="118" uuid="36deb7dd-0971-4930-ad82-52e69571d367">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
-						<jr:columnHeader style="Table_CH" height="30">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="118" height="30" uuid="add31fc1-3b72-4458-8e3e-df1c8d8f09f9"/>
 								<box padding="2"/>
@@ -706,8 +715,8 @@ GROUP BY geographiczonename]]>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="118" uuid="2bcf4445-bb10-4a9f-8118-70ae37631da9">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
-						<jr:columnHeader style="Table_CH" height="30">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="118" height="30" uuid="bc42f5e4-5711-402f-9d18-b2a59d09f4e9"/>
 								<box padding="2"/>
@@ -725,8 +734,8 @@ GROUP BY geographiczonename]]>
 						</jr:detailCell>
 					</jr:column>
 					<jr:column width="118" uuid="c6d75d3a-7411-46f3-a79f-6d1e06fb0dbd">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
-						<jr:columnHeader style="Table_CH" height="30">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
 								<reportElement x="0" y="0" width="118" height="30" uuid="7ba5a6fb-2872-472e-9b81-fdf14b96c310">
 									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -739,6 +748,378 @@ GROUP BY geographiczonename]]>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="118" height="30" uuid="f74f1b72-b6a5-4a54-8772-e6f3fc79c3c9"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[String.format($V{PercentAndNumberFormat}, (double)($F{missed})/$F{total}*100, $F{missed})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="60">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1 && Arrays.asList("xls").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
+			<componentElement>
+				<reportElement x="0" y="0" width="555" height="60" uuid="abaf998c-69ad-4400-a369-3c589e5e8c24">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Period Table"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="ByZone" uuid="ce2afa17-8d34-4b3a-8be3-c3ef335075ac">
+						<datasetParameter name="DueDays">
+							<datasetParameterExpression><![CDATA[$P{DueDays}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="Period">
+							<datasetParameterExpression><![CDATA[$P{Period}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="Program">
+							<datasetParameterExpression><![CDATA[$P{Program}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="GeographicZone">
+							<datasetParameterExpression><![CDATA[$P{GeographicZone}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="REPORT_PARAMETERS_MAP">
+							<datasetParameterExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="83" uuid="ee76da14-85ee-4333-bbb6-e919e542c09e">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:tableHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="83" height="30" uuid="29083928-91a6-455d-861d-4ef07c1faec4"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<text><![CDATA[Districts]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="83" height="30" uuid="c559cdd3-8436-455f-a4fe-4ca04d44c224"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{geographiczonename}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="118" uuid="0683d6d0-22df-4e4d-930b-c144613119a1">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:tableHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="118" height="30" uuid="0c7b28a3-712e-410c-8f23-03a360430393"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<text><![CDATA[% Reporting (Count)]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="118" height="30" uuid="8f8a7714-d550-4ef3-a700-514c1b991b5e"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[String.format($V{PercentAndNumberFormat}, (double)$F{completed}/$F{total}*100, $F{completed})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="118" uuid="079c40b5-a92f-4b3a-98f9-3f0619cdaf90">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:tableHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="118" height="30" uuid="11abd44d-aa4d-4f36-858b-7339e01b967a"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<text><![CDATA[% On Time Rep (Count)]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="118" height="30" uuid="4a6b09c6-c340-46bc-b7df-21bc7c0a8c8f"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[String.format($V{PercentAndNumberFormat}, (double)$F{ontime}/$F{total}*100, $F{ontime})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="118" uuid="5d1f0d22-bb46-4f0c-9085-2153529c50b4">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:tableHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="118" height="30" uuid="172d9093-1bbe-4055-a666-16d1b87b52d1"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<text><![CDATA[% Late Rep (Count)]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="118" height="30" uuid="7e25f7b6-fb0a-40f2-8852-d27b3612c83d"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[String.format($V{PercentAndNumberFormat}, (double)($F{completed}-$F{ontime})/$F{total}*100, $F{completed}-$F{ontime})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="118" uuid="21eb7751-c100-4944-ac2c-51bf5551aa7a">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:tableHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="118" height="30" uuid="b75a05f5-1811-46a5-a4dd-b070f0816605">
+									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+								</reportElement>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<text><![CDATA[% Not Reported (Count)]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="118" height="30" uuid="1fa8f2a1-fd05-460a-8fc2-52d4dce71bdf"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[String.format($V{PercentAndNumberFormat}, (double)($F{missed})/$F{total}*100, $F{missed})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="60">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1 && Arrays.asList("csv").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
+			<componentElement>
+				<reportElement x="0" y="0" width="555" height="60" uuid="a84d68b1-074e-452d-8328-070e3efc1248">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Period Table"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="ByMonth" uuid="1ca18116-71f4-431f-bccb-8df29deb57d3">
+						<datasetParameter name="DueDays">
+							<datasetParameterExpression><![CDATA[$P{DueDays}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="Period">
+							<datasetParameterExpression><![CDATA[$P{Period}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="Program">
+							<datasetParameterExpression><![CDATA[$P{Program}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="GeographicZone">
+							<datasetParameterExpression><![CDATA[$P{GeographicZone}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="REPORT_PARAMETERS_MAP">
+							<datasetParameterExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="60" uuid="ca72f0ad-4b58-4941-b735-52e6cea94fc4">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="30" uuid="c2c6a9da-14b5-4c70-9134-b612ee6272f0"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<text><![CDATA[Periods]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="60" height="30" uuid="676c1eeb-f906-412a-b3a2-1553ba1084dc"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{periodname}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="55" uuid="279bab2c-4cdb-4f6a-8119-777a540106d5">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+							<staticText>
+								<reportElement x="0" y="0" width="55" height="30" uuid="591a94c8-65c3-4245-a7e6-60953ca17fa4"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Districts]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30"/>
+					</jr:column>
+					<jr:column width="110" uuid="fb0765ca-e44d-4f16-84b9-160a7f3774a3">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="110" height="30" uuid="a22303f1-d124-4cfe-bfda-1d001b0030f2"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<text><![CDATA[% Reporting (Count)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="110" height="30" uuid="c2658a98-2654-4b45-8777-9a6ae36bb7dc"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[String.format($V{PercentAndNumberFormat}, (double)$F{completed}/$F{total}*100, $F{completed})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="110" uuid="8d6feceb-48c1-43e9-b40d-79f2e5a724bb">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="110" height="30" uuid="cb47ce23-097a-4dbf-b6e7-6b15903fc7e6"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<text><![CDATA[% On Time Rep (Count)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="110" height="30" uuid="918ac171-9660-4039-95bc-fb0a5a20443a"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[String.format($V{PercentAndNumberFormat}, (double)$F{ontime}/$F{total}*100, $F{ontime})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="110" uuid="77bb80c8-cf41-43d3-a762-8d708d635d7e">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="110" height="30" uuid="7f4b2f9d-415c-4200-8118-550d6415b321"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<text><![CDATA[% Late Rep (Count)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="110" height="30" uuid="b31d34cb-2964-42fd-a539-c314958c4889"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[String.format($V{PercentAndNumberFormat}, (double)($F{completed}-$F{ontime})/$F{total}*100, $F{completed}-$F{ontime})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="110" uuid="af5da198-84b2-4a5b-be51-7d7ce68a28d0">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="110" height="30" uuid="9589fc1a-89ff-4b43-8aa8-4b03216e8060">
+									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+								</reportElement>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<text><![CDATA[% Not Reported (Count)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="110" height="30" uuid="99682d76-41cd-4326-ae41-79c49b0dafa2"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[String.format($V{PercentAndNumberFormat}, (double)($F{total}-$F{completed})/$F{total}*100, $F{total}-$F{completed})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="30">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} == 1 && Arrays.asList("csv").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
+			<componentElement>
+				<reportElement x="0" y="0" width="555" height="30" uuid="960d6e95-bcdd-47e4-8602-5c532f95602d">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value="Period Table"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="ByZone" uuid="d0410fd4-a29a-41ad-bef4-6f8773ab91b1">
+						<datasetParameter name="DueDays">
+							<datasetParameterExpression><![CDATA[$P{DueDays}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="Period">
+							<datasetParameterExpression><![CDATA[$P{Period}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="Program">
+							<datasetParameterExpression><![CDATA[$P{Program}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="GeographicZone">
+							<datasetParameterExpression><![CDATA[$P{GeographicZone}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="REPORT_PARAMETERS_MAP">
+							<datasetParameterExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="60" uuid="885322f5-504e-4fd0-be46-598988c41573">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:detailCell style="Table_TD" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="60" height="30" uuid="577ef06a-0a7e-4fc1-a0b9-dd16eaa1fa2d"/>
+								<text><![CDATA[]]></text>
+							</staticText>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="55" uuid="85214d34-fb51-4084-b4d4-848f5a0b31e4">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="55" height="30" uuid="035b3d28-98e1-43e0-ae86-04c1e8332931"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[$F{geographiczonename}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="110" uuid="afcee84e-4cc6-4a4b-81d0-95f6dddded46">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="110" height="30" uuid="3a15f8e8-95f4-48f3-b61e-e9edfc92baf7"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[String.format($V{PercentAndNumberFormat}, (double)$F{completed}/$F{total}*100, $F{completed})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="110" uuid="e10b4955-4e78-45e6-9143-f1d63fe3b5a4">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="110" height="30" uuid="f6b3ed9b-ffc8-4dce-a54b-cfa142d62716"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[String.format($V{PercentAndNumberFormat}, (double)$F{ontime}/$F{total}*100, $F{ontime})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="110" uuid="3e49b5e4-74b6-41e9-ac36-f64b062df4d4">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="110" height="30" uuid="c4f717cb-56d2-4cc7-87eb-d5e2bf217570"/>
+								<box padding="2"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[String.format($V{PercentAndNumberFormat}, (double)($F{completed}-$F{ontime})/$F{total}*100, $F{completed}-$F{ontime})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="110" uuid="64d4ca47-2676-4d12-8606-1b2ae018293d">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="110" height="30" uuid="8289fafb-de94-4725-ae69-fdc9c9846103"/>
 								<box padding="2"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle"/>
 								<textFieldExpression><![CDATA[String.format($V{PercentAndNumberFormat}, (double)($F{missed})/$F{total}*100, $F{missed})]]></textFieldExpression>

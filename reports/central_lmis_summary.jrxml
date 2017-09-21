@@ -171,7 +171,7 @@ ORDER BY orderable_display_categories.displayorder ASC,
 		<band height="30">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<staticText>
-				<reportElement mode="Opaque" x="105" y="15" width="150" height="15" backcolor="#F0F0F0" uuid="d2d776af-5894-469d-9b37-32c4e64ffa43">
+				<reportElement mode="Opaque" x="105" y="0" width="150" height="30" backcolor="#F0F0F0" uuid="d2d776af-5894-469d-9b37-32c4e64ffa43">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
@@ -232,7 +232,7 @@ ORDER BY orderable_display_categories.displayorder ASC,
 				<text><![CDATA[Quantity Used]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="ContainerHeight" mode="Opaque" x="0" y="15" width="50" height="15" backcolor="#F0F0F0" uuid="1d0c97c0-a3ea-4870-828a-033dbbf6a2ec">
+				<reportElement stretchType="ContainerHeight" mode="Opaque" x="0" y="0" width="50" height="30" backcolor="#F0F0F0" uuid="1d0c97c0-a3ea-4870-828a-033dbbf6a2ec">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
@@ -265,22 +265,6 @@ ORDER BY orderable_display_categories.displayorder ASC,
 				<text><![CDATA[Closing Balance]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="254" height="15" backcolor="#F0F0F0" uuid="e12c89e7-12a5-4af2-a465-1075f57e5d46">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-					<printWhenExpression><![CDATA[Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
-				</reportElement>
-				<box topPadding="0" leftPadding="2" bottomPadding="2" rightPadding="0">
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#D4D4D4"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#D4D4D4"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Bottom">
-					<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingAfter="0"/>
-				</textElement>
-				<text><![CDATA[Category]]></text>
-			</staticText>
-			<staticText>
 				<reportElement mode="Opaque" x="255" y="0" width="60" height="30" backcolor="#F0F0F0" uuid="7d3377d0-addb-436c-9f89-55b29b54e860">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -296,7 +280,7 @@ ORDER BY orderable_display_categories.displayorder ASC,
 				<text><![CDATA[Unit of Issue]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="50" y="15" width="55" height="15" backcolor="#F0F0F0" uuid="12930b5c-5676-459b-9483-091c64f3fcd6">
+				<reportElement mode="Opaque" x="50" y="0" width="55" height="30" backcolor="#F0F0F0" uuid="12930b5c-5676-459b-9483-091c64f3fcd6">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				</reportElement>
@@ -310,6 +294,22 @@ ORDER BY orderable_display_categories.displayorder ASC,
 					<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingAfter="0"/>
 				</textElement>
 				<text><![CDATA[Item No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="254" height="15" backcolor="#F0F0F0" uuid="e12c89e7-12a5-4af2-a465-1075f57e5d46">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<printWhenExpression><![CDATA[Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="0" leftPadding="2" bottomPadding="2" rightPadding="0">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#D4D4D4"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingAfter="0"/>
+				</textElement>
+				<text><![CDATA[Category]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
