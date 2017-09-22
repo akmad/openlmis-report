@@ -107,7 +107,7 @@ ORDER BY  referencedata.orderables.fullproductname DESC,
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[1D]]></textFieldExpression>
 				</textField>
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement x="310" y="0" width="120" height="15" uuid="3e18ae2e-49b9-41c0-a8bd-82e92e5e6d0b">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
@@ -229,8 +229,7 @@ ORDER BY  referencedata.orderables.fullproductname DESC,
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<paragraph lineSpacing="Single" lineSpacingSize="1.0" spacingAfter="0"/>
 				</textElement>
-				<text><![CDATA[Quantity
-Consumed / Dispensed]]></text>
+				<text><![CDATA[Quantity Consumed / Dispensed]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="430" y="0" width="124" height="40" uuid="97ffce8a-c19b-44c7-984f-25257b993e57"/>
@@ -276,7 +275,7 @@ Consumed / Dispensed]]></text>
 		<band height="15" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<printWhenExpression><![CDATA[Arrays.asList("pdf", "html").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="310" y="0" width="120" height="15" uuid="13359167-bc7b-4585-ada9-19647b196b65">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
@@ -306,7 +305,7 @@ Consumed / Dispensed]]></text>
 		<band height="15">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<printWhenExpression><![CDATA[Arrays.asList("csv", "xls").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="310" y="0" width="120" height="15" uuid="eac2762a-b78a-4e50-83b8-f57c45e10b63">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
