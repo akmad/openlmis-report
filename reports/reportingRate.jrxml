@@ -92,7 +92,7 @@ FROM referencedata.facilities
     AND requisition.requisitions.programid = (SELECT id from referencedata.programs WHERE name = $P{Program}::varchar)
     AND requisition.requisitions.emergency = false
   LEFT JOIN requisition.status_changes ON
-   requisition.requisitions.id = requisition.status_changes.requisitionid AND requisition.status_changes.status = 'APPROVED'
+   requisition.requisitions.id = requisition.status_changes.requisitionid AND requisition.status_changes.status = 'AUTHORIZED'
 WHERE
    referencedata.facilities.active = true
    AND ($P{GeographicZone}::varchar IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
@@ -164,7 +164,7 @@ FROM referencedata.facilities
     AND requisition.requisitions.programid = (SELECT id from referencedata.programs WHERE name = $P{Program}::varchar)
     AND requisition.requisitions.emergency = false
   LEFT JOIN requisition.status_changes ON
-   requisition.requisitions.id = requisition.status_changes.requisitionid AND requisition.status_changes.status = 'APPROVED'
+   requisition.requisitions.id = requisition.status_changes.requisitionid AND requisition.status_changes.status = 'AUTHORIZED'
 WHERE
    referencedata.facilities.active = true
    AND ($P{GeographicZone}::varchar IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
