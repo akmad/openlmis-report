@@ -75,7 +75,7 @@ WHERE
    AND referencedata.processing_periods.name = $P{period}::varchar
    AND ($P{district}::varchar IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
   AND referencedata.facilities.active = true
-  AND (requisition.requisitions.status = 'AUTHORIZED' OR requisition.requisitions.status = 'AUTHORIZED' OR requisitions.status = 'APPROVED' OR requisition.requisitions.status = 'RELEASED')
+  AND (requisition.requisitions.status = 'AUTHORIZED' OR requisitions.status = 'APPROVED' OR requisition.requisitions.status = 'RELEASED')
 ORDER BY referencedata.facilities.name DESC,
   referencedata.orderables.fullproductname DESC]]>
 	</queryString>
