@@ -44,7 +44,8 @@ SELECT referencedata.facilities.name AS facilityname,
   requisition.requisition_line_items.stockonhand AS balanceonhand,
   requisition.requisition_line_items.totalconsumedquantity AS quantityused,
   requisition.requisition_line_items.totalreceivedquantity AS quantityreceived,
-  requisition.requisition_line_items.approvedquantity AS quantityrequired,
+  requisition.requisition_line_items.requestedquantity AS quantityrequired,
+  requisition.requisition_line_items.approvedquantity AS approvedquantity,
   referencedata.geographic_zones.name AS geographiczone
 FROM requisition.requisition_line_items
   JOIN referencedata.orderables ON
@@ -71,7 +72,7 @@ WHERE
    AND ($P{district}::varchar IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
   AND referencedata.facilities.active = true
   AND (requisition.requisitions.status = 'AUTHORIZED' OR requisitions.status = 'IN_APPROVAL' OR requisition.requisitions.status = 'IN_APPROVAL' OR requisitions.status = 'APPROVED' OR requisition.requisitions.status = 'RELEASED')
-  AND (stockonhand > 0 OR totalconsumedquantity > 0 OR totalreceivedquantity > 0 OR approvedquantity > 0)
+  AND (stockonhand > 0 OR totalconsumedquantity > 0 OR totalreceivedquantity > 0 OR requestedquantity > 0 OR approvedquantity > 0)
 ORDER BY referencedata.facilities.name DESC,
   referencedata.orderable_display_categories.displayorder ASC,
   referencedata.program_orderables.displayorder ASC,
@@ -87,6 +88,7 @@ ORDER BY referencedata.facilities.name DESC,
 	<field name="quantityreceived" class="java.lang.Integer"/>
 	<field name="quantityrequired" class="java.lang.Integer"/>
 	<field name="geographiczone" class="java.lang.String"/>
+	<field name="approvedquantity" class="java.lang.String"/>
 	<group name="Group1" isReprintHeaderOnEachPage="true">
 		<groupExpression><![CDATA[$F{facilityname}]]></groupExpression>
 		<groupHeader>
@@ -553,7 +555,7 @@ ORDER BY referencedata.facilities.name DESC,
 				</reportElement>
 				<box rightPadding="2"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[($F{quantityrequired} == null) ? "-" : $F{quantityrequired}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{approvedquantity} == null) ? (($F{quantityrequired} == null) ? "-" : $F{quantityrequired}) : $F{approvedquantity}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="50" y="0" width="55" height="15" uuid="e551397e-cb09-466d-8082-28298fe9a398">
