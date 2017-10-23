@@ -140,7 +140,7 @@ WHERE
    AND fulfillment.order_line_items.packstoship > 0
    AND NOT (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
    			AND LOWER(referencedata.facilities.extraData ->> 'AggregateOrderMember') = 'false')
-   AND (referencedata.facility_types.name <> ALL ( ARRAY['Private Clinic', 'Private Hospital', 'Districttest Health Office', 'CHAM', 'Central Hospital'] ) OR (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
+   AND (referencedata.facility_types.name <> ALL ( ARRAY['Private Clinic', 'Private Hospital', 'District Health Office', 'CHAM', 'Central Hospital'] ) OR (referencedata.facilities.extraData -> 'AggregateOrderMember' IS NOT NULL
    			AND LOWER(referencedata.facilities.extraData ->> 'AggregateOrderMember') = 'true'))
 ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]]>
     </queryString>
