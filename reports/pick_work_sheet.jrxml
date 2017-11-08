@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aggregate_orders" pageWidth="600" pageHeight="800" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="600" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="843ea716-ea72-47f8-bbd7-b9050b973ed0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aggregate_orders" pageWidth="800" pageHeight="800" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="800" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="843ea716-ea72-47f8-bbd7-b9050b973ed0">
     <property name="com.jaspersoft.studio.data.defaultdataadapter" value="Dev.xml"/>
     <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
     <property name="com.jaspersoft.studio.unit." value="pixel"/>
     <property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
     <property name="net.sf.jasperreports.export.xls.one.page.per.sheet" value="false"/>
     <property name="isDisplayed" value="true"/>
-    <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
     <property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="pageHeader"/>
     <property name="net.sf.jasperreports.export.csv.exclude.origin.band.1" value="pageHeader"/>
     <property name="net.sf.jasperreports.export.xls.exclude.origin.band.2" value=""/>
@@ -23,6 +15,14 @@
     <property name="net.sf.jasperreports.export.csv.exclude.origin.band.3" value=""/>
     <property name="net.sf.jasperreports.export.xls.exclude.origin.band.4" value=""/>
     <property name="net.sf.jasperreports.export.csv.exclude.origin.band.4" value=""/>
+    <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
     <style name="Row" mode="Transparent">
         <conditionalStyle>
             <conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></conditionExpression>
@@ -95,8 +95,15 @@
 )
 SELECT referencedata.facilities.name AS FacilityName,
   requisition.requisition_line_items.calculatedorderquantity AS Quantity,
+  requisition.requisition_line_items.totalcost AS TotalCost,
+  requisition.requisition_line_items.priceperpack AS PricePerPack,
   referencedata.orderables.fullproductname AS ProductName,
-  referencedata.programs.name AS ProgramName
+  referencedata.orderables.packroundingthreshold AS PackRoundingThreshold,
+  referencedata.orderables.roundtozero AS RoundToZero,
+  referencedata.orderables.netcontent AS NetContent,
+  referencedata.programs.name AS ProgramName,
+  calculatedorderquantity / NULLIF(netcontent, 0) AS DividedQuantity,
+  calculatedorderquantity % NULLIF(netcontent, 0) AS RemainderQuantity
 FROM requisition.requisition_line_items
   JOIN referencedata.orderables ON
    requisition.requisition_line_items.orderableid = referencedata.orderables.id
@@ -124,9 +131,16 @@ referencedata.orderables.fullproductname DESC,
 referencedata.facilities.name DESC]]>
     </queryString>
     <field name="FacilityName" class="java.lang.String"/>
-    <field name="Quantity" class="java.lang.Integer"/>
+    <field name="Quantity" class="java.lang.Long"/>
     <field name="ProductName" class="java.lang.String"/>
     <field name="ProgramName" class="java.lang.String"/>
+    <field name="PricePerPack" class="java.lang.Double"/>
+    <field name="TotalCost" class="java.lang.Integer"/>
+    <field name="PackRoundingThreshold" class="java.lang.Long"/>
+    <field name="NetContent" class="java.lang.Long"/>
+    <field name="RoundToZero" class="java.lang.Boolean"/>
+    <field name="DividedQuantity" class="java.lang.Long"/>
+    <field name="RemainderQuantity" class="java.lang.Long"/>
     <group name="Group1">
         <groupExpression><![CDATA[$F{ProductName}]]></groupExpression>
     </group>
@@ -213,7 +227,7 @@ referencedata.facilities.name DESC]]>
             <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
             <printWhenExpression><![CDATA[$F{ProductName} != null]]></printWhenExpression>
             <crosstab ignoreWidth="true">
-                <reportElement x="0" y="0" width="600" height="180" uuid="94873cd5-dc42-4f3b-8fe0-d1e2d622ab75">
+                <reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="850" height="180" uuid="94873cd5-dc42-4f3b-8fe0-d1e2d622ab75">
                     <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
                     <property name="com.jaspersoft.studio.crosstab.style.header" value="Crosstab_CH"/>
                     <property name="com.jaspersoft.studio.crosstab.style.group" value="Crosstab_CG"/>
@@ -222,16 +236,16 @@ referencedata.facilities.name DESC]]>
                     <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
                 </reportElement>
                 <crosstabHeaderCell>
-                    <cellContents mode="Opaque" style="Crosstab_CD">
+                    <cellContents mode="Opaque" style="Crosstab_CH">
                         <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
                         <textField>
-                            <reportElement x="100" y="0" width="360" height="20" uuid="84a4ac27-46c7-4b54-887a-d0ab1dab70cc">
+                            <reportElement key="" style="Crosstab_CG" mode="Transparent" x="100" y="0" width="350" height="50" backcolor="#FFFFFF" uuid="84a4ac27-46c7-4b54-887a-d0ab1dab70cc">
                                 <property name="com.jaspersoft.studio.unit.x" value="pixel"/>
                             </reportElement>
                             <textFieldExpression><![CDATA["Product"]]></textFieldExpression>
                         </textField>
                         <textField>
-                            <reportElement x="0" y="0" width="100" height="20" uuid="505b655a-56a6-4af2-91b8-7148e3b59039">
+                            <reportElement key="" style="Crosstab_CG" mode="Transparent" x="0" y="0" width="100" height="50" backcolor="#FFFFFF" uuid="505b655a-56a6-4af2-91b8-7148e3b59039">
                                 <property name="com.jaspersoft.studio.unit.x" value="pixel"/>
                             </reportElement>
                             <box>
@@ -239,102 +253,175 @@ referencedata.facilities.name DESC]]>
                             </box>
                             <textFieldExpression><![CDATA["Program"]]></textFieldExpression>
                         </textField>
+                        <textField>
+                            <reportElement key="" style="Crosstab_CG" mode="Transparent" x="450" y="0" width="90" height="50" backcolor="#FFFFFF" uuid="eca8811d-817c-4906-ab28-782fd998164f">
+                                <property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+                                <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+                                <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+                            </reportElement>
+                            <box>
+                                <rightPen lineWidth="0.0"/>
+                            </box>
+                            <textFieldExpression><![CDATA["Unit cost"]]></textFieldExpression>
+                        </textField>
                     </cellContents>
                 </crosstabHeaderCell>
-                <rowGroup name="ProgramName" width="0" totalPosition="End">
-                    <bucket class="java.lang.String">
-                        <bucketExpression><![CDATA[$F{ProgramName}]]></bucketExpression>
-                    </bucket>
-                    <crosstabRowHeader>
-                        <cellContents mode="Opaque" style="Crosstab_CH"/>
-                    </crosstabRowHeader>
-                    <crosstabTotalRowHeader>
-                        <cellContents mode="Opaque" style="Crosstab_CT">
-                            <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-                        </cellContents>
-                    </crosstabTotalRowHeader>
-                </rowGroup>
-                <rowGroup name="ProductName" width="460" totalPosition="End">
+                <rowGroup name="ProductName" width="540" totalPosition="End">
                     <bucket class="java.lang.String">
                         <bucketExpression><![CDATA[$F{ProductName}]]></bucketExpression>
                     </bucket>
                     <crosstabRowHeader>
                         <cellContents mode="Opaque" style="Crosstab_CH">
-                            <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
                             <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+                            <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
                             <textField>
-                                <reportElement stretchType="RelativeToBandHeight" x="100" y="0" width="360" height="20" uuid="819202e6-0baf-48cd-9c9d-dafed899106d"/>
+                                <reportElement key="" style="Crosstab_CH" stretchType="RelativeToBandHeight" mode="Transparent" x="100" y="0" width="350" height="20" backcolor="#FFFFFF" uuid="819202e6-0baf-48cd-9c9d-dafed899106d"/>
                                 <textFieldExpression><![CDATA[$V{ProductName}]]></textFieldExpression>
                             </textField>
                             <textField>
-                                <reportElement x="0" y="0" width="100" height="20" uuid="5a49998c-a186-4ec0-ab25-7817e54e23e6"/>
+                                <reportElement key="" style="Crosstab_CH" mode="Transparent" x="0" y="0" width="100" height="20" backcolor="#FFFFFF" uuid="5a49998c-a186-4ec0-ab25-7817e54e23e6"/>
                                 <box>
                                     <rightPen lineWidth="0.0"/>
                                 </box>
                                 <textFieldExpression><![CDATA[$V{ProgramName}]]></textFieldExpression>
                             </textField>
+                            <textField>
+                                <reportElement key="" style="Crosstab_CH" mode="Transparent" x="450" y="0" width="90" height="20" backcolor="#FFFFFF" uuid="b1617acf-0698-4d82-953f-69aaa91b9ced">
+                                    <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+                                </reportElement>
+                                <box>
+                                    <rightPen lineWidth="0.0"/>
+                                </box>
+                                <textFieldExpression><![CDATA[$V{PricePerPack}]]></textFieldExpression>
+                            </textField>
                         </cellContents>
                     </crosstabRowHeader>
                     <crosstabTotalRowHeader>
-                        <cellContents mode="Opaque" style="Crosstab_CG"/>
+                        <cellContents mode="Opaque" style="Crosstab_CH"/>
                     </crosstabTotalRowHeader>
                 </rowGroup>
-                <columnGroup name="FacilityName" height="20" totalPosition="End">
+                <columnGroup name="FacilityName" height="50" totalPosition="End">
                     <bucket class="java.lang.String">
                         <bucketExpression><![CDATA[$F{FacilityName}]]></bucketExpression>
                     </bucket>
                     <crosstabColumnHeader>
                         <cellContents mode="Opaque" style="Crosstab_CH">
+                            <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+                            <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
                             <textField>
-                                <reportElement x="0" y="0" width="60" height="20" uuid="1a566d64-337a-45f0-97b5-499f1880bc04"/>
-                                <textFieldExpression><![CDATA[$V{FacilityName}]]></textFieldExpression>
+                                <reportElement key="" style="Crosstab_CG" mode="Transparent" x="0" y="0" width="60" height="50" backcolor="#FFFFFF" uuid="1a566d64-337a-45f0-97b5-499f1880bc04">
+                                    <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+                                </reportElement>
+                                <textFieldExpression><![CDATA[$V{FacilityName} + " (QTY)"]]></textFieldExpression>
+                            </textField>
+                            <textField>
+                                <reportElement key="" style="Crosstab_CG" mode="Transparent" x="60" y="0" width="70" height="50" backcolor="#FFFFFF" uuid="03d60018-fc9e-4546-a9ac-b97b33dd90e8">
+                                    <property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+                                    <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+                                    <property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+                                    <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+                                </reportElement>
+                                <textFieldExpression><![CDATA["Cost"]]></textFieldExpression>
                             </textField>
                         </cellContents>
                     </crosstabColumnHeader>
                     <crosstabTotalColumnHeader>
                         <cellContents mode="Opaque" style="Crosstab_CT">
+                            <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+                            <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
                             <staticText>
-                                <reportElement x="0" y="0" width="80" height="20" forecolor="#FFFFFF" uuid="726ea6d0-0669-482f-b3ca-4d163aff4fa1"/>
-                                <text><![CDATA[Total]]></text>
+                                <reportElement x="0" y="0" width="80" height="50" forecolor="#FFFFFF" uuid="726ea6d0-0669-482f-b3ca-4d163aff4fa1"/>
+                                <text><![CDATA[Total Quantity]]></text>
+                            </staticText>
+                            <staticText>
+                                <reportElement style="Crosstab_CT" x="80" y="0" width="100" height="50" forecolor="#FFFFFF" uuid="d7b1f895-5e1a-4dfa-8682-d1ec7311cb94">
+                                    <property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+                                    <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+                                    <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+                                </reportElement>
+                                <text><![CDATA[Total Price]]></text>
                             </staticText>
                         </cellContents>
                     </crosstabTotalColumnHeader>
                 </columnGroup>
-                <measure name="Quantity_MEASURE" class="java.lang.Integer">
+                <measure name="TotalCost" class="java.lang.Integer">
+                    <measureExpression><![CDATA[$F{TotalCost}]]></measureExpression>
+                </measure>
+                <measure name="PricePerPack" class="java.lang.Double">
+                    <measureExpression><![CDATA[$F{PricePerPack}]]></measureExpression>
+                </measure>
+                <measure name="Quantity" class="java.lang.Long">
                     <measureExpression><![CDATA[$F{Quantity}]]></measureExpression>
                 </measure>
-                <measure name="TotalQuantity" class="java.lang.Integer" calculation="Sum">
+                <measure name="ProgramName" class="java.lang.String">
+                    <measureExpression><![CDATA[$F{ProgramName}]]></measureExpression>
+                </measure>
+                <measure name="CalculatedPrice" class="java.lang.Double">
+                    <measureExpression><![CDATA[$F{PricePerPack} * (($F{Quantity} == 0L || $F{Quantity} == null || $F{NetContent} == 0L || $F{NetContent} == null) ? 0L :(( $F{RemainderQuantity} > 0L &&  $F{RemainderQuantity} >  $F{PackRoundingThreshold}) ?  $F{DividedQuantity} + 1L : ( $F{DividedQuantity} == 0L && ! $F{RoundToZero}) ? 1L :  $F{DividedQuantity}))]]></measureExpression>
+                </measure>
+                <measure name="TotalPrice" class="java.lang.Double" calculation="Sum">
+                    <measureExpression><![CDATA[$F{PricePerPack} * (($F{Quantity} == 0L || $F{Quantity} == null || $F{NetContent} == 0L || $F{NetContent} == null) ? 0L :(( $F{RemainderQuantity} > 0L &&  $F{RemainderQuantity} >  $F{PackRoundingThreshold}) ?  $F{DividedQuantity} + 1L : ( $F{DividedQuantity} == 0L && ! $F{RoundToZero}) ? 1L :  $F{DividedQuantity}))]]></measureExpression>
+                </measure>
+                <measure name="TotalQuantity" class="java.lang.Long" calculation="Sum">
                     <measureExpression><![CDATA[$F{Quantity}]]></measureExpression>
                 </measure>
-                <crosstabCell width="60" height="20">
+                <crosstabCell width="130" height="20">
                     <cellContents mode="Opaque" style="Crosstab_CD">
                         <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
                         <textField isBlankWhenNull="true">
-                            <reportElement x="0" y="0" width="60" height="20" uuid="01f58f29-139f-47d8-b2c8-a994f5bb390a"/>
-                            <textFieldExpression><![CDATA[$V{Quantity_MEASURE}]]></textFieldExpression>
+                            <reportElement style="Crosstab_CH" mode="Transparent" x="0" y="0" width="60" height="20" backcolor="#F7F7F7" uuid="01f58f29-139f-47d8-b2c8-a994f5bb390a"/>
+                            <textFieldExpression><![CDATA[$V{Quantity}]]></textFieldExpression>
+                        </textField>
+                        <textField pattern="#,##0.###;(#,##0.###-)" isBlankWhenNull="true">
+                            <reportElement style="Crosstab_CH" mode="Transparent" x="60" y="0" width="70" height="20" backcolor="#FFFFFF" uuid="2524dd4f-d8aa-4a5f-9ca3-9c278b5060d0">
+                                <property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+                                <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+                            </reportElement>
+                            <box>
+                                <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                                <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                                <bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                                <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                            </box>
+                            <textFieldExpression><![CDATA[$V{CalculatedPrice}]]></textFieldExpression>
                         </textField>
                     </cellContents>
                 </crosstabCell>
-                <crosstabCell width="80" height="20" columnTotalGroup="FacilityName">
+                <crosstabCell width="180" height="20" columnTotalGroup="FacilityName">
                     <cellContents mode="Opaque" style="Crosstab_CT">
                         <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
                         <textField isBlankWhenNull="true">
                             <reportElement positionType="FixRelativeToBottom" x="0" y="0" width="80" height="20" forecolor="#FFFFFF" uuid="7fd2d723-ca39-46ce-be28-2ee150f30029"/>
                             <textFieldExpression><![CDATA[$V{TotalQuantity}]]></textFieldExpression>
                         </textField>
+                        <textField pattern="#,##0.###;(#,##0.###-)" isBlankWhenNull="true">
+                            <reportElement style="Crosstab_CT" positionType="FixRelativeToBottom" x="80" y="0" width="100" height="20" forecolor="#FFFFFF" uuid="eec07e27-7299-4a30-b299-35c03dc627b1">
+                                <property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+                                <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+                                <property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+                            </reportElement>
+                            <textFieldExpression><![CDATA[$V{TotalPrice}]]></textFieldExpression>
+                        </textField>
                     </cellContents>
                 </crosstabCell>
-                <crosstabCell width="60" height="0" rowTotalGroup="ProductName">
-                    <cellContents mode="Opaque" style="Crosstab_CG"/>
+                <crosstabCell width="130" height="20" rowTotalGroup="ProductName">
+                    <cellContents mode="Opaque" style="Crosstab_CH">
+                        <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+                    </cellContents>
                 </crosstabCell>
-                <crosstabCell width="80" height="0" rowTotalGroup="ProductName" columnTotalGroup="FacilityName">
-                    <cellContents mode="Opaque" style="Crosstab_CT"/>
-                </crosstabCell>
-                <crosstabCell width="60" height="0" rowTotalGroup="ProgramName">
-                    <cellContents/>
-                </crosstabCell>
-                <crosstabCell width="80" height="0" rowTotalGroup="ProgramName" columnTotalGroup="FacilityName">
-                    <cellContents/>
+                <crosstabCell width="180" height="20" rowTotalGroup="ProductName" columnTotalGroup="FacilityName">
+                    <cellContents mode="Opaque" style="Crosstab_CH">
+                        <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+                        <textField pattern="#,##0.###;(#,##0.###-)" isBlankWhenNull="true">
+                            <reportElement style="Crosstab_CH" positionType="FixRelativeToBottom" x="80" y="0" width="100" height="20" forecolor="#000000" uuid="d7fcd099-c0bd-4711-8cd2-1b8df0df1dc3">
+                                <property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+                                <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+                                <property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+                                <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+                            </reportElement>
+                            <textFieldExpression><![CDATA[$V{TotalPrice_ProductName_FacilityName_ALL}]]></textFieldExpression>
+                        </textField>
+                    </cellContents>
                 </crosstabCell>
             </crosstab>
         </band>
