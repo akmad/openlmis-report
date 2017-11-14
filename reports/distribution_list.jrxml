@@ -157,6 +157,7 @@ SELECT
 	products.dispensingunit AS dispensingunit,
 	products.fullproductname AS productname,
 	products.code AS productcode,
+	zones.name AS zonename,
   	CASE
 		WHEN periods.id IN (SELECT id FROM findPreviousPeriods LIMIT 1) THEN 1
 		WHEN periods.id IN (SELECT id FROM findPreviousPeriods LIMIT 1 OFFSET 1) THEN 2
@@ -195,6 +196,7 @@ ORDER BY facilitycode, productcategory, productcode]]>
 	<field name="consumedquantity" class="java.lang.Integer"/>
 	<field name="stockonhand" class="java.lang.Integer"/>
 	<field name="approvedquantity" class="java.lang.Integer"/>
+	<field name="zonename" class="java.lang.String"/>
 	<variable name="Consumption Period 1" class="java.lang.Integer" resetType="Group" resetGroup="Product Code" calculation="Sum">
 		<variableExpression><![CDATA[$F{periodnumber} == 1 ? $F{consumedquantity} : null]]></variableExpression>
 	</variable>
@@ -247,7 +249,7 @@ ORDER BY facilitycode, productcategory, productcode]]>
 				</rectangle>
 				<textField isBlankWhenNull="true">
 					<reportElement x="50" y="0" width="220" height="20" uuid="6fbf4300-abb9-4d37-ab7b-c27278688eda"/>
-					<textFieldExpression><![CDATA[$F{facilityname}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{facilityname} + ", " +  $F{zonename}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement x="0" y="0" width="40" height="20" uuid="10ee90db-d197-45fc-a827-922fc941eef8"/>
