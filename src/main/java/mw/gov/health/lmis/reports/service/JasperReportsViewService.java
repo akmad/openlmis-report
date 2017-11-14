@@ -23,7 +23,6 @@ import mw.gov.health.lmis.reports.dto.external.RequisitionStatusDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionTemplateColumnDto;
 import mw.gov.health.lmis.reports.dto.external.RequisitionTemplateDto;
 import mw.gov.health.lmis.reports.dto.external.TimelinessReportFacilityDto;
-import mw.gov.health.lmis.reports.dto.external.UserDto;
 import mw.gov.health.lmis.reports.service.fulfillment.OrderService;
 import mw.gov.health.lmis.reports.service.referencedata.BaseReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.FacilityReferenceDataService;
@@ -33,7 +32,6 @@ import mw.gov.health.lmis.reports.service.referencedata.ProgramReferenceDataServ
 import mw.gov.health.lmis.reports.service.referencedata.UserReferenceDataService;
 import mw.gov.health.lmis.reports.service.requisition.RequisitionService;
 import mw.gov.health.lmis.reports.web.RequisitionReportDtoBuilder;
-import mw.gov.health.lmis.utils.AuthenticationHelper;
 import mw.gov.health.lmis.utils.ReportUtils;
 import net.sf.jasperreports.engine.JRBand;
 import net.sf.jasperreports.engine.JRException;
@@ -108,9 +106,6 @@ public class JasperReportsViewService {
 
   @Autowired
   private UserReferenceDataService userReferenceDataService;
-
-  @Autowired
-  private AuthenticationHelper authenticationHelper;
 
   @Autowired
   private RequisitionReportDtoBuilder requisitionReportDtoBuilder;
@@ -242,11 +237,8 @@ public class JasperReportsViewService {
     List<OrderLineItemDto> items = order.getOrderLineItems();
     items.sort(Comparator.comparing(c -> c.getOrderable().getProductCode()));
 
-    UserDto currentUser = authenticationHelper.getCurrentUser();
-
     parameters.put(DATASOURCE, new JRBeanCollectionDataSource(items));
     parameters.put("order", order);
-    parameters.put("user", currentUser.printName());
 
     return new ModelAndView(jasperView, parameters);
   }

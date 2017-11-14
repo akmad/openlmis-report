@@ -4,6 +4,8 @@ import static mw.gov.health.lmis.reports.i18n.JasperMessageKeys.ERROR_JASPER_TEM
 import static mw.gov.health.lmis.reports.service.PermissionService.AGGREGATE_ORDERS_ID;
 import static mw.gov.health.lmis.reports.service.PermissionService.AGGREGATE_ORDERS_XLS_ID;
 
+import mw.gov.health.lmis.reports.dto.external.UserDto;
+import mw.gov.health.lmis.utils.AuthenticationHelper;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRVirtualizationHelper;
 import net.sf.jasperreports.engine.JRVirtualizer;
@@ -70,6 +72,9 @@ public class JasperTemplateController extends BaseController {
 
   @Autowired
   private Clock clock;
+
+  @Autowired
+  private AuthenticationHelper authenticationHelper;
 
   /**
    * Adding report templates with ".jrxml" format to database.
@@ -197,6 +202,9 @@ public class JasperTemplateController extends BaseController {
     map.put("format", format);
     map.put("imagesDirectory", "images/");
     map.put("timeZone", clock.getZone().getId());
+    UserDto currentUser = authenticationHelper.getCurrentUser();
+    map.put("user", currentUser.printName());
+
     map.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
 
     JasperReportsMultiFormatView jasperView =
