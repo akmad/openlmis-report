@@ -27,6 +27,7 @@
 		<property name="displayProperty" value="orderCode"/>
 		<property name="required" value="true"/>
 	</parameter>
+	<parameter name="timeZone" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="imagesDirectory" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="user" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
@@ -548,7 +549,7 @@ Lilongwe]]></text>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{order}.getAuthorizedStatusChange().printDate();]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{order}.getAuthorizedStatusChange().printDate($P{timeZone});]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="380" y="100" width="40" height="20" uuid="c8adb3e0-3283-482a-96a4-9898a6beb3a9"/>
@@ -568,7 +569,7 @@ Lilongwe]]></text>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{order}.getApprovedStatusChange().printDate();]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{order}.getApprovedStatusChange().printDate($P{timeZone});]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="380" y="120" width="40" height="20" uuid="992fcd9b-f17f-4ee8-8aee-cf95482ae224"/>
@@ -588,7 +589,7 @@ Lilongwe]]></text>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{order}.getReleasedStatusChange().printDate();]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{order}.getReleasedStatusChange().printDate($P{timeZone});]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement key="" x="430" y="140" width="122" height="20" uuid="2308393b-b536-4676-a4f7-8bd83528b662"/>
@@ -601,7 +602,7 @@ Lilongwe]]></text>
 				<textElement verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("MMM d, yyyy h:mm:ss a").format(new java.util.Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[java.time.format.DateTimeFormatter.ofPattern("MMM d, yyyy h:mm:ss a").format(java.time.ZonedDateTime.now(java.time.ZoneId.of($P{timeZone})));]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="380" y="140" width="40" height="20" uuid="a64dde3f-b081-496c-a33d-521309f2407e"/>

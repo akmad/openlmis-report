@@ -26,12 +26,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
-import java.util.Locale;
-
 import mw.gov.health.lmis.reports.domain.BaseEntity;
 import mw.gov.health.lmis.reports.i18n.ExposedMessageSourceImpl;
 import mw.gov.health.lmis.security.UserNameProvider;
 import mw.gov.health.lmis.settings.domain.ConfigurationSetting;
+
+import java.time.Clock;
+import java.time.ZoneId;
+import java.util.Locale;
 
 @SpringBootApplication
 @ImportResource("applicationContext.xml")
@@ -48,6 +50,9 @@ public class Application {
 
   @Value("${spring.jpa.properties.hibernate.default_schema}")
   private String preferredSchema;
+
+  @Value("${time.zoneId}")
+  private String timeZoneId;
 
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
@@ -142,5 +147,15 @@ public class Application {
       flyway.clean();
       flyway.migrate();
     };
+  }
+
+  /**
+   * Creates the clock bean and sets the timezone in the Locale Holder.
+   *
+   * @return clock instance with application configured timezone.
+   */
+  @Bean
+  public Clock clock() {
+    return Clock.system(ZoneId.of(timeZoneId));
   }
 }

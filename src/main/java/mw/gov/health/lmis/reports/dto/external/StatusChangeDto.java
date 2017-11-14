@@ -1,12 +1,15 @@
 package mw.gov.health.lmis.reports.dto.external;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.springframework.context.i18n.LocaleContextHolder;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.chrono.Chronology;
 import java.time.format.DateTimeFormatter;
@@ -44,11 +47,12 @@ public class StatusChangeDto {
    * @return created date
    */
   @JsonIgnore
-  public String printDate() {
+  public String printDate(String zoneId) {
     Locale locale = LocaleContextHolder.getLocale();
     String datePattern = DateTimeFormatterBuilder.getLocalizedDateTimePattern(
             FormatStyle.MEDIUM, FormatStyle.MEDIUM, Chronology.ofLocale(locale), locale);
-    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(datePattern);
+    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(datePattern)
+        .withZone(ZoneId.of(zoneId));
 
     return dateTimeFormatter.format(createdDate);
   }

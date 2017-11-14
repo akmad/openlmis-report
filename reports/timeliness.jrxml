@@ -42,6 +42,7 @@
 		<property name="required" value="true"/>
 	</parameter>
 	<parameter name="imagesDirectory" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="timeZone" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -127,7 +128,7 @@
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left"/>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("d - MMM - yy").format(new java.util.Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[java.time.format.DateTimeFormatter.ofPattern("d - MMM - yy").format(java.time.ZonedDateTime.now(java.time.ZoneId.of($P{timeZone})));]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="80" width="200" height="20" uuid="333cf5f4-1696-452a-ad45-0635a394548e"/>

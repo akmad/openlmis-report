@@ -88,6 +88,7 @@
         <property name="required" value="true"/>
     </parameter>
     <parameter name="imagesDirectory" class="java.lang.String" isForPrompting="false"/>
+    <parameter name="timeZone" class="java.lang.String" isForPrompting="false"/>
     <queryString language="plsql">
         <![CDATA[WITH RECURSIVE findChildZones AS (
   SELECT * FROM referencedata.geographic_zones WHERE name = $P{district}::varchar
@@ -198,7 +199,7 @@ ORDER BY  referencedata.orderables.code ASC, referencedata.facilities.name DESC]
                     <property name="com.jaspersoft.studio.unit.y" value="pixel"/>
                 </reportElement>
                 <textElement textAlignment="Left"/>
-                <textFieldExpression><![CDATA[new SimpleDateFormat("d - MMM - yy").format(new java.util.Date())]]></textFieldExpression>
+                <textFieldExpression><![CDATA[java.time.format.DateTimeFormatter.ofPattern("d - MMM - yy").format(java.time.ZonedDateTime.now(java.time.ZoneId.of($P{timeZone})));]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="80" y="30" width="80" height="40" uuid="2d8d85cb-2583-4a58-9cce-efc84578b732"/>

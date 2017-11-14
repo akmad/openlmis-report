@@ -128,6 +128,7 @@ GROUP BY periodname]]>
 		<property name="options" value="Stocked out,Understocked,Overstocked"/>
 	</parameter>
 	<parameter name="imagesDirectory" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="timeZone" class="java.lang.String" isForPrompting="false"/>
 	<queryString language="plsql">
 		<![CDATA[WITH RECURSIVE findChildZones AS (
   SELECT * FROM referencedata.geographic_zones WHERE name = $P{district}::varchar
@@ -220,7 +221,7 @@ ORDER BY referencedata.facilities.name DESC,
 			<textField>
 				<reportElement key="" x="444" y="100" width="110" height="20" uuid="ee95017e-34fb-47fb-8003-8128ed51bd37"/>
 				<textElement textAlignment="Left"/>
-				<textFieldExpression><![CDATA[new SimpleDateFormat("d - MMM - yy").format(new java.util.Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[java.time.format.DateTimeFormatter.ofPattern("d - MMM - yy").format(java.time.ZonedDateTime.now(java.time.ZoneId.of($P{timeZone})));]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement mode="Opaque" x="0" y="60" width="554" height="18" forecolor="#FFFFFF" backcolor="#787878" uuid="62aab899-e15b-4f60-b150-0b97376963d6">

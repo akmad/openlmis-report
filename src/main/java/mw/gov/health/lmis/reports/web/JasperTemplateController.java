@@ -7,9 +7,9 @@ import static mw.gov.health.lmis.reports.service.PermissionService.AGGREGATE_ORD
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRVirtualizationHelper;
 import net.sf.jasperreports.engine.JRVirtualizer;
-
 import net.sf.jasperreports.engine.fill.JRSwapFileVirtualizer;
 import net.sf.jasperreports.engine.util.JRSwapFile;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +36,7 @@ import mw.gov.health.lmis.reports.service.JasperTemplateService;
 import mw.gov.health.lmis.reports.service.PermissionService;
 import mw.gov.health.lmis.utils.Message;
 
+import java.time.Clock;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -66,6 +67,9 @@ public class JasperTemplateController extends BaseController {
 
   @Autowired
   private PermissionService permissionService;
+
+  @Autowired
+  private Clock clock;
 
   /**
    * Adding report templates with ".jrxml" format to database.
@@ -192,6 +196,7 @@ public class JasperTemplateController extends BaseController {
     );
     map.put("format", format);
     map.put("imagesDirectory", "images/");
+    map.put("timeZone", clock.getZone().getId());
     map.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
 
     JasperReportsMultiFormatView jasperView =
