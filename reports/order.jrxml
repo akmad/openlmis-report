@@ -48,6 +48,7 @@
 	<field name="packsToShip" class="java.lang.Long">
 		<fieldDescription><![CDATA[packsToShip]]></fieldDescription>
 	</field>
+	<field name="approvedQuantity" class="java.lang.Long"/>
 	<variable name="VisibleRows" class="java.lang.Integer" calculation="Sum">
 		<variableExpression><![CDATA[($F{packsToShip} > 0L) ? 1 : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
@@ -422,7 +423,7 @@ Lilongwe]]></text>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{orderable}.getNetContent()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{approvedQuantity}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
