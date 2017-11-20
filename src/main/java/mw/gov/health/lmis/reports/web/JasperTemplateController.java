@@ -216,8 +216,8 @@ public class JasperTemplateController extends BaseController {
     JasperReportsMultiFormatView jasperView =
         jasperReportsViewService.getJasperReportsView(template, request);
 
-    String contentDisposition = "inline; filename=" +
-        fileName.toString().replaceAll("\\s+", "_")
+    String contentDisposition = "inline; filename="
+        + fileName.toString().replaceAll("\\s+", "_")
         + "." + format;
 
     jasperView
