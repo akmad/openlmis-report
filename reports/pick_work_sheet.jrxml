@@ -336,7 +336,7 @@ referencedata.facilities.name DESC]]>
                         <textField pattern="#,##0.###;(#,##0.###-)" isBlankWhenNull="true">
                             <reportElement style="Crosstab_CH" mode="Transparent" x="60" y="0" width="70" height="20" backcolor="#FFFFFF" uuid="2524dd4f-d8aa-4a5f-9ca3-9c278b5060d0">
                                 <property name="net.sf.jasperreports.export.xls.formula">
-                                    <![CDATA[IF(ISBLANK(INDIRECT(ADDRESS(ROW(),COLUMN()-1))),"-",INDIRECT(ADDRESS(ROW(),6)) * IF(MOD(INDIRECT(ADDRESS(ROW(),7)),INDIRECT(ADDRESS(ROW(),5))) > INDIRECT(ADDRESS(ROW(),3)), QUOTIENT(INDIRECT(ADDRESS(ROW(),7)),INDIRECT(ADDRESS(ROW(),5))) + 1, IF(AND(QUOTIENT(INDIRECT(ADDRESS(ROW(),7)),INDIRECT(ADDRESS(ROW(),5))) = 0, INDIRECT(ADDRESS(ROW(),4)) = 0), 1, QUOTIENT(INDIRECT(ADDRESS(ROW(),7)),INDIRECT(ADDRESS(ROW(),5))))))]]>
+                                    <![CDATA[IF(ISBLANK(INDIRECT(ADDRESS(ROW(),COLUMN()-1))),"-",IF(INDIRECT(ADDRESS(ROW(),COLUMN()-1))=0,0,INDIRECT(ADDRESS(ROW(),6))*IF(MOD(INDIRECT(ADDRESS(ROW(),7)),INDIRECT(ADDRESS(ROW(),5)))>INDIRECT(ADDRESS(ROW(),3)),QUOTIENT(INDIRECT(ADDRESS(ROW(),7)),INDIRECT(ADDRESS(ROW(),5)))+1,IF(AND(QUOTIENT(INDIRECT(ADDRESS(ROW(),7)),INDIRECT(ADDRESS(ROW(),5)))=0,INDIRECT(ADDRESS(ROW(),4))=0),1,QUOTIENT(INDIRECT(ADDRESS(ROW(),7)),INDIRECT(ADDRESS(ROW(),5)))))))]]>
                                 </property>
                                 <property name="com.jaspersoft.studio.unit.x" value="pixel"/>
                                 <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
