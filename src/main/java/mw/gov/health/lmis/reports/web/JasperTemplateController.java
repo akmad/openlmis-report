@@ -199,6 +199,12 @@ public class JasperTemplateController extends BaseController {
     Map<String, Object> map = jasperTemplateService.mapRequestParametersToTemplate(
         request, template
     );
+    StringBuilder fileName = new StringBuilder(template.getName());
+    for (Object value : map.values()) {
+      fileName
+          .append('_')
+          .append((String) value);
+    }
     map.put("format", format);
     map.put("imagesDirectory", "images/");
     map.put("timeZone", clock.getZone().getId());
@@ -210,8 +216,9 @@ public class JasperTemplateController extends BaseController {
     JasperReportsMultiFormatView jasperView =
         jasperReportsViewService.getJasperReportsView(template, request);
 
-    String fileName = template.getName().replaceAll("\\s+", "_");
-    String contentDisposition = "inline; filename=" + fileName + "." + format;
+    String contentDisposition = "inline; filename=" +
+        fileName.toString().replaceAll("\\s+", "_")
+        + "." + format;
 
     jasperView
         .getContentDispositionMappings()
