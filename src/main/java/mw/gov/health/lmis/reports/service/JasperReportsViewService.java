@@ -7,6 +7,7 @@ import static mw.gov.health.lmis.reports.i18n.MessageKeys.ERROR_IO;
 import static mw.gov.health.lmis.reports.i18n.MessageKeys.ERROR_JASPER_FILE_FORMAT;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_CLASS_NOT_FOUND;
 import static mw.gov.health.lmis.reports.i18n.ReportingMessageKeys.ERROR_REPORTING_IO;
+import static mw.gov.health.lmis.reports.web.ReportTypes.ORDER_REPORT;
 import static net.sf.jasperreports.engine.export.JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN;
 import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
 
@@ -59,10 +60,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -271,6 +274,36 @@ public class JasperReportsViewService {
     return new ModelAndView(jasperView, params);
   }
 
+  /**
+   * Get report's filename.
+   *
+   * @param template jasper template
+   * @param params template parameters populated with values from the request
+   * @return filename
+   */
+  public String getFilename(JasperTemplate template, Map<String, Object> params) {
+    String templateType = template.getType();
+    StringBuilder fileName = new StringBuilder(template.getName());
+    Collection<Object> values = params.values();
+    if (ORDER_REPORT.equals(templateType)) {
+      OrderDto order = orderService.findOne(
+          UUID.fromString(params.get("order").toString())
+      );
+      values = Arrays.asList(
+          order.getProgram().getName(),
+          order.getProcessingPeriod().getName(),
+          order.getFacility().getName()
+      );
+    }
+    for (Object value : values) {
+      fileName
+          .append('_')
+          .append(value.toString());
+    }
+    return fileName.toString()
+        .replaceAll("\\s+", "_")
+        .toLowerCase(Locale.ENGLISH);
+  }
 
   private JasperDesign createCustomizedRequisitionLineSubreport(RequisitionTemplateDto template)
           throws JasperReportViewException {

@@ -3,6 +3,9 @@ package mw.gov.health.lmis.reports.web;
 import static mw.gov.health.lmis.reports.i18n.JasperMessageKeys.ERROR_JASPER_TEMPLATE_NOT_FOUND;
 import static mw.gov.health.lmis.reports.service.PermissionService.AGGREGATE_ORDERS_ID;
 import static mw.gov.health.lmis.reports.service.PermissionService.AGGREGATE_ORDERS_XLS_ID;
+import static mw.gov.health.lmis.reports.web.ReportTypes.CONSISTENCY_REPORT;
+import static mw.gov.health.lmis.reports.web.ReportTypes.ORDER_REPORT;
+import static mw.gov.health.lmis.reports.web.ReportTypes.TIMELINESS_REPORT;
 
 import mw.gov.health.lmis.reports.dto.external.UserDto;
 import mw.gov.health.lmis.utils.AuthenticationHelper;
@@ -41,7 +44,6 @@ import mw.gov.health.lmis.utils.Message;
 import java.time.Clock;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -53,10 +55,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/reports/templates/malawi")
 public class JasperTemplateController extends BaseController {
   private static final Logger LOGGER = Logger.getLogger(JasperTemplateController.class);
-
-  private static final String TIMELINESS_REPORT = "Timeliness Report";
-  private static final String ORDER_REPORT = "Order Report";
-  private static final String CONSISTENCY_REPORT = "Consistency Report";
 
   @Autowired
   private JasperTemplateService jasperTemplateService;
@@ -199,12 +197,7 @@ public class JasperTemplateController extends BaseController {
     Map<String, Object> map = jasperTemplateService.mapRequestParametersToTemplate(
         request, template
     );
-    StringBuilder fileName = new StringBuilder(template.getName());
-    for (Object value : map.values()) {
-      fileName
-          .append('_')
-          .append((String) value);
-    }
+    String fileName = jasperReportsViewService.getFilename(template, map);
     map.put("format", format);
     map.put("imagesDirectory", "images/");
     map.put("timeZone", clock.getZone().getId());
@@ -216,13 +209,11 @@ public class JasperTemplateController extends BaseController {
     JasperReportsMultiFormatView jasperView =
         jasperReportsViewService.getJasperReportsView(template, request);
 
-    String contentDisposition = "inline; filename="
-        + fileName.toString().replaceAll("\\s+", "_")
-        + "." + format;
+    String contentDisposition = "inline; filename=" + fileName + "." + format;
 
     jasperView
         .getContentDispositionMappings()
-        .setProperty(format, contentDisposition.toLowerCase(Locale.ENGLISH));
+        .setProperty(format, contentDisposition);
 
     String templateType = template.getType();
     if (TIMELINESS_REPORT.equals(templateType)) {

@@ -1,11 +1,14 @@
 package mw.gov.health.lmis.reports.web;
 
+import mw.gov.health.lmis.reports.domain.JasperTemplate;
 import mw.gov.health.lmis.reports.dto.external.FacilityDto;
 import mw.gov.health.lmis.reports.dto.external.GeographicLevelDto;
 import mw.gov.health.lmis.reports.dto.external.GeographicZoneDto;
+import mw.gov.health.lmis.reports.dto.external.OrderDto;
 import mw.gov.health.lmis.reports.dto.external.ProcessingPeriodDto;
 import mw.gov.health.lmis.reports.dto.external.ProgramDto;
 import mw.gov.health.lmis.reports.service.JasperReportsViewService;
+import mw.gov.health.lmis.reports.service.fulfillment.OrderService;
 import mw.gov.health.lmis.reports.service.referencedata.FacilityReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.GeographicZoneReferenceDataService;
 import mw.gov.health.lmis.reports.service.referencedata.PeriodReferenceDataService;
@@ -26,12 +29,14 @@ import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiForm
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static mw.gov.health.lmis.reports.dto.external.FacilityDto.DISTRICT_LEVEL;
+import static mw.gov.health.lmis.reports.web.ReportTypes.ORDER_REPORT;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -64,8 +69,18 @@ public class JasperReportsViewServiceTest {
   @Mock
   private ProcessingPeriodDto period;
 
+  @Mock
+  private OrderDto order;
+
+  @Mock
+  private FacilityDto facility;
+
+  @Mock
+  private OrderService orderService;
+
   private UUID programId = UUID.randomUUID();
   private UUID periodId = UUID.randomUUID();
+  private UUID orderId = UUID.randomUUID();
 
   private Map<String, Object> reportParams = new HashMap<>();
 
@@ -73,9 +88,15 @@ public class JasperReportsViewServiceTest {
   public void setUp() {
     when(program.getId()).thenReturn(programId);
     when(period.getId()).thenReturn(periodId);
+    when(order.getId()).thenReturn(orderId);
 
     when(programReferenceDataService.findOne(programId)).thenReturn(program);
     when(periodReferenceDataService.findOne(periodId)).thenReturn(period);
+    when(orderService.findOne(orderId)).thenReturn(order);
+
+    when(order.getProgram()).thenReturn(program);
+    when(order.getProcessingPeriod()).thenReturn(period);
+    when(order.getFacility()).thenReturn(facility);
 
     reportParams.put("program", programId.toString());
     reportParams.put("period", periodId.toString());
@@ -210,6 +231,45 @@ public class JasperReportsViewServiceTest {
     Assert.assertEquals(facility1B.getId(), facilities.get(1).getId());
     Assert.assertEquals(facility2A.getId(), facilities.get(2).getId());
     Assert.assertEquals(facility2B.getId(), facilities.get(3).getId());
+  }
+
+  @Test
+  public void shouldGetFilenameWithProvidedParameters() {
+    // given
+    JasperTemplate template = new JasperTemplate();
+    template.setName("Some report");
+
+    Map<String, Object> params = new LinkedHashMap<>();
+    params.put("program", "Essential Meds");
+    params.put("period", "Jul2017");
+    params.put("district", "Chitipa");
+
+    // when
+    String filename = service.getFilename(template, params);
+
+    // then
+    Assert.assertEquals("some_report_essential_meds_jul2017_chitipa", filename);
+  }
+
+  @Test
+  public void shouldGetFilenameForOrderReport() {
+    // given
+    JasperTemplate template = new JasperTemplate();
+    template.setName("Order");
+    template.setType(ORDER_REPORT);
+
+    Map<String, Object> params = new HashMap<>();
+    params.put("order", orderId);
+
+    when(program.getName()).thenReturn("Essential Meds");
+    when(period.getName()).thenReturn("Jul2017");
+    when(facility.getName()).thenReturn("Chitipa DHO");
+
+    // when
+    String filename = service.getFilename(template, params);
+
+    // then
+    Assert.assertEquals("order_essential_meds_jul2017_chitipa_dho", filename);
   }
 
   private List<FacilityDto> extractFacilitiesFromOutputParams(Map<String, Object> outputParams) {
