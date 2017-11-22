@@ -47,3 +47,5 @@ sonarqube {
         properties["sonar.tests"] += sourceSets.integrationTest.java
     }
 }
+
+project.tasks["sonarqube"].dependsOn integrationTest
