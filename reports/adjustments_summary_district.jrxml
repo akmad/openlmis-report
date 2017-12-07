@@ -148,6 +148,7 @@ SELECT
 	products.fullproductname AS productname,
 	products.dispensingunit AS dispensingunit,
 	facilities.name AS facilityname,
+	zones.name AS zonename,
 	stock_card_line_item_reasons.name AS adjustmenttype,
 	stock_adjustments.quantity AS adjustmentquantity,
 	stock_card_line_item_reasons.reasontype AS reasontype
@@ -176,6 +177,7 @@ ORDER BY productname, adjustmenttype]]>
 	<field name="reasontype" class="java.lang.String"/>
 	<field name="dispensingunit" class="java.lang.String"/>
 	<field name="programname" class="java.lang.String"/>
+	<field name="zonename" class="java.lang.String"/>
 	<variable name="Adjustment Quantity total for Adjustment Type" class="java.lang.Integer" resetType="Group" resetGroup="Adjustment Type Group" calculation="Sum">
 		<variableExpression><![CDATA[$V{Additive Adjustment Quantity}]]></variableExpression>
 	</variable>
@@ -235,25 +237,29 @@ $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></v
 					<text><![CDATA[Product]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="180" y="0" width="104" height="20" uuid="0e1d212b-8146-4cd7-8385-eff493d0800f">
+					<reportElement x="230" y="0" width="85" height="20" uuid="0e1d212b-8146-4cd7-8385-eff493d0800f">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<text><![CDATA[Facility Name]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="364" y="0" width="100" height="20" uuid="429a7e8d-f187-4026-8beb-96a885690f28">
+					<reportElement x="380" y="0" width="90" height="20" uuid="429a7e8d-f187-4026-8beb-96a885690f28">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					</reportElement>
 					<text><![CDATA[Adjustment Type]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="464" y="0" width="90" height="20" uuid="b189204d-78a9-4a4f-affd-6d3d9567d5fc">
+					<reportElement x="470" y="0" width="85" height="20" uuid="b189204d-78a9-4a4f-affd-6d3d9567d5fc">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<text><![CDATA[Adjustment Quantity]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="284" y="0" width="80" height="20" uuid="7f548f67-961c-4198-b41a-31b7e4abea49"/>
+					<reportElement x="315" y="0" width="65" height="20" uuid="7f548f67-961c-4198-b41a-31b7e4abea49">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
 					<text><![CDATA[Dispensing Unit]]></text>
 				</staticText>
 				<staticText>
@@ -261,6 +267,12 @@ $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></v
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					</reportElement>
 					<text><![CDATA[Line #]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="180" y="0" width="50" height="20" uuid="724aec2b-44cb-4095-a6a0-08ba6f45882e">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<text><![CDATA[District]]></text>
 				</staticText>
 			</band>
 		</groupHeader>
@@ -334,7 +346,7 @@ $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></v
 					<textFieldExpression><![CDATA[$F{adjustmenttype}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="380" y="0" width="110" height="20" uuid="0114aeb0-fcbd-4d52-b328-614352384632"/>
+					<reportElement x="381" y="0" width="110" height="20" uuid="0114aeb0-fcbd-4d52-b328-614352384632"/>
 					<box leftPadding="2"/>
 					<textFieldExpression><![CDATA[$V{Adjustment Quantity total for Facility}]]></textFieldExpression>
 				</textField>
@@ -343,11 +355,16 @@ $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></v
 				<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				<printWhenExpression><![CDATA[$V{Line Count} > 0 && Arrays.asList("csv", "xls").contains($P{REPORT_PARAMETERS_MAP}.get("format"))]]></printWhenExpression>
 				<textField>
-					<reportElement x="180" y="0" width="104" height="20" uuid="f8bee16a-3b3f-4c30-a714-2b913c36d01e"/>
+					<reportElement x="230" y="0" width="85" height="20" uuid="f8bee16a-3b3f-4c30-a714-2b913c36d01e">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					</reportElement>
 					<textFieldExpression><![CDATA[$F{facilityname}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="364" y="0" width="100" height="20" uuid="4b7273d9-b59b-48a3-b937-ece374ed135b"/>
+					<reportElement x="380" y="0" width="90" height="20" uuid="4b7273d9-b59b-48a3-b937-ece374ed135b">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
 					<textFieldExpression><![CDATA[$F{adjustmenttype}]]></textFieldExpression>
 				</textField>
 				<textField>
@@ -358,12 +375,12 @@ $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></v
 					<textFieldExpression><![CDATA[$V{Line Count}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="464" y="0" width="90" height="20" uuid="0e21ace4-5096-4818-a9a8-35fde2eb4c79"/>
+					<reportElement x="470" y="0" width="85" height="20" uuid="0e21ace4-5096-4818-a9a8-35fde2eb4c79"/>
 					<box leftPadding="2"/>
 					<textFieldExpression><![CDATA[$V{Adjustment Quantity total for Facility}]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="false">
-					<reportElement x="284" y="0" width="80" height="20" uuid="63386b44-8304-44a1-a78a-8ce46531e507">
+					<reportElement x="315" y="0" width="65" height="20" uuid="63386b44-8304-44a1-a78a-8ce46531e507">
 						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 						<printWhenExpression><![CDATA[$F{dispensingunit} != null]]></printWhenExpression>
 					</reportElement>
@@ -380,6 +397,13 @@ $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></v
 						<font isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{productname}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="180" y="0" width="50" height="20" uuid="baacbf10-17d6-48ae-8ac8-168af97eb901">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					</reportElement>
+					<textFieldExpression><![CDATA[$F{zonename}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
