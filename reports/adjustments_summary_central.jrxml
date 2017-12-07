@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-11-14T13:39:47 -->
+<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="adjustments_summary_district" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="548a4d5f-1cb0-4fa0-b5f9-40a07c579f42">
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
@@ -254,7 +253,7 @@ $F{adjustmentquantity}.intValue() : -1 * $F{adjustmentquantity}.intValue()]]></v
 					<reportElement x="180" y="0" width="104" height="20" uuid="27783dd8-782c-4ea4-9927-0d26ca6347c2">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
-					<text><![CDATA[Facility Name]]></text>
+					<text><![CDATA[District Name]]></text>
 				</staticText>
 				<staticText>
 					<reportElement x="0" y="0" width="40" height="20" uuid="d6c76fb7-4569-4386-93a5-02832cfa3793">
