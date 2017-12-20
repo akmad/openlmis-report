@@ -82,9 +82,9 @@
 )
 SELECT
   referencedata.processing_periods.name AS periodname,
-   COUNT(CASE WHEN requisition.status_changes.id IS NOT NULL THEN 1 END) AS completed,
-  COUNT(CASE WHEN referencedata.processing_periods.enddate + (CASE WHEN $P{DueDays}::varchar IS NULL THEN 20 ELSE $P{DueDays}::int END) + 1 >= requisition.status_changes.createddate THEN 1 END) AS ontime,
-  COUNT(CASE WHEN requisition.status_changes.id IS NULL THEN 1 END) AS missed,
+  COUNT(CASE WHEN status_change.createddate IS NOT NULL THEN 1 END) AS completed,
+  COUNT(CASE WHEN referencedata.processing_periods.enddate + (CASE WHEN $P{DueDays}::varchar IS NULL THEN 20 ELSE $P{DueDays}::int END) + 1 >= status_change.createddate THEN 1 END) AS ontime,
+  COUNT(CASE WHEN status_change.createddate IS NULL THEN 1 END) AS missed,
   COUNT(*) as total
 FROM referencedata.facilities
   JOIN referencedata.geographic_zones ON
@@ -96,13 +96,14 @@ FROM referencedata.facilities
     AND requisition.requisitions.processingperiodid =  referencedata.processing_periods.id
     AND ($P{Program}::varchar IS NULL OR requisition.requisitions.programid = (SELECT id from referencedata.programs WHERE name = $P{Program}::varchar))
     AND requisition.requisitions.emergency = false
-  LEFT JOIN requisition.status_changes ON
-   requisition.requisitions.id = requisition.status_changes.requisitionid AND requisition.status_changes.status = 'SUBMITTED'
+  LEFT JOIN (SELECT DISTINCT ON (requisitionid) requisitionid, createddate FROM requisition.status_changes WHERE requisition.status_changes.status = 'SUBMITTED') status_change 
+   ON status_change.requisitionid = requisition.requisitions.id
 WHERE
    referencedata.facilities.active = true
    AND referencedata.facilities.enabled = true
    AND ($P{GeographicZone}::varchar IS NULL OR referencedata.geographic_zones.id IN (SELECT id FROM findChildZones))
-GROUP BY periodname]]>
+GROUP BY periodname
+]]>
 		</queryString>
 		<field name="periodname" class="java.lang.String"/>
 		<field name="completed" class="java.lang.Integer"/>
