@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LocalFulfillmentPickPackList" pageWidth="842" pageHeight="595" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="be52f660-1499-4fdb-bac0-fa964fc1e938">
+    <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+    <property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1" value="columnHeader"/>
+    <property name="net.sf.jasperreports.export.csv.exclude.origin.keep.first.band.1" value="columnHeader"/>
+    <property name="net.sf.jasperreports.export.xls.one.page.per.sheet" value="false"/>
+    <property name="net.sf.jasperreports.export.csv.one.page.per.sheet" value="false"/>
+    <property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+    <property name="net.sf.jasperreports.export.csv.remove.empty.space.between.rows" value="true"/>
+    <import value="org.openlmis.report.dto.external.referencedata.*"/>
+    <import value="java.util.List"/>
+    <import value="org.openlmis.report.dto.*"/>
+    <import value="org.openlmis.report.dto.external.*"/>
+    <import value="org.openlmis.report.dto.external.fulfillment.*"/>
+    <import value="org.openlmis.report.dto.external.stockmanagement.*"/>
+    <import value="java.time.LocalDate"/>
+    <import value="java.time.format.DateTimeFormatter"/>
+    <style name="Table_CH" mode="Opaque" backcolor="#333333">
+        <box>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <subDataset name="ItemDataSource" uuid="2914f7c6-c2d7-448b-b0c1-090970e18ed6">
+        <queryString>
+            <![CDATA[]]>
+        </queryString>
+        <field name="orderable" class="org.openlmis.report.dto.external.referencedata.OrderableDto"/>
+        <field name="stockCard" class="org.openlmis.report.dto.external.stockmanagement.StockCardDto"/>
+        <field name="filledQuantity" class="java.lang.Long"/>
+        <group name="groupByOrderable">
+            <groupExpression><![CDATA[$F{orderable}.getProductCode() + $F{orderable}.getFullProductName() + $F{orderable}.getDispensable().getDispensingUnit()]]></groupExpression>
+        </group>
+    </subDataset>
+    <parameter name="shipmentDraftId">
+        <property name="displayName" value="Shipment Draft ID"/>
+    </parameter>
+    <parameter name="entity" class="org.openlmis.report.dto.PickPackEntity">
+        <property name="displayName" value="Entity"/>
+    </parameter>
+    <parameter name="entityLineItems" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource">
+        <property name="displayName" value="Entity Line Items"/>
+    </parameter>
+    <queryString>
+        <![CDATA[]]>
+    </queryString>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="90" splitType="Stretch">
+            <staticText>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="0" width="200" height="30" uuid="bc3874ea-c0b6-4870-bb5d-b63fd3314fee"/>
+                <textElement>
+                    <font size="24"/>
+                </textElement>
+                <text><![CDATA[Pick Pack List]]></text>
+            </staticText>
+            <textField>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="30" width="400" height="15" uuid="7e71222a-5f8f-4569-a08a-c9a0d4baa75f"/>
+                <textFieldExpression><![CDATA["Generated on: " + DateTimeFormatter.ofPattern("dd MMMM yyyy").format(LocalDate.now())]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="45" width="400" height="15" uuid="6603b7c0-88ee-4ed5-8ab7-8ce1525ab34a"/>
+                <textFieldExpression><![CDATA["Order: " + $P{entity}.getOrderCode()]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="60" width="400" height="15" uuid="391255e0-1e46-4c5f-8f5c-44d3476acd5b"/>
+                <textFieldExpression><![CDATA["Facility: " + $P{entity}.getRequestingFacility().getName()]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="75" width="400" height="15" uuid="8f145179-c938-4a8f-87f2-6ea47071508f"/>
+                <textFieldExpression><![CDATA["Storeroom: " + $P{entity}.getSupplyingFacility().getName()]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+    <detail>
+        <band height="234" splitType="Stretch">
+            <componentElement>
+                <reportElement x="0" y="0" width="800" height="230" uuid="3ed81775-a15d-46ea-a953-96bc2e7f9925">
+                    <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+                    <property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+                    <property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+                    <property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+                    <property name="net.sf.jasperreports.export.headertoolbar.table.name" value=""/>
+                    <property name="com.jaspersoft.studio.components.autoresize.next" value="true"/>
+                    <property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
+                </reportElement>
+                <jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+                    <datasetRun subDataset="ItemDataSource" uuid="9872e474-62a7-492e-a113-61224458cda2">
+                        <dataSourceExpression><![CDATA[$P{entityLineItems}]]></dataSourceExpression>
+                    </datasetRun>
+                    <jr:column width="100" uuid="7ee4e17a-ab48-4493-b9c3-497b7966888c">
+                        <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+                        <jr:groupHeader groupName="groupByOrderable">
+                            <jr:cell style="Table_TD" height="30" rowSpan="1">
+                                <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                                    <reportElement x="0" y="0" width="100" height="30" uuid="4cfcf24b-a136-4f79-bf14-c772454a3955"/>
+                                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                    <textFieldExpression><![CDATA[$F{orderable}.getProductCode()]]></textFieldExpression>
+                                </textField>
+                            </jr:cell>
+                        </jr:groupHeader>
+                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="667ec2de-e77a-4213-9f11-f475da2ad346"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                </textElement>
+                                <text><![CDATA[Product Code]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30"/>
+                    </jr:column>
+                    <jr:column width="100" uuid="7f8193c8-7367-4c12-8bb1-b6619cbc0b16">
+                        <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+                        <jr:groupHeader groupName="groupByOrderable">
+                            <jr:cell style="Table_TD" height="30" rowSpan="1">
+                                <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                                    <reportElement x="0" y="0" width="100" height="30" uuid="7b88bdca-a6d0-4df1-a611-27bb78f70cb5"/>
+                                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                    <textFieldExpression><![CDATA[$F{orderable}.getFullProductName()]]></textFieldExpression>
+                                </textField>
+                            </jr:cell>
+                        </jr:groupHeader>
+                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="cadefb93-93d7-4b2e-8b9a-62b4f2b1bf16"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                </textElement>
+                                <text><![CDATA[Product]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30"/>
+                    </jr:column>
+                    <jr:column width="100" uuid="ddf1c2de-e3c8-4ceb-af8e-a7ae987db5a9">
+                        <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+                        <jr:groupHeader groupName="groupByOrderable">
+                            <jr:cell style="Table_TD" height="30" rowSpan="1">
+                                <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                                    <reportElement x="0" y="0" width="100" height="30" uuid="2660edd4-33e8-4f5b-9bec-6756f9f9701a"/>
+                                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                    <textFieldExpression><![CDATA[$F{orderable}.getDispensable().getDispensingUnit()]]></textFieldExpression>
+                                </textField>
+                            </jr:cell>
+                        </jr:groupHeader>
+                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="c7b3817d-8b7d-41e2-b3cf-6beb51b50376"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                </textElement>
+                                <text><![CDATA[Dispensing Unit]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30"/>
+                    </jr:column>
+                    <jr:column width="100" uuid="98f61f55-b615-4a1c-b204-bc4e69525227">
+                        <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+                        <jr:groupHeader groupName="groupByOrderable">
+                            <jr:cell style="Table_TD" height="30" rowSpan="1"/>
+                        </jr:groupHeader>
+                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="b722ec2b-7798-4553-ad19-d2ead3109a6b"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                </textElement>
+                                <text><![CDATA[Lot Code]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30">
+                            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                                <reportElement x="0" y="0" width="100" height="30" uuid="a5963f2f-d12f-4ad7-9ad4-8fd54205754b"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stockCard}.getLot().getLotCode()]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="100" uuid="a34c8f74-167d-4f4d-bd4e-8d23c3470550">
+                        <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+                        <jr:groupHeader groupName="groupByOrderable">
+                            <jr:cell style="Table_TD" height="30" rowSpan="1"/>
+                        </jr:groupHeader>
+                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="94a27e13-856c-4419-aa8e-1f6ff0c4eab4"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                </textElement>
+                                <text><![CDATA[VVM Status]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30">
+                            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                                <reportElement x="0" y="0" width="100" height="30" uuid="b02df90b-8663-4fe7-a569-0c67c75a8f51"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stockCard}.getExtraData().get("vvmStatus")]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="100" uuid="97f20a4a-9dcc-4984-a340-acd2062c348f">
+                        <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+                        <jr:groupHeader groupName="groupByOrderable">
+                            <jr:cell style="Table_TD" height="30" rowSpan="1"/>
+                        </jr:groupHeader>
+                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="5d0efb1b-aa11-497b-96d3-4996a162ee44"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                </textElement>
+                                <text><![CDATA[Expiry Date]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30">
+                            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                                <reportElement x="0" y="0" width="100" height="30" uuid="fd8b35bc-d736-4e82-b559-d86e9d933681"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{stockCard}.getLot().getExpirationDate()]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="100" uuid="10c999f4-982c-4232-bf78-0e7c8f804135">
+                        <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
+                        <jr:groupHeader groupName="groupByOrderable">
+                            <jr:cell style="Table_TD" height="30" rowSpan="1"/>
+                        </jr:groupHeader>
+                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="bd760be6-fbfa-4fe6-9606-7d77ae4c8e2b"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                </textElement>
+                                <text><![CDATA[Fill Quantity (doses)]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30">
+                            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                                <reportElement x="0" y="0" width="100" height="30" uuid="3b460b8b-a8a2-4375-9761-8b0cf2fd93ae"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{filledQuantity}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="100" uuid="9943cf62-0cd5-47b4-a056-e89d8472c5f6">
+                        <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column8"/>
+                        <jr:groupHeader groupName="groupByOrderable">
+                            <jr:cell style="Table_TD" height="30" rowSpan="1"/>
+                        </jr:groupHeader>
+                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="0a8a4896-6d19-481e-9311-ae94a507d034"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font isBold="true"/>
+                                </textElement>
+                                <text><![CDATA[Fill Quantity (vials)]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30">
+                            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                                <reportElement x="0" y="0" width="100" height="30" uuid="d2ca6dde-2399-4fd0-adbc-f10f317348d3"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                <textFieldExpression><![CDATA[$F{orderable}.packsToOrder($F{filledQuantity})]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                </jr:table>
+            </componentElement>
+        </band>
+    </detail>
+    <pageFooter>
+        <band height="30" splitType="Stretch">
+            <textField>
+                <reportElement x="430" y="10" width="70" height="20" uuid="49d7030b-3cad-47e5-af05-f063c98fb9e4"/>
+                <textElement textAlignment="Right" verticalAlignment="Bottom"/>
+                <textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+            <textField evaluationTime="Report">
+                <reportElement x="500" y="10" width="50" height="20" uuid="08848fb7-8d78-4e93-a448-483ebae4c582"/>
+                <textElement textAlignment="Left" verticalAlignment="Bottom"/>
+                <textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+</jasperReport>
