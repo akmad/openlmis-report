@@ -53,7 +53,7 @@ import guru.nidi.ramltester.RamlDefinition;
 import guru.nidi.ramltester.RamlLoaders;
 import guru.nidi.ramltester.restassured.RestAssuredClient;
 import org.openlmis.report.domain.BaseEntity;
-import org.openlmis.report.dto.external.UserDto;
+import org.openlmis.report.dto.external.referencedata.UserDto;
 import org.openlmis.report.exception.PermissionMessageException;
 import org.openlmis.report.service.PermissionService;
 import org.openlmis.report.utils.AuthenticationHelper;

@@ -16,8 +16,8 @@
 package org.openlmis.report.service;
 
 import org.openlmis.report.dto.external.ResultDto;
-import org.openlmis.report.dto.external.RightDto;
-import org.openlmis.report.dto.external.UserDto;
+import org.openlmis.report.dto.external.referencedata.RightDto;
+import org.openlmis.report.dto.external.referencedata.UserDto;
 import org.openlmis.report.exception.PermissionMessageException;
 import org.openlmis.report.service.referencedata.UserReferenceDataService;
 import org.openlmis.report.utils.AuthenticationHelper;

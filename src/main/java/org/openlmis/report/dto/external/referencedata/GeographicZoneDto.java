@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-package org.openlmis.report.dto.external;
+package org.openlmis.report.dto.external.referencedata;
 
 import java.util.UUID;
 

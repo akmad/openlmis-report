@@ -13,24 +13,18 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-package org.openlmis.report.dto.external;
+package org.openlmis.report.dto.external.referencedata;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-public class SupportedProgramDto {
+@Data
+public class FacilityTypeDto {
   private UUID id;
   private String code;
   private String name;
   private String description;
-  private boolean programActive;
-  private boolean periodsSkippable;
-  private boolean showNonFullSupplyTab;
-  private boolean supportActive;
-  private LocalDate supportStartDate;
+  private Integer displayOrder;
+  private Boolean active;
 }

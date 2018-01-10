@@ -33,7 +33,7 @@ import org.mockito.Mock;
 import org.openlmis.report.domain.JasperTemplate;
 import org.openlmis.report.domain.JasperTemplateParameter;
 import org.openlmis.report.domain.ReportImage;
-import org.openlmis.report.dto.external.RightDto;
+import org.openlmis.report.dto.external.referencedata.RightDto;
 import org.openlmis.report.exception.JasperReportViewException;
 import org.openlmis.report.exception.ReportingException;
 import org.openlmis.report.exception.ValidationMessageException;

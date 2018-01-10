@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import org.openlmis.report.dto.external.RightDto;
+import org.openlmis.report.dto.external.referencedata.RightDto;
 import org.openlmis.report.utils.RequestParameters;
 
 @Service

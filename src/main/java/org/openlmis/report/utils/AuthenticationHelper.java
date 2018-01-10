@@ -22,8 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import org.openlmis.report.dto.external.RightDto;
-import org.openlmis.report.dto.external.UserDto;
+import org.openlmis.report.dto.external.referencedata.RightDto;
+import org.openlmis.report.dto.external.referencedata.UserDto;
 import org.openlmis.report.exception.AuthenticationMessageException;
 import org.openlmis.report.service.referencedata.RightReferenceDataService;
 import org.openlmis.report.service.referencedata.UserReferenceDataService;

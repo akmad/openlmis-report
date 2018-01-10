@@ -18,7 +18,7 @@ package org.openlmis.report.security;
 import org.javers.spring.auditable.AuthorProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.openlmis.report.dto.external.UserDto;
+import org.openlmis.report.dto.external.referencedata.UserDto;
 import org.openlmis.report.utils.AuthenticationHelper;
 
 /**

@@ -15,7 +15,7 @@
 
 package org.openlmis.report.service.referencedata;
 
-import org.openlmis.report.dto.external.DetailedRoleAssignmentDto;
+import org.openlmis.report.dto.external.referencedata.DetailedRoleAssignmentDto;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.openlmis.report.dto.external.ResultDto;
-import org.openlmis.report.dto.external.UserDto;
+import org.openlmis.report.dto.external.referencedata.UserDto;
 import org.openlmis.report.utils.RequestParameters;
 
 @Service

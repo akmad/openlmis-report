@@ -13,15 +13,21 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-package org.openlmis.report.dto.external;
+package org.openlmis.report.dto.external.referencedata;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
-import lombok.Data;
-
-@Data
-public class FacilityOperatorDto {
+@Getter
+@Setter
+public class ProgramDto {
   private UUID id;
   private String code;
   private String name;
+  private String description;
+  private Boolean active;
+  private Boolean periodsSkippable;
+  private Boolean showNonFullSupplyTab;
 }

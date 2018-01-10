@@ -13,17 +13,17 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-package org.openlmis.report.dto.external;
+package org.openlmis.report.dto.external.referencedata;
 
 import java.util.UUID;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-public class RoleAssignmentDto {
+@Data
+public class GeographicLevelDto {
   private UUID id;
-  protected RoleDto role;
-  protected UserDto user;
+  private String code;
+  private String name;
+  private Integer levelNumber;
 }
+

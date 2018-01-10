@@ -13,21 +13,19 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-package org.openlmis.report.dto.external;
+package org.openlmis.report.dto.external.referencedata;
+
+import java.util.Set;
+import java.util.UUID;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Getter
 @Setter
-public class ProgramDto {
+public class RoleDto {
   private UUID id;
-  private String code;
   private String name;
   private String description;
-  private Boolean active;
-  private Boolean periodsSkippable;
-  private Boolean showNonFullSupplyTab;
+  private Set<RightDto> rights;
 }

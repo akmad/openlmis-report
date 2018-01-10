@@ -13,7 +13,7 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-package org.openlmis.report.dto.external;
+package org.openlmis.report.dto.external.referencedata;
 
 public enum RightType {
   ORDER_FULFILLMENT, SUPERVISION, GENERAL_ADMIN, REPORTS, STOCK_MANAGEMENT

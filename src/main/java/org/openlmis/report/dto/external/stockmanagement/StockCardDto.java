@@ -19,8 +19,8 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import org.openlmis.report.dto.external.FacilityDto;
-import org.openlmis.report.dto.external.ProgramDto;
+import org.openlmis.report.dto.external.referencedata.FacilityDto;
+import org.openlmis.report.dto.external.referencedata.ProgramDto;
 import org.openlmis.report.dto.external.referencedata.LotDto;
 import org.openlmis.report.dto.external.referencedata.OrderableDto;
 

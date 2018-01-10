@@ -13,14 +13,12 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-package org.openlmis.report.dto;
+package org.openlmis.report.dto.external.referencedata;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import org.openlmis.report.dto.external.UserDto;
 
 public class UserDtoTest {
 
