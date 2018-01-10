@@ -37,6 +37,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +48,10 @@ import javax.sql.DataSource;
 
 @Service
 public class JasperReportsViewService {
+
+  @Autowired(required = false)
+  private List<ReportFiller> reportFillers;
+
   @Autowired
   private DataSource replicationDataSource;
 
@@ -70,9 +78,19 @@ public class JasperReportsViewService {
   }
 
   /**
-   * Get application context from servlet.
+   * Fill related parameters for the given report name.
    */
-  public WebApplicationContext getApplicationContext(HttpServletRequest servletRequest) {
+  public void fillParameters(String reportName, Map<String, Object> parameters) {
+    Optional
+        .ofNullable(reportFillers)
+        .orElse(Collections.emptyList())
+        .stream()
+        .filter(filler -> filler.support(reportName))
+        .findFirst()
+        .ifPresent(filler -> filler.fillParameters(parameters));
+  }
+
+  private WebApplicationContext getApplicationContext(HttpServletRequest servletRequest) {
     ServletContext servletContext = servletRequest.getSession().getServletContext();
     return WebApplicationContextUtils.getWebApplicationContext(servletContext);
   }
