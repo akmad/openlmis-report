@@ -26,16 +26,18 @@ import org.javers.repository.sql.SqlRepositoryBuilder;
 import org.javers.spring.auditable.AuthorProvider;
 import org.javers.spring.boot.sql.JaversProperties;
 import org.javers.spring.jpa.TransactionalJaversBuilder;
+import org.openlmis.report.domain.BaseEntity;
+import org.openlmis.report.i18n.ExposedMessageSourceImpl;
+import org.openlmis.report.security.UserNameProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
-import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.servlet.LocaleResolver;
@@ -43,13 +45,8 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
 import java.util.Locale;
 
-import org.openlmis.report.domain.BaseEntity;
-import org.openlmis.report.i18n.ExposedMessageSourceImpl;
-import org.openlmis.report.security.UserNameProvider;
-
-@SpringBootApplication
-@ImportResource("applicationContext.xml")
-@EntityScan(basePackageClasses = {BaseEntity.class})
+@SpringBootApplication(scanBasePackages = "org.openlmis.report")
+@EntityScan(basePackageClasses = BaseEntity.class)
 public class Application {
   private static Logger LOGGER = LoggerFactory.getLogger(Application.class);
 

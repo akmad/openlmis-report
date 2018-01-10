@@ -18,22 +18,20 @@ package org.openlmis.report.repository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.openlmis.report.domain.BaseEntity;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.openlmis.report.Application;
-import org.openlmis.report.domain.BaseEntity;
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles("test")
-@SpringApplicationConfiguration(Application.class)
 @Transactional
+@SpringBootTest
+@DirtiesContext
+@RunWith(SpringRunner.class)
 public abstract class BaseCrudRepositoryIntegrationTest<T extends BaseEntity> {
 
   abstract CrudRepository<T, UUID> getRepository();
