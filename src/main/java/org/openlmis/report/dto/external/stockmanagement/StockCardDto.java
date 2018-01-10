@@ -20,11 +20,12 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import org.openlmis.report.dto.external.referencedata.FacilityDto;
-import org.openlmis.report.dto.external.referencedata.ProgramDto;
 import org.openlmis.report.dto.external.referencedata.LotDto;
 import org.openlmis.report.dto.external.referencedata.OrderableDto;
+import org.openlmis.report.dto.external.referencedata.ProgramDto;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,7 +38,8 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StockCardDto {
+@EqualsAndHashCode
+public final class StockCardDto {
   private UUID id;
   private Integer stockOnHand;
   private FacilityDto facility;

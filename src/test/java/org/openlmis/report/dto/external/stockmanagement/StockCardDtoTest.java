@@ -13,23 +13,27 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-package org.openlmis.report.dto.external.referencedata;
+package org.openlmis.report.dto.external.stockmanagement;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
-import java.util.UUID;
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.Test;
+import org.openlmis.report.dto.external.DtoGenerator;
+import org.openlmis.report.dto.external.referencedata.GeographicZoneDto;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
-public final class FacilityOperatorDto {
-  private UUID id;
-  private String code;
-  private String name;
+public class StockCardDtoTest {
+
+  @Test
+  public void equalsContract() {
+    Pair<GeographicZoneDto, GeographicZoneDto> zonePair = DtoGenerator.of(GeographicZoneDto.class);
+
+    EqualsVerifier
+        .forClass(StockCardDto.class)
+        .withPrefabValues(GeographicZoneDto.class, zonePair.getLeft(), zonePair.getRight())
+        .suppress(Warning.NONFINAL_FIELDS) // fields in dto cannot be final
+        .verify();
+  }
+
 }

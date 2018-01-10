@@ -15,14 +15,20 @@
 
 package org.openlmis.report.dto.external.referencedata;
 
-import java.util.UUID;
-
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.UUID;
 
 @Getter
 @Setter
-public class RoleAssignmentDto {
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+public final class RoleAssignmentDto {
   private UUID id;
   protected RoleDto role;
   protected UserDto user;

@@ -15,21 +15,24 @@
 
 package org.openlmis.report.dto.external.referencedata;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
-import java.util.UUID;
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.Test;
+import org.openlmis.report.dto.external.DtoGenerator;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
-public final class FacilityOperatorDto {
-  private UUID id;
-  private String code;
-  private String name;
+public class RoleDtoTest {
+
+  @Test
+  public void equalsContract() {
+    Pair<RightDto, RightDto> rightPair = DtoGenerator.of(RightDto.class);
+
+    EqualsVerifier
+        .forClass(RoleDto.class)
+        .withPrefabValues(RightDto.class, rightPair.getLeft(), rightPair.getRight())
+        .suppress(Warning.NONFINAL_FIELDS) // fields in dto cannot be final
+        .verify();
+  }
+
 }

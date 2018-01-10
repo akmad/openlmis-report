@@ -29,6 +29,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.openlmis.report.dto.external.DtoGenerator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -65,7 +66,7 @@ public class AuthenticationHelperTest {
   @Test
   public void shouldReturnUser() {
     // given
-    UserDto userMock = mock(UserDto.class);
+    UserDto userMock = DtoGenerator.of(UserDto.class).getLeft();
     when(userReferenceDataService.findUser(any(String.class))).thenReturn(userMock);
 
     // when
@@ -87,7 +88,7 @@ public class AuthenticationHelperTest {
   @Test
   public void shouldReturnRight() throws Exception {
     // given
-    RightDto right = mock(RightDto.class);
+    RightDto right = DtoGenerator.of(RightDto.class).getLeft();
     when(rightReferenceDataService.findRight(anyString())).thenReturn(right);
 
     // when

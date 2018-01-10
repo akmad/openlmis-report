@@ -13,23 +13,22 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-package org.openlmis.report.dto.external.referencedata;
+package org.openlmis.report.dto.external;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
-import java.util.UUID;
+import org.junit.Test;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
-public final class FacilityOperatorDto {
-  private UUID id;
-  private String code;
-  private String name;
+public class ObjectReferenceDtoTest {
+
+  @Test
+  public void equalsContract() {
+    EqualsVerifier
+        .forClass(ObjectReferenceDto.class)
+        .withRedefinedSubclass(UserObjectReferenceDto.class)
+        .suppress(Warning.NONFINAL_FIELDS) // fields in dto cannot be final
+        .verify();
+  }
+
 }

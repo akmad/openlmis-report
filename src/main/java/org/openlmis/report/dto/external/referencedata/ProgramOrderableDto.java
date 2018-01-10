@@ -15,7 +15,10 @@
 
 package org.openlmis.report.dto.external.referencedata;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -23,7 +26,10 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class ProgramOrderableDto {
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+public final class ProgramOrderableDto {
   private UUID programId;
   private UUID orderableDisplayCategoryId;
   private String orderableCategoryDisplayName;

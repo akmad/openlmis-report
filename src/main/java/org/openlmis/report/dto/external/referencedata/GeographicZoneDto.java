@@ -15,12 +15,20 @@
 
 package org.openlmis.report.dto.external.referencedata;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.UUID;
 
-import lombok.Data;
-
-@Data
-public class GeographicZoneDto {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+public final class GeographicZoneDto {
   private UUID id;
   private String code;
   private String name;

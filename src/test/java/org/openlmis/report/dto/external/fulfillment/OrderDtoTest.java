@@ -15,27 +15,28 @@
 
 package org.openlmis.report.dto.external.fulfillment;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.Test;
+import org.openlmis.report.dto.external.DtoGenerator;
+import org.openlmis.report.dto.external.referencedata.FacilityDto;
 import org.openlmis.report.dto.external.referencedata.UserDto;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+public class OrderDtoTest {
 
-import java.time.ZonedDateTime;
-import java.util.UUID;
+  @Test
+  public void equalsContract() {
+    Pair<FacilityDto, FacilityDto> facilityPair = DtoGenerator.of(FacilityDto.class);
+    Pair<UserDto, UserDto> userPair = DtoGenerator.of(UserDto.class);
 
+    EqualsVerifier
+        .forClass(OrderDto.class)
+        .withPrefabValues(FacilityDto.class, facilityPair.getLeft(), facilityPair.getRight())
+        .withPrefabValues(UserDto.class, userPair.getLeft(), userPair.getRight())
+        .suppress(Warning.NONFINAL_FIELDS) // fields in dto cannot be final
+        .verify();
+  }
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
-public final class StatusChangeDto {
-  private ExternalStatus status;
-  private UUID authorId;
-  private ZonedDateTime createdDate;
-  private UserDto author;
 }

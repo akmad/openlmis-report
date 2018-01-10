@@ -15,7 +15,10 @@
 
 package org.openlmis.report.dto.external.referencedata;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -23,7 +26,10 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class SupportedProgramDto {
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+public final class SupportedProgramDto {
   private UUID id;
   private String code;
   private String name;
