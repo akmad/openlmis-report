@@ -35,6 +35,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.openlmis.report.exception.DataRetrievalException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -45,8 +46,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.UUID;
-
-import org.openlmis.report.exception.DataRetrievalException;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class BaseCommunicationServiceTest<T> {
@@ -104,8 +103,10 @@ public abstract class BaseCommunicationServiceTest<T> {
     assertThat(uri.toString(), is(equalTo(url)));
     assertThat(found, is(instance));
 
-    assertAuthHeader(entityCaptor.getValue());
-    assertThat(entityCaptor.getValue(), is(nullValue()));
+    HttpEntity entity = entityCaptor.getValue();
+
+    assertAuthHeader(entity);
+    assertThat(entity.getBody(), is(nullValue()));
   }
 
   @Test
@@ -134,8 +135,10 @@ public abstract class BaseCommunicationServiceTest<T> {
     assertThat(uri.toString(), is(equalTo(url)));
     assertThat(found, is(nullValue()));
 
-    assertAuthHeader(entityCaptor.getValue());
-    assertThat(entityCaptor.getValue(), is(nullValue()));
+    HttpEntity entity = entityCaptor.getValue();
+
+    assertAuthHeader(entity);
+    assertThat(entity.getBody(), is(nullValue()));
   }
 
   @Test(expected = DataRetrievalException.class)
