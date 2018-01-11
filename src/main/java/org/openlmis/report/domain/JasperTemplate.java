@@ -95,6 +95,10 @@ public class JasperTemplate extends BaseEntity {
   @Setter
   private Set<ReportImage> reportImages = new HashSet<>();
 
+  @Getter
+  @Setter
+  private Boolean visible;
+
   /**
    * Export this object to the specified exporter (DTO).
    *
@@ -113,6 +117,10 @@ public class JasperTemplate extends BaseEntity {
   private void preSave() {
     if (templateParameters != null) {
       templateParameters.forEach(line -> line.setTemplate(this));
+    }
+
+    if (null == visible) {
+      visible = true;
     }
   }
 

@@ -15,6 +15,9 @@
 
 package org.openlmis.report.web;
 
+import static org.apache.commons.lang3.BooleanUtils.isNotFalse;
+import static org.openlmis.report.i18n.JasperMessageKeys.ERROR_JASPER_TEMPLATE_NOT_FOUND;
+
 import org.apache.log4j.Logger;
 import org.openlmis.report.domain.JasperTemplate;
 import org.openlmis.report.dto.JasperTemplateDto;
@@ -48,8 +51,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-
-import static org.openlmis.report.i18n.JasperMessageKeys.ERROR_JASPER_TEMPLATE_NOT_FOUND;
 
 @Controller
 @Transactional
@@ -95,16 +96,17 @@ public class JasperTemplateController extends BaseController {
   }
 
   /**
-   * Get all templates.
+   * Get visible templates.
    *
    * @return Templates.
    */
   @RequestMapping(method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public List<JasperTemplateDto> getAllTemplates() {
+  public List<JasperTemplateDto> getVisibleTemplates() {
     permissionService.canViewReports();
-    return JasperTemplateDto.newInstance(jasperTemplateRepository.findAll());
+    // we want to show only visible reports
+    return JasperTemplateDto.newInstance(jasperTemplateRepository.findByVisible(true));
   }
 
   /**
@@ -158,11 +160,17 @@ public class JasperTemplateController extends BaseController {
   public ModelAndView generateReport(
       HttpServletRequest request, @PathVariable("id") UUID templateId,
       @PathVariable("format") String format) throws JasperReportViewException {
-    permissionService.canViewReports();
-
     JasperTemplate template = jasperTemplateRepository.findOne(templateId);
+
     if (template == null) {
       throw new NotFoundMessageException(new Message(ERROR_JASPER_TEMPLATE_NOT_FOUND, templateId));
+    }
+
+    if (isNotFalse(template.getVisible())) {
+      // if template is hidden it means that it is generated from other view than 'report view'
+      // we should not check if user has right to view reports but we should check if user has
+      // required rights assigned to the template
+      permissionService.canViewReports();
     }
 
     List<String> requiredRights = template.getRequiredRights();

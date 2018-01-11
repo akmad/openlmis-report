@@ -15,16 +15,18 @@
 
 package org.openlmis.report.repository;
 
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 import org.openlmis.report.domain.JasperTemplate;
 import org.openlmis.report.domain.JasperTemplateParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
-
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 public class JasperTemplateRepositoryIntegrationTest extends
     BaseCrudRepositoryIntegrationTest<JasperTemplate> {
@@ -42,20 +44,21 @@ public class JasperTemplateRepositoryIntegrationTest extends
   @Override
   protected JasperTemplate generateInstance() {
     JasperTemplate jasperTemplate = new JasperTemplate();
-    jasperTemplate.setName(NAME);
+    jasperTemplate.setName(NAME + getNextInstanceNumber());
     return jasperTemplate;
   }
 
   @Test
   public void shouldFindTemplateByName() {
     // given
-    jasperTemplateRepository.save(generateInstance());
+    JasperTemplate entity = generateInstance();
+    jasperTemplateRepository.save(entity);
 
     // when
-    JasperTemplate found = jasperTemplateRepository.findByName(NAME);
+    JasperTemplate found = jasperTemplateRepository.findByName(entity.getName());
 
     // then
-    assertThat(found.getName(), is(NAME));
+    assertThat(found.getName(), is(entity.getName()));
   }
 
   @Test
@@ -75,4 +78,21 @@ public class JasperTemplateRepositoryIntegrationTest extends
     assertEquals(templateParameter.getTemplate().getId(), result.getId());
   }
 
+  @Test
+  public void shouldFindByVisibilityFlag() {
+    JasperTemplate visibleTemplate = generateInstance();
+    JasperTemplate hiddenTemplate = generateInstance();
+    hiddenTemplate.setVisible(false);
+
+    jasperTemplateRepository.save(visibleTemplate);
+    jasperTemplateRepository.save(hiddenTemplate);
+
+    assertThat(
+        jasperTemplateRepository.findByVisible(true),
+        hasItem(hasProperty("id", is(visibleTemplate.getId()))));
+
+    assertThat(
+        jasperTemplateRepository.findByVisible(false),
+        hasItem(hasProperty("id", is(hiddenTemplate.getId()))));
+  }
 }

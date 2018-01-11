@@ -15,6 +15,8 @@
 
 package org.openlmis.report.service;
 
+import static org.openlmis.report.i18n.PermissionMessageKeys.ERROR_NO_PERMISSION;
+
 import org.openlmis.report.dto.external.ResultDto;
 import org.openlmis.report.dto.external.referencedata.RightDto;
 import org.openlmis.report.dto.external.referencedata.UserDto;
@@ -25,12 +27,10 @@ import org.openlmis.report.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static org.openlmis.report.i18n.PermissionMessageKeys.ERROR_NO_PERMISSION;
-
 @Service
 public class PermissionService {
   static final String REPORT_TEMPLATES_EDIT = "REPORT_TEMPLATES_EDIT";
-  static final String REPORTS_VIEW = "REPORTS_VIEW";
+  public static final String REPORTS_VIEW = "REPORTS_VIEW";
 
   @Autowired
   private AuthenticationHelper authenticationHelper;

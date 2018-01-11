@@ -15,6 +15,18 @@
 
 package org.openlmis.report.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.openlmis.report.service.PermissionService.REPORTS_VIEW;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openlmis.report.domain.JasperTemplate;
@@ -25,6 +37,7 @@ import org.openlmis.report.repository.JasperTemplateRepository;
 import org.openlmis.report.service.JasperReportsViewService;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
 
@@ -38,23 +51,13 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-
 @SuppressWarnings("PMD.TooManyMethods")
 public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationTest {
   private static final String RESOURCE_URL = "/api/reports/templates/common";
   private static final String ID_URL = RESOURCE_URL + "/{id}";
   private static final String FORMAT_PARAM = "format";
   private static final String REPORT_URL = ID_URL + "/{" + FORMAT_PARAM + "}";
+  private static final String PDF_FORMAT = "pdf";
 
   @MockBean
   private JasperTemplateRepository jasperTemplateRepository;
@@ -70,10 +73,10 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
   // GET /api/reports/templates
 
   @Test
-  public void shouldGetAllTemplates() {
+  public void shouldGetVisibleTemplates() {
     // given
     JasperTemplate[] templates = { generateExistentTemplate(), generateExistentTemplate() };
-    given(jasperTemplateRepository.findAll()).willReturn(Arrays.asList(templates));
+    given(jasperTemplateRepository.findByVisible(true)).willReturn(Arrays.asList(templates));
 
     // when
     JasperTemplateDto[] result = restAssured.given()
@@ -177,6 +180,55 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
   // GET /api/reports/templates/{id}/{format}
 
   @Test
+  public void generateReportShouldRejectWhenUserHasNoViewReportsRight() {
+    // given
+    JasperTemplate template = generateExistentTemplate();
+    given(jasperTemplateRepository.findOne(template.getId())).willReturn(template);
+
+    doThrow(mockPermissionException(REPORTS_VIEW)).when(permissionService).canViewReports();
+
+    // when
+    restAssured.given()
+        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .pathParam("id", template.getId())
+        .pathParam(FORMAT_PARAM, PDF_FORMAT)
+        .when()
+        .get(REPORT_URL)
+        .then()
+        .statusCode(HttpStatus.FORBIDDEN.value());
+
+    // then
+    assertThat(RAML_ASSERT_MESSAGE, restAssured.getLastReport(), RamlMatchers.hasNoViolations());
+  }
+
+  @Test
+  public void generateReportShouldNotRejectWhenUserHasNoViewReportsRightAndTemplateIsHidden()
+      throws JasperReportViewException {
+    // given
+    JasperTemplate template = generateExistentTemplate();
+    template.setVisible(false);
+
+    JasperReportsMultiFormatView view = mock(JasperReportsMultiFormatView.class);
+    given(view.getContentDispositionMappings()).willReturn(new Properties());
+
+    given(jasperTemplateRepository.findOne(template.getId())).willReturn(template);
+    given(jasperReportsViewService
+        .getJasperReportsView(eq(template), any(HttpServletRequest.class)))
+        .willReturn(view);
+
+    // when
+    restAssured.given()
+        .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
+        .pathParam("id", template.getId())
+        .pathParam(FORMAT_PARAM, PDF_FORMAT)
+        .when()
+        .get(REPORT_URL)
+        .then()
+        .statusCode(HttpStatus.OK.value());
+  }
+
+  @Test
   public void generateReportShouldReturnNotFoundWhenReportTemplateDoesNotExist() {
     // given
     given(jasperTemplateRepository.findOne(anyUuid())).willReturn(null);
@@ -186,7 +238,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
         .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .pathParam("id", UUID.randomUUID())
-        .pathParam(FORMAT_PARAM, "pdf")
+        .pathParam(FORMAT_PARAM, PDF_FORMAT)
         .when()
         .get(REPORT_URL)
         .then()
@@ -212,7 +264,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
         .header(HttpHeaders.AUTHORIZATION, getTokenHeader())
         .contentType(MediaType.APPLICATION_JSON_VALUE)
         .pathParam("id", template.getId())
-        .pathParam(FORMAT_PARAM, "pdf")
+        .pathParam(FORMAT_PARAM, PDF_FORMAT)
         .when()
         .get(REPORT_URL)
         .then()
@@ -224,7 +276,7 @@ public class JasperTemplateControllerIntegrationTest extends BaseWebIntegrationT
 
   @Test
   public void shouldGenerateReportInPdfFormat() throws JasperReportViewException {
-    testGenerateReportInGivenFormat("application/pdf", "pdf");
+    testGenerateReportInGivenFormat("application/pdf", PDF_FORMAT);
   }
 
   @Test
