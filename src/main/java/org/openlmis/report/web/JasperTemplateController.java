@@ -15,8 +15,6 @@
 
 package org.openlmis.report.web;
 
-import static org.openlmis.report.i18n.JasperMessageKeys.ERROR_JASPER_TEMPLATE_NOT_FOUND;
-
 import org.apache.log4j.Logger;
 import org.openlmis.report.domain.JasperTemplate;
 import org.openlmis.report.dto.JasperTemplateDto;
@@ -50,6 +48,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static org.openlmis.report.i18n.JasperMessageKeys.ERROR_JASPER_TEMPLATE_NOT_FOUND;
 
 @Controller
 @Transactional
@@ -169,12 +169,12 @@ public class JasperTemplateController extends BaseController {
     permissionService.validatePermissions(
         requiredRights.toArray(new String[requiredRights.size()]));
 
-    Map<String, Object> map = jasperTemplateService
-        .mapRequestParametersToTemplate(request, template);
+    Map<String, Object> map = jasperTemplateService.mapRequestParametersToTemplate(
+        request, template
+    );
     map.putAll(jasperTemplateService.mapReportImagesToTemplate(template));
-    map.put("format", format);
 
-    jasperReportsViewService.fillParameters(template.getName(), map);
+    map.put("format", format);
 
     JasperReportsMultiFormatView jasperView = jasperReportsViewService
         .getJasperReportsView(template, request);
