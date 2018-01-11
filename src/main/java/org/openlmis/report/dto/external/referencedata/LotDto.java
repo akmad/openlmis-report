@@ -20,7 +20,6 @@ import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,8 +31,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-public final class LotDto {
+public class LotDto {
   private UUID id;
   private String lotCode;
   private boolean active;

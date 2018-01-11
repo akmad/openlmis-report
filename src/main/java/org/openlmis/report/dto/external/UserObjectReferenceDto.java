@@ -15,17 +15,11 @@
 
 package org.openlmis.report.dto.external;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public final class UserObjectReferenceDto extends ObjectReferenceDto {
   private String username;
 }

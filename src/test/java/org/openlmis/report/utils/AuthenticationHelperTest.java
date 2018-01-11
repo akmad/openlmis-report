@@ -30,15 +30,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.openlmis.report.dto.external.DtoGenerator;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-
 import org.openlmis.report.dto.external.referencedata.RightDto;
 import org.openlmis.report.dto.external.referencedata.UserDto;
 import org.openlmis.report.exception.AuthenticationMessageException;
 import org.openlmis.report.service.referencedata.RightReferenceDataService;
 import org.openlmis.report.service.referencedata.UserReferenceDataService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AuthenticationHelperTest {

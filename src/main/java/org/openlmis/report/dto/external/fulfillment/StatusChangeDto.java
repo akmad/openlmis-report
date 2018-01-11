@@ -19,7 +19,6 @@ package org.openlmis.report.dto.external.fulfillment;
 import org.openlmis.report.dto.external.referencedata.UserDto;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,8 +31,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-public final class StatusChangeDto {
+public class StatusChangeDto {
   private ExternalStatus status;
   private UUID authorId;
   private ZonedDateTime createdDate;

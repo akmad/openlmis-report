@@ -18,7 +18,6 @@ package org.openlmis.report.dto.external.fulfillment;
 import org.openlmis.report.dto.external.ObjectReferenceDto;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,7 +28,6 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 public final class ShipmentLineItemDto {
   private UUID id;
   private ObjectReferenceDto orderable;

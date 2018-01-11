@@ -17,7 +17,6 @@ package org.openlmis.report.dto.external.fulfillment;
 
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,8 +27,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-public final class StatusMessageDto {
+public class StatusMessageDto {
   private UUID id;
   private UUID authorId;
   private ExternalStatus status;

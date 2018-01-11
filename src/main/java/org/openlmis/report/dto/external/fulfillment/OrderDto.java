@@ -15,14 +15,13 @@
 
 package org.openlmis.report.dto.external.fulfillment;
 
-import org.openlmis.report.dto.external.UserObjectReferenceDto;
 import org.openlmis.report.dto.external.referencedata.FacilityDto;
-import org.openlmis.report.dto.external.referencedata.ProcessingPeriodDto;
 import org.openlmis.report.dto.external.referencedata.ProgramDto;
 import org.openlmis.report.dto.external.referencedata.UserDto;
+import org.openlmis.report.dto.external.UserObjectReferenceDto;
+import org.openlmis.report.dto.external.referencedata.ProcessingPeriodDto;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,12 +31,11 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
-public final class OrderDto {
+public class OrderDto {
   private UUID id;
   private UUID externalId;
   private Boolean emergency;

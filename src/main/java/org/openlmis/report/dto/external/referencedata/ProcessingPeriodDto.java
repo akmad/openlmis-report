@@ -15,8 +15,6 @@
 
 package org.openlmis.report.dto.external.referencedata;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,9 +25,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
-public final class ProcessingPeriodDto {
+public class ProcessingPeriodDto {
   private UUID id;
   private ProcessingScheduleDto processingSchedule;
   private String name;
