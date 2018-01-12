@@ -36,7 +36,7 @@ NC0xMzJjNjI2OWRkODc7]]>
             <![CDATA[SELECT DISTINCT
     p.code AS productCode,
     p.fullProductName AS productName,
-    p.netcontent AS dispensingUnit,
+    p.netContent AS dispensingUnit,
     p.packRoundingThreshold AS packRoundingThreshold,
     p.roundToZero AS roundToZero,
     (CASE WHEN c IS NULL THEN '' ELSE (CASE WHEN c.lotId IS NULL THEN 'No Lot Defined' ELSE l.lotCode END) END) AS lotCode,
@@ -133,12 +133,13 @@ WHERE
     <detail>
         <band height="234" splitType="Stretch">
             <componentElement>
-                <reportElement x="0" y="0" width="800" height="230" uuid="3ed81775-a15d-46ea-a953-96bc2e7f9925">
+                <reportElement x="0" y="0" width="802" height="230" uuid="3ed81775-a15d-46ea-a953-96bc2e7f9925">
                     <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
                     <property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
                     <property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
                     <property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
                     <property name="net.sf.jasperreports.export.headertoolbar.table.name" value=""/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
                     <property name="com.jaspersoft.studio.components.autoresize.next" value="true"/>
                     <property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
                 </reportElement>
@@ -146,6 +147,9 @@ WHERE
                     <datasetRun subDataset="ItemDataSource" uuid="3e3c813d-4f5d-4b71-9c92-88b7dbe5ff4c">
                         <datasetParameter name="shipmentDraftId">
                             <datasetParameterExpression><![CDATA[$P{shipmentDraftId}]]></datasetParameterExpression>
+                        </datasetParameter>
+                        <datasetParameter name="ORACLE_REF_CURSOR">
+                            <datasetParameterExpression><![CDATA[$P{ORACLE_REF_CURSOR}]]></datasetParameterExpression>
                         </datasetParameter>
                         <connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
                     </datasetRun>
@@ -171,12 +175,12 @@ WHERE
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30"/>
                     </jr:column>
-                    <jr:column width="100" uuid="7f8193c8-7367-4c12-8bb1-b6619cbc0b16">
+                    <jr:column width="120" uuid="7f8193c8-7367-4c12-8bb1-b6619cbc0b16">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
                         <jr:groupHeader groupName="groupByOrderable">
                             <jr:cell style="Table_TD" height="30" rowSpan="1">
                                 <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                                    <reportElement x="0" y="0" width="100" height="30" uuid="7b88bdca-a6d0-4df1-a611-27bb78f70cb5"/>
+                                    <reportElement x="0" y="0" width="120" height="30" uuid="7b88bdca-a6d0-4df1-a611-27bb78f70cb5"/>
                                     <textElement textAlignment="Center" verticalAlignment="Middle"/>
                                     <textFieldExpression><![CDATA[$F{productName}]]></textFieldExpression>
                                 </textField>
@@ -184,7 +188,7 @@ WHERE
                         </jr:groupHeader>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="cadefb93-93d7-4b2e-8b9a-62b4f2b1bf16"/>
+                                <reportElement x="0" y="0" width="120" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="cadefb93-93d7-4b2e-8b9a-62b4f2b1bf16"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font isBold="true"/>
                                 </textElement>
@@ -193,12 +197,12 @@ WHERE
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30"/>
                     </jr:column>
-                    <jr:column width="100" uuid="ddf1c2de-e3c8-4ceb-af8e-a7ae987db5a9">
+                    <jr:column width="90" uuid="ddf1c2de-e3c8-4ceb-af8e-a7ae987db5a9">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
                         <jr:groupHeader groupName="groupByOrderable">
                             <jr:cell style="Table_TD" height="30" rowSpan="1">
                                 <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                                    <reportElement x="0" y="0" width="100" height="30" uuid="2660edd4-33e8-4f5b-9bec-6756f9f9701a"/>
+                                    <reportElement x="0" y="0" width="90" height="30" uuid="2660edd4-33e8-4f5b-9bec-6756f9f9701a"/>
                                     <textElement textAlignment="Center" verticalAlignment="Middle"/>
                                     <textFieldExpression><![CDATA[$F{dispensingUnit}]]></textFieldExpression>
                                 </textField>
@@ -206,7 +210,7 @@ WHERE
                         </jr:groupHeader>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="c7b3817d-8b7d-41e2-b3cf-6beb51b50376"/>
+                                <reportElement x="0" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="c7b3817d-8b7d-41e2-b3cf-6beb51b50376"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font isBold="true"/>
                                 </textElement>
@@ -237,14 +241,14 @@ WHERE
                             </textField>
                         </jr:detailCell>
                     </jr:column>
-                    <jr:column width="100" uuid="a34c8f74-167d-4f4d-bd4e-8d23c3470550">
+                    <jr:column width="76" uuid="a34c8f74-167d-4f4d-bd4e-8d23c3470550">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
                         <jr:groupHeader groupName="groupByOrderable">
                             <jr:cell style="Table_TD" height="30" rowSpan="1"/>
                         </jr:groupHeader>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="94a27e13-856c-4419-aa8e-1f6ff0c4eab4"/>
+                                <reportElement x="0" y="0" width="76" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="94a27e13-856c-4419-aa8e-1f6ff0c4eab4"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font isBold="true"/>
                                 </textElement>
@@ -253,20 +257,20 @@ WHERE
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                                <reportElement x="0" y="0" width="100" height="30" uuid="b02df90b-8663-4fe7-a569-0c67c75a8f51"/>
+                                <reportElement x="0" y="0" width="76" height="30" uuid="b02df90b-8663-4fe7-a569-0c67c75a8f51"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                                 <textFieldExpression><![CDATA[$F{vvmStatus}]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
-                    <jr:column width="100" uuid="97f20a4a-9dcc-4984-a340-acd2062c348f">
+                    <jr:column width="85" uuid="97f20a4a-9dcc-4984-a340-acd2062c348f">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
                         <jr:groupHeader groupName="groupByOrderable">
                             <jr:cell style="Table_TD" height="30" rowSpan="1"/>
                         </jr:groupHeader>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="5d0efb1b-aa11-497b-96d3-4996a162ee44"/>
+                                <reportElement x="0" y="0" width="85" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="5d0efb1b-aa11-497b-96d3-4996a162ee44"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font isBold="true"/>
                                 </textElement>
@@ -275,20 +279,20 @@ WHERE
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                                <reportElement x="0" y="0" width="100" height="30" uuid="fd8b35bc-d736-4e82-b559-d86e9d933681"/>
+                                <reportElement x="0" y="0" width="85" height="30" uuid="fd8b35bc-d736-4e82-b559-d86e9d933681"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                                 <textFieldExpression><![CDATA[$F{expirationDate}]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
-                    <jr:column width="100" uuid="10c999f4-982c-4232-bf78-0e7c8f804135">
+                    <jr:column width="118" uuid="10c999f4-982c-4232-bf78-0e7c8f804135">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
                         <jr:groupHeader groupName="groupByOrderable">
                             <jr:cell style="Table_TD" height="30" rowSpan="1"/>
                         </jr:groupHeader>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="bd760be6-fbfa-4fe6-9606-7d77ae4c8e2b"/>
+                                <reportElement x="0" y="0" width="118" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="bd760be6-fbfa-4fe6-9606-7d77ae4c8e2b"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font isBold="true"/>
                                 </textElement>
@@ -297,20 +301,20 @@ WHERE
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                                <reportElement x="0" y="0" width="100" height="30" uuid="3b460b8b-a8a2-4375-9761-8b0cf2fd93ae"/>
+                                <reportElement x="0" y="0" width="118" height="30" uuid="3b460b8b-a8a2-4375-9761-8b0cf2fd93ae"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                                 <textFieldExpression><![CDATA[$F{filledQuantityDoses}]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
-                    <jr:column width="100" uuid="9943cf62-0cd5-47b4-a056-e89d8472c5f6">
+                    <jr:column width="113" uuid="9943cf62-0cd5-47b4-a056-e89d8472c5f6">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column8"/>
                         <jr:groupHeader groupName="groupByOrderable">
                             <jr:cell style="Table_TD" height="30" rowSpan="1"/>
                         </jr:groupHeader>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="0a8a4896-6d19-481e-9311-ae94a507d034"/>
+                                <reportElement x="0" y="0" width="113" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="0a8a4896-6d19-481e-9311-ae94a507d034"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font isBold="true"/>
                                 </textElement>
@@ -319,7 +323,7 @@ WHERE
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
-                                <reportElement x="0" y="0" width="100" height="30" uuid="d2ca6dde-2399-4fd0-adbc-f10f317348d3"/>
+                                <reportElement x="0" y="0" width="113" height="30" uuid="d2ca6dde-2399-4fd0-adbc-f10f317348d3"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
                                 <textFieldExpression><![CDATA[$V{filledQuantityVials}]]></textFieldExpression>
                             </textField>
