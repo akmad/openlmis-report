@@ -27,6 +27,7 @@ import org.openlmis.report.dto.external.referencedata.UserDto;
 import org.openlmis.report.exception.AuthenticationMessageException;
 import org.openlmis.report.service.referencedata.RightReferenceDataService;
 import org.openlmis.report.service.referencedata.UserReferenceDataService;
+import java.util.UUID;
 
 @Component
 public class AuthenticationHelper {
@@ -45,12 +46,11 @@ public class AuthenticationHelper {
    * @throws AuthenticationMessageException if user cannot be found.
    */
   public UserDto getCurrentUser() {
-    String username =
-        (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    UserDto user = userReferenceDataService.findUser(username);
+    UUID userId = (UUID) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    UserDto user = userReferenceDataService.findOne(userId);
 
     if (user == null) {
-      throw new AuthenticationMessageException(new Message(ERROR_USER_NOT_FOUND, username));
+      throw new AuthenticationMessageException(new Message(ERROR_USER_NOT_FOUND, userId));
     }
 
     return user;
