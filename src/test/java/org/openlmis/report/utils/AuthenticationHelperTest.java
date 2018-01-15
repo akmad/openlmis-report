@@ -68,7 +68,7 @@ public class AuthenticationHelperTest {
   @Test
   public void shouldReturnUser() {
     // given
-    UserDto userMock = DtoGenerator.of(UserDto.class).getLeft();
+    UserDto userMock = DtoGenerator.of(UserDto.class);
     when(userReferenceDataService.findOne(userId)).thenReturn(userMock);
 
     // when
@@ -90,7 +90,7 @@ public class AuthenticationHelperTest {
   @Test
   public void shouldReturnRight() throws Exception {
     // given
-    RightDto right = DtoGenerator.of(RightDto.class).getLeft();
+    RightDto right = DtoGenerator.of(RightDto.class);
     when(rightReferenceDataService.findRight(anyString())).thenReturn(right);
 
     // when

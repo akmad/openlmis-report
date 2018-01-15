@@ -15,22 +15,18 @@
 
 package org.openlmis.report.dto.external.referencedata;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
-import org.openlmis.report.dto.external.DtoGenerator;
+import org.openlmis.report.dto.external.EqualsVerifierWrapper;
 
 public class GeographicZoneDtoTest {
 
   @Test
   public void equalsContract() {
-    Pair<GeographicZoneDto, GeographicZoneDto> zonePair = DtoGenerator.of(GeographicZoneDto.class);
-
-    EqualsVerifier
+    EqualsVerifierWrapper
         .forClass(GeographicZoneDto.class)
-        .withPrefabValues(GeographicZoneDto.class, zonePair.getLeft(), zonePair.getRight())
+        .withPrefabValue(GeographicZoneDto.class)
         .suppress(Warning.NONFINAL_FIELDS) // fields in dto cannot be final
         .verify();
   }

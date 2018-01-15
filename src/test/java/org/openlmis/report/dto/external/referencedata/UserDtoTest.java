@@ -15,19 +15,13 @@
 
 package org.openlmis.report.dto.external.referencedata;
 
-import static java.util.Collections.emptySet;
-import static java.util.Collections.singleton;
 import static org.junit.Assert.assertEquals;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Before;
 import org.junit.Test;
-import org.openlmis.report.dto.external.DtoGenerator;
-
-import java.util.Set;
+import org.openlmis.report.dto.external.EqualsVerifierWrapper;
 
 public class UserDtoTest {
 
@@ -67,12 +61,9 @@ public class UserDtoTest {
 
   @Test
   public void equalsContract() {
-    Pair<RoleAssignmentDto, RoleAssignmentDto> assignmentPair = DtoGenerator
-        .of(RoleAssignmentDto.class);
-
-    EqualsVerifier
+    EqualsVerifierWrapper
         .forClass(UserDto.class)
-        .withPrefabValues(Set.class, emptySet(), singleton(assignmentPair.getLeft()))
+        .withPrefabSet(RoleAssignmentDto.class)
         .suppress(Warning.NONFINAL_FIELDS) // fields in dto cannot be final
         .verify();
   }

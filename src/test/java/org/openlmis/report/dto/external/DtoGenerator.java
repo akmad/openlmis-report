@@ -15,15 +15,17 @@
 
 package org.openlmis.report.dto.external;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import org.assertj.core.util.Lists;
 
 import java.beans.PropertyDescriptor;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -31,23 +33,31 @@ import java.util.Set;
 import java.util.UUID;
 
 public final class DtoGenerator {
-  private static Map<Class<?>, Pair> REFERENCES = new HashMap<>();
+  private static Multimap<Class, Object> REFERENCES = HashMultimap.create();
   private static final Random RANDOM = new Random();
 
   private DtoGenerator() {
     throw new UnsupportedOperationException();
   }
 
-  public static <T> Pair<T, T> of(Class<T> clazz) {
-    return (Pair<T, T>) REFERENCES.computeIfAbsent(clazz, DtoGenerator::generatePair);
+  public static <T> T of(Class<T> clazz) {
+    return of(clazz, 1).get(0);
   }
 
-  private static <T> ImmutablePair<T, T> generatePair(Class<T> clazz) {
-    return new ImmutablePair<>(generate(clazz), generate(clazz));
+  public static <T> List<T> of(Class<T> clazz, int count) {
+    while (REFERENCES.get(clazz).size() < count) {
+      generate(clazz);
+    }
+
+    @SuppressWarnings("unchecked")
+    // the map is update in private method where key and values has the same type
+    // because values are generated from the passed class definition.
+    Collection<T> collection = (Collection<T>) REFERENCES.get(clazz);
+    return Lists.newArrayList(collection);
   }
 
-  private static <T> T generate(Class<T> clazz) {
-    T instance;
+  private static void generate(Class clazz) {
+    Object instance;
 
     try {
       instance = clazz.newInstance();
@@ -70,7 +80,7 @@ public final class DtoGenerator {
       }
     }
 
-    return instance;
+    REFERENCES.put(clazz, instance);
   }
 
   private static Object generateValue(Class<?> type, Class<?> propertyType) {
@@ -87,7 +97,7 @@ public final class DtoGenerator {
       return null;
     }
 
-    return of(propertyType).getLeft();
+    return of(propertyType);
   }
 
   private static Object generateCollectionValue(Class<?> propertyType) {
