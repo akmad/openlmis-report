@@ -40,6 +40,9 @@ public final class EqualsVerifierWrapper<T> {
     return this;
   }
 
+  /**
+   * Adds prefabricated set.
+   */
   public <S> EqualsVerifierWrapper<T> withPrefabSet(Class<S> setType) {
     Set<S> left = emptySet();
     Set<S> right = singleton(DtoGenerator.of(setType));
@@ -48,6 +51,9 @@ public final class EqualsVerifierWrapper<T> {
     return this;
   }
 
+  /**
+   * Adds prefabricated value.
+   */
   public <S> EqualsVerifierWrapper<T> withPrefabValue(Class<S> otherType) {
     List<S> list = DtoGenerator.of(otherType, 2);
     verifier = verifier.withPrefabValues(otherType, list.get(0), list.get(1));

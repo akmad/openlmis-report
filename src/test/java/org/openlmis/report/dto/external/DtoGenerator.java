@@ -44,6 +44,10 @@ public final class DtoGenerator {
     return of(clazz, 1).get(0);
   }
 
+  /**
+   * Creates a list of instances with the given type. The list size will be equal to the number
+   * in the <strong>count</strong> parameter.
+   */
   public static <T> List<T> of(Class<T> clazz, int count) {
     while (REFERENCES.get(clazz).size() < count) {
       generate(clazz);
