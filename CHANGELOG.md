@@ -4,6 +4,9 @@
 New functionality added in a backwards-compatible manner::
 * [OLMIS-239](https://openlmis.atlassian.net/browse/OLMIS-239): Add possibility to generate Pick Pack List report.
 
+Bug fixes added in a backwards-compatible manner::
+* [OLMIS-3778](https://openlmis.atlassian.net/browse/OLMIS-3778): Fixed service checks the rights of a wrong user
+
 1.0.0 / 2017-09-01
 ==================
 
