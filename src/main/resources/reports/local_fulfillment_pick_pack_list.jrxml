@@ -77,6 +77,14 @@ ORDER BY
         <variable name="filledQuantityVials" class="java.lang.Long">
             <variableExpression><![CDATA[$F{filledQuantityDividedQuantity} == 0 && $F{roundToZero} == false ? $V{filledQuantityVials0} + 1 : $V{filledQuantityVials0}]]></variableExpression>
         </variable>
+        <variable name="sumFilledQuantityDoses" class="java.lang.Long" resetType="Group" resetGroup="groupByOrderable" calculation="Sum">
+            <variableExpression><![CDATA[$F{filledQuantityDoses}]]></variableExpression>
+            <initialValueExpression><![CDATA[0L]]></initialValueExpression>
+        </variable>
+        <variable name="sumFilledQuantityVials" class="java.lang.Long" resetType="Group" resetGroup="groupByOrderable" calculation="Sum">
+            <variableExpression><![CDATA[$V{filledQuantityVials}]]></variableExpression>
+            <initialValueExpression><![CDATA[0L]]></initialValueExpression>
+        </variable>
         <group name="groupByOrderable">
             <groupExpression><![CDATA[$F{productCode} + $F{productName} + $F{dispensingUnit}]]></groupExpression>
         </group>
@@ -288,7 +296,13 @@ WHERE
                     <jr:column width="118" uuid="10c999f4-982c-4232-bf78-0e7c8f804135">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
                         <jr:groupHeader groupName="groupByOrderable">
-                            <jr:cell style="Table_TD" height="30" rowSpan="1"/>
+                            <jr:cell style="Table_TD" height="30" rowSpan="1">
+                                <textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="groupByOrderable" isBlankWhenNull="false">
+                                    <reportElement x="0" y="0" width="118" height="30" uuid="6d516c5b-b365-4b28-9936-454f6bedd6bc"/>
+                                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                    <textFieldExpression><![CDATA[$V{sumFilledQuantityDoses} == null ? 0 : $V{sumFilledQuantityDoses}]]></textFieldExpression>
+                                </textField>
+                            </jr:cell>
                         </jr:groupHeader>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
@@ -310,7 +324,13 @@ WHERE
                     <jr:column width="113" uuid="9943cf62-0cd5-47b4-a056-e89d8472c5f6">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column8"/>
                         <jr:groupHeader groupName="groupByOrderable">
-                            <jr:cell style="Table_TD" height="30" rowSpan="1"/>
+                            <jr:cell style="Table_TD" height="30" rowSpan="1">
+                                <textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="groupByOrderable" isBlankWhenNull="false">
+                                    <reportElement x="0" y="0" width="113" height="30" uuid="03ae313b-12e8-4a85-8416-d0ddb9092574"/>
+                                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                    <textFieldExpression><![CDATA[$V{sumFilledQuantityVials} == null ? 0 : $V{sumFilledQuantityVials}]]></textFieldExpression>
+                                </textField>
+                            </jr:cell>
                         </jr:groupHeader>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
