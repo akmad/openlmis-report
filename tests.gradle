@@ -38,8 +38,4 @@ task integrationTest(type: Test) {
     environment 'BASE_URL', "http://localhost"
 }
 
-integrationTest {
-    dependsOn ramlToSwagger
-}
-
 project.tasks["sonarqube"].dependsOn integrationTest
