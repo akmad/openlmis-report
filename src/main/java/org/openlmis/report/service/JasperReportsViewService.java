@@ -21,26 +21,30 @@ import static org.openlmis.report.i18n.JasperMessageKeys.ERROR_JASPER_FILE_CREAT
 import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_CLASS_NOT_FOUND;
 import static org.openlmis.report.i18n.ReportingMessageKeys.ERROR_REPORTING_IO;
 
-import net.sf.jasperreports.engine.JasperReport;
-
-import org.openlmis.report.domain.JasperTemplate;
-import org.openlmis.report.exception.JasperReportViewException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
+import net.sf.jasperreports.engine.JasperReport;
+import org.openlmis.report.domain.JasperTemplate;
+import org.openlmis.report.exception.JasperReportViewException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.servlet.view.jasperreports.AbstractJasperReportsView;
+import org.springframework.web.servlet.view.jasperreports.JasperReportsCsvView;
+import org.springframework.web.servlet.view.jasperreports.JasperReportsMultiFormatView;
+import org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView;
+import org.springframework.web.servlet.view.jasperreports.JasperReportsXlsView;
+import org.springframework.web.servlet.view.jasperreports.JasperReportsXlsxView;
 
 @Service
 public class JasperReportsViewService {
@@ -60,12 +64,16 @@ public class JasperReportsViewService {
   public JasperReportsMultiFormatView getJasperReportsView(
       JasperTemplate jasperTemplate, HttpServletRequest request) throws JasperReportViewException {
     JasperReportsMultiFormatView jasperView = new JasperReportsMultiFormatView();
+
+    setFormatMappings(jasperView);
+
     jasperView.setUrl(getReportUrlForReportData(jasperTemplate));
     jasperView.setJdbcDataSource(replicationDataSource);
 
     if (getApplicationContext(request) != null) {
       jasperView.setApplicationContext(getApplicationContext(request));
     }
+
     return jasperView;
   }
 
@@ -75,6 +83,16 @@ public class JasperReportsViewService {
   public WebApplicationContext getApplicationContext(HttpServletRequest servletRequest) {
     ServletContext servletContext = servletRequest.getSession().getServletContext();
     return WebApplicationContextUtils.getWebApplicationContext(servletContext);
+  }
+
+  private void setFormatMappings(JasperReportsMultiFormatView jasperView) {
+    Map<String, Class<? extends AbstractJasperReportsView>> formatMappings = new HashMap<>();
+    formatMappings.put("csv", JasperReportsCsvView.class);
+    formatMappings.put("html", JasperReportsHtmlView.class);
+    formatMappings.put("pdf", JasperReportsPdfView.class);
+    formatMappings.put("xls", JasperReportsXlsView.class);
+    formatMappings.put("xlsx", JasperReportsXlsxView.class);
+    jasperView.setFormatMappings(formatMappings);
   }
 
   /**
