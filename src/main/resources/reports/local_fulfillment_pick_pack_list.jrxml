@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2018-02-21T17:25:53 -->
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LocalFulfillmentPickPackList" pageWidth="842" pageHeight="595" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="be52f660-1499-4fdb-bac0-fa964fc1e938">
     <property name="com.jaspersoft.studio.data.sql.tables">
         <![CDATA[ZnVsZmlsbG1lbnQuc2hpcG1lbnRfZHJhZnRzICwxNSwxNSw3MWEyZDQzYi1mZGE2LTQwZjQtYmU0
@@ -19,13 +18,19 @@ NC0xMzJjNjI2OWRkODc7]]>
     <property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="209"/>
     <import value="java.time.LocalDate"/>
     <import value="java.time.format.DateTimeFormatter"/>
-    <style name="Table_CH" mode="Opaque" backcolor="#333333">
+    <style name="table_header" mode="Opaque" backcolor="#333333">
         <box>
             <topPen lineWidth="0.5" lineColor="#000000"/>
             <bottomPen lineWidth="0.5" lineColor="#000000"/>
         </box>
     </style>
-    <style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+    <style name="table_content" mode="Opaque" backcolor="#FFFFFF">
+        <box>
+            <topPen lineWidth="0.5" lineColor="#000000"/>
+            <bottomPen lineWidth="0.5" lineColor="#000000"/>
+        </box>
+    </style>
+    <style name="table_group" mode="Opaque" backcolor="#DDDDDD">
         <box>
             <topPen lineWidth="0.5" lineColor="#000000"/>
             <bottomPen lineWidth="0.5" lineColor="#000000"/>
@@ -33,61 +38,114 @@ NC0xMzJjNjI2OWRkODc7]]>
     </style>
     <subDataset name="ItemDataSource" uuid="2914f7c6-c2d7-448b-b0c1-090970e18ed6">
         <parameter name="shipmentDraftId" class="java.lang.String"/>
-        <queryString language="plsql">
-            <![CDATA[(SELECT DISTINCT
-    p.code AS productCode,
-    p.fullProductName AS productName,
-    p.netContent AS netContent,
-    (CASE WHEN c IS NULL THEN '' ELSE (CASE WHEN c.lotId IS NULL THEN 'No Lot Defined' ELSE l.lotCode END) END) AS lotCode,
-    l.expirationDate AS expirationDate,
-    cli.vvmStatus AS vvmStatus,
-    dli.quantityShipped AS filledQuantity
+        <queryString language="SQL">
+            <![CDATA[SELECT DISTINCT
+  order_orderable.code                  AS orderProductCode,
+  order_orderable.fullproductname       AS orderProductName,
+  orderable.code                        AS productCode,
+  orderable.fullproductname             AS productName,
+  orderable.netContent                  AS netContent,
+  shipment_li.quantityshipped           AS filledQuantity,
+  lot.lotcode                           AS lotCode,
+  lot.expirationDate                    AS expirationDate,
+  stock_card_li.extraData->>'vvmStatus' AS vvmStatus
 FROM
-    fulfillment.orders AS o
-    INNER JOIN fulfillment.order_line_items AS oli ON o.id = oli.orderId
-    INNER JOIN referencedata.orderables AS p ON p.id = oli.orderableId
-    INNER JOIN fulfillment.shipment_drafts AS d ON d.orderId = o.id
-    INNER JOIN fulfillment.shipment_draft_line_items AS dli ON (d.id = dli.shipmentDraftId AND dli.orderableId = oli.orderableId)
-    LEFT OUTER JOIN stockmanagement.stock_cards AS c ON (c.facilityId = o.supplyingFacilityId AND c.programId = o.programId)
-    LEFT OUTER JOIN (SELECT id, extraData->>'vvmStatus' AS vvmStatus, quantity, stockCardId, reasonId FROM stockmanagement.stock_card_line_items) AS cli ON cli.stockCardId = c.id
-    LEFT OUTER JOIN referencedata.lots AS l ON (c.lotId = l.id AND dli.lotId = l.id)
+  fulfillment.shipment_drafts shipment
+  JOIN
+  fulfillment.orders ord
+    ON ord.id = shipment.orderid
+  JOIN
+  fulfillment.shipment_draft_line_items shipment_li
+    ON shipment_li.shipmentdraftid = shipment.id
+  JOIN
+  referencedata.orderables orderable
+    ON orderable.id = shipment_li.orderableid
+  JOIN
+  referencedata.dispensables dispensable
+    ON dispensable.id = orderable.dispensableid
+  LEFT JOIN referencedata.orderable_identifiers shipment_orderable_identifier ON orderable.id = shipment_orderable_identifier.orderableid
+                                                       AND (shipment_orderable_identifier.key = 'tradeItem' OR shipment_orderable_identifier.key = 'commodityType')
+  LEFT JOIN
+  fulfillment.order_line_items order_li
+    ON order_li.orderid = ord.id AND (shipment_li.orderableid = order_li.orderableid OR order_li.orderableid IN
+    (
+      SELECT
+        o.id
+      FROM
+        referencedata.orderables o
+        LEFT JOIN
+        referencedata.orderable_identifiers order_orderable_identifier
+          ON o.id = order_orderable_identifier.orderableid
+             AND (order_orderable_identifier.key = 'tradeItem' OR order_orderable_identifier.key = 'commodityType')
+        LEFT JOIN
+        referencedata.trade_item_classifications trade_item_classification
+          ON trade_item_classification.tradeitemid = order_orderable_identifier.value::uuid
+        LEFT JOIN
+        referencedata.commodity_types commodity_type
+          ON order_orderable_identifier.value::uuid = commodity_type.id
+             OR (commodity_type.classificationid = trade_item_classification.classificationid AND commodity_type.classificationsystem = trade_item_classification.classificationsystem)
+        LEFT JOIN
+        referencedata.trade_items trade_item
+          ON order_orderable_identifier.value::uuid = trade_item.id
+             OR EXISTS
+             (
+                 SELECT
+                   1
+                 FROM
+                   referencedata.trade_item_classifications trade_item_classification
+                 WHERE
+                   trade_item_classification.tradeitemid = trade_item.id
+                   AND trade_item_classification.classificationid = commodity_type.classificationid
+                   AND trade_item_classification.classificationsystem = commodity_type.classificationsystem
+             )
+      WHERE
+        NOT EXISTS
+        (
+            SELECT
+              1
+            FROM
+              referencedata.dispensable_attributes orderer_dispensable_attribute
+              JOIN
+              referencedata.dispensable_attributes shipment_dispensable_attribute
+                ON shipment_dispensable_attribute.dispensableid = dispensable.id
+            WHERE
+              orderer_dispensable_attribute.dispensableid = o.dispensableid
+              AND orderer_dispensable_attribute.key = shipment_dispensable_attribute.key
+              AND orderer_dispensable_attribute.value <> shipment_dispensable_attribute.value
+        )
+        AND (shipment_orderable_identifier.value::uuid = trade_item.id OR shipment_orderable_identifier.value::uuid = commodity_type.id)
+    ))
+  LEFT JOIN
+  referencedata.lots lot
+    ON shipment_li.lotid = lot.id
+  LEFT JOIN
+  referencedata.orderables order_orderable
+    ON order_orderable.id = order_li.orderableid
+  LEFT JOIN
+  stockmanagement.stock_cards stock_card
+    ON (stock_card.facilityId = ord.supplyingFacilityId AND stock_card.programId = ord.programId AND shipment_li.orderableId = stock_card.orderableId AND ((shipment_li.lotId IS NULL AND stock_card.lotId IS NULL) OR shipment_li.lotId = stock_card.lotId))
+  LEFT JOIN
+  stockmanagement.stock_card_line_items stock_card_li
+    ON stock_card_li.stockCardId = stock_card.id
 WHERE
-    dli.orderableId = c.orderableId AND ((dli.lotId IS NULL AND c.lotId IS NULL) OR dli.lotId = c.lotId)
-    AND cli.id IN (
-        SELECT id
-        FROM stockmanagement.stock_card_line_items
-        WHERE stockCardId = c.id
-        ORDER BY occurredDate DESC NULLS LAST, processedDate DESC NULLS LAST
-        LIMIT 1)
-    AND d.id = $P{shipmentDraftId}::uuid)
-UNION
-(SELECT DISTINCT
-    p.code AS productCode,
-    p.fullProductName AS productName,
-    p.netContent AS netContent,
-    NULL AS lotCode,
-    NULL::date AS expirationDate,
-    NULL AS vvmStatus,
-    0 AS filledQuantity
-FROM
-    fulfillment.shipment_drafts AS d
-    INNER JOIN fulfillment.shipment_draft_line_items AS dli ON d.id = dli.shipmentDraftId
-    INNER JOIN fulfillment.orders AS o ON d.orderId = o.id
-    INNER JOIN fulfillment.order_line_items AS oli ON o.id = oli.orderId
-    INNER JOIN referencedata.orderables AS p ON p.id = oli.orderableId
-WHERE
-    oli.orderableId NOT IN (
-        SELECT orderableId
-        FROM fulfillment.shipment_draft_line_items
-        WHERE shipmentDraftId = d.id)
-    AND d.id = $P{shipmentDraftId}::uuid)
+  shipment.id = $P{shipmentDraftId}::uuid
+  AND stock_card_li.id IN
+  (SELECT id
+   FROM stockmanagement.stock_card_line_items
+   WHERE stockCardId = stock_card.id
+   ORDER BY occurredDate DESC NULLS LAST, processedDate DESC NULLS LAST
+   LIMIT 1)
 ORDER BY
-    productCode ASC,
-    vvmStatus DESC NULLS LAST,
-    expirationDate ASC NULLS LAST]]>
+  orderProductCode ASC,
+  productCode ASC,
+  expirationDate ASC NULLS FIRST,
+  vvmStatus DESC NULLS LAST,
+  lotCode DESC]]>
         </queryString>
         <field name="productCode" class="java.lang.String"/>
         <field name="productName" class="java.lang.String"/>
+        <field name="orderProductCode" class="java.lang.String"/>
+        <field name="orderProductName" class="java.lang.String"/>
         <field name="netContent" class="java.lang.Long"/>
         <field name="lotCode" class="java.lang.String"/>
         <field name="expirationDate" class="java.lang.String"/>
@@ -96,16 +154,19 @@ ORDER BY
         <variable name="filledQuantityDoses" class="java.lang.Long">
             <variableExpression><![CDATA[$F{filledQuantity} * $F{netContent}]]></variableExpression>
         </variable>
-        <variable name="sumFilledQuantityDoses" class="java.lang.Long" resetType="Group" resetGroup="groupByOrderable" calculation="Sum">
+        <variable name="sumFilledQuantityDoses" class="java.lang.Long" resetType="Group" resetGroup="ProductGroup" calculation="Sum">
             <variableExpression><![CDATA[$V{filledQuantityDoses}]]></variableExpression>
             <initialValueExpression><![CDATA[0L]]></initialValueExpression>
         </variable>
-        <variable name="sumFilledQuantity" class="java.lang.Long" resetType="Group" resetGroup="groupByOrderable" calculation="Sum">
+        <variable name="sumFilledQuantity" class="java.lang.Long" resetType="Group" resetGroup="ProductGroup" calculation="Sum">
             <variableExpression><![CDATA[$F{filledQuantity}]]></variableExpression>
             <initialValueExpression><![CDATA[0L]]></initialValueExpression>
         </variable>
-        <group name="groupByOrderable" keepTogether="true">
-            <groupExpression><![CDATA[$F{productCode} + $F{productName}]]></groupExpression>
+        <group name="OrderProductGroup" keepTogether="true">
+            <groupExpression><![CDATA[$F{orderProductName}]]></groupExpression>
+        </group>
+        <group name="ProductGroup" keepTogether="true">
+            <groupExpression><![CDATA[$F{productName}]]></groupExpression>
         </group>
     </subDataset>
     <parameter name="shipmentDraftId" class="java.lang.String">
@@ -163,8 +224,8 @@ WHERE
                 <reportElement x="0" y="0" width="802" height="230" uuid="3ed81775-a15d-46ea-a953-96bc2e7f9925">
                     <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
                     <property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
-                    <property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
-                    <property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+                    <property name="com.jaspersoft.studio.table.style.column_header" value="table_header"/>
+                    <property name="com.jaspersoft.studio.table.style.detail" value="table_content"/>
                     <property name="net.sf.jasperreports.export.headertoolbar.table.name" value=""/>
                     <property name="com.jaspersoft.studio.unit.width" value="px"/>
                     <property name="com.jaspersoft.studio.components.autoresize.next" value="true"/>
@@ -175,15 +236,20 @@ WHERE
                         <datasetParameter name="shipmentDraftId">
                             <datasetParameterExpression><![CDATA[$P{shipmentDraftId}]]></datasetParameterExpression>
                         </datasetParameter>
-                        <datasetParameter name="ORACLE_REF_CURSOR">
-                            <datasetParameterExpression><![CDATA[$P{ORACLE_REF_CURSOR}]]></datasetParameterExpression>
-                        </datasetParameter>
-                        <connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
                     </datasetRun>
                     <jr:column width="135" uuid="7ee4e17a-ab48-4493-b9c3-497b7966888c">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
-                        <jr:groupHeader groupName="groupByOrderable">
-                            <jr:cell style="Table_TD" height="30" rowSpan="1">
+                        <jr:groupHeader groupName="OrderProductGroup">
+                            <jr:cell style="table_group" height="30" rowSpan="1">
+                                <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                                    <reportElement x="0" y="0" width="135" height="30" uuid="5a7dd806-3246-11e8-b467-0ed5f89f718b"/>
+                                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                    <textFieldExpression><![CDATA[$F{orderProductCode}]]></textFieldExpression>
+                                </textField>
+                            </jr:cell>
+                        </jr:groupHeader>
+                        <jr:groupHeader groupName="ProductGroup">
+                            <jr:cell style="table_content" height="30" rowSpan="1">
                                 <textField isStretchWithOverflow="true" isBlankWhenNull="true">
                                     <reportElement x="0" y="0" width="135" height="30" uuid="4cfcf24b-a136-4f79-bf14-c772454a3955"/>
                                     <textElement textAlignment="Center" verticalAlignment="Middle"/>
@@ -191,7 +257,7 @@ WHERE
                                 </textField>
                             </jr:cell>
                         </jr:groupHeader>
-                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                        <jr:columnHeader style="table_header" height="30" rowSpan="1">
                             <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
                             <staticText>
                                 <reportElement x="0" y="0" width="135" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="667ec2de-e77a-4213-9f11-f475da2ad346"/>
@@ -201,12 +267,21 @@ WHERE
                                 <text><![CDATA[Product Code]]></text>
                             </staticText>
                         </jr:columnHeader>
-                        <jr:detailCell style="Table_TD" height="30"/>
+                        <jr:detailCell style="table_content" height="30"/>
                     </jr:column>
                     <jr:column width="150" uuid="7f8193c8-7367-4c12-8bb1-b6619cbc0b16">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
-                        <jr:groupHeader groupName="groupByOrderable">
-                            <jr:cell style="Table_TD" height="30" rowSpan="1">
+                        <jr:groupHeader groupName="OrderProductGroup">
+                            <jr:cell style="table_group" height="30" rowSpan="1">
+                                <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                                    <reportElement x="0" y="0" width="150" height="30" uuid="5569596c-3246-11e8-b467-0ed5f89f718b"/>
+                                    <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                                    <textFieldExpression><![CDATA[$F{orderProductName}]]></textFieldExpression>
+                                </textField>
+                            </jr:cell>
+                        </jr:groupHeader>
+                        <jr:groupHeader groupName="ProductGroup">
+                            <jr:cell style="table_content" height="30" rowSpan="1">
                                 <textField isStretchWithOverflow="true" isBlankWhenNull="true">
                                     <reportElement x="0" y="0" width="150" height="30" uuid="7b88bdca-a6d0-4df1-a611-27bb78f70cb5"/>
                                     <textElement textAlignment="Center" verticalAlignment="Middle"/>
@@ -214,7 +289,7 @@ WHERE
                                 </textField>
                             </jr:cell>
                         </jr:groupHeader>
-                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                        <jr:columnHeader style="table_header" height="30" rowSpan="1">
                             <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
                             <staticText>
                                 <reportElement x="0" y="0" width="150" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="cadefb93-93d7-4b2e-8b9a-62b4f2b1bf16"/>
@@ -224,14 +299,17 @@ WHERE
                                 <text><![CDATA[Product]]></text>
                             </staticText>
                         </jr:columnHeader>
-                        <jr:detailCell style="Table_TD" height="30"/>
+                        <jr:detailCell style="table_content" height="30"/>
                     </jr:column>
                     <jr:column width="105" uuid="98f61f55-b615-4a1c-b204-bc4e69525227">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
-                        <jr:groupHeader groupName="groupByOrderable">
-                            <jr:cell style="Table_TD" height="30" rowSpan="1"/>
+                        <jr:groupHeader groupName="OrderProductGroup">
+                            <jr:cell style="table_group" height="30" rowSpan="1"/>
                         </jr:groupHeader>
-                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                        <jr:groupHeader groupName="ProductGroup">
+                            <jr:cell style="table_content" height="30" rowSpan="1"/>
+                        </jr:groupHeader>
+                        <jr:columnHeader style="table_header" height="30" rowSpan="1">
                             <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
                             <staticText>
                                 <reportElement x="0" y="0" width="105" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="b722ec2b-7798-4553-ad19-d2ead3109a6b"/>
@@ -241,20 +319,23 @@ WHERE
                                 <text><![CDATA[Lot Code]]></text>
                             </staticText>
                         </jr:columnHeader>
-                        <jr:detailCell style="Table_TD" height="30">
+                        <jr:detailCell style="table_content" height="30">
                             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
                                 <reportElement x="0" y="0" width="105" height="30" uuid="a5963f2f-d12f-4ad7-9ad4-8fd54205754b"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
-                                <textFieldExpression><![CDATA[$F{lotCode}]]></textFieldExpression>
+                                <textFieldExpression><![CDATA[($F{lotCode} == null) ? "No Lot Defined" : $F{lotCode}]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
                     <jr:column width="76" uuid="a34c8f74-167d-4f4d-bd4e-8d23c3470550">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
-                        <jr:groupHeader groupName="groupByOrderable">
-                            <jr:cell style="Table_TD" height="30" rowSpan="1"/>
+                        <jr:groupHeader groupName="OrderProductGroup">
+                            <jr:cell style="table_group" height="30" rowSpan="1"/>
                         </jr:groupHeader>
-                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                        <jr:groupHeader groupName="ProductGroup">
+                            <jr:cell style="table_content" height="30" rowSpan="1"/>
+                        </jr:groupHeader>
+                        <jr:columnHeader style="table_header" height="30" rowSpan="1">
                             <staticText>
                                 <reportElement x="0" y="0" width="76" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="94a27e13-856c-4419-aa8e-1f6ff0c4eab4"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
@@ -263,7 +344,7 @@ WHERE
                                 <text><![CDATA[VVM Status]]></text>
                             </staticText>
                         </jr:columnHeader>
-                        <jr:detailCell style="Table_TD" height="30">
+                        <jr:detailCell style="table_content" height="30">
                             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
                                 <reportElement x="0" y="0" width="76" height="30" uuid="b02df90b-8663-4fe7-a569-0c67c75a8f51"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
@@ -273,10 +354,13 @@ WHERE
                     </jr:column>
                     <jr:column width="90" uuid="97f20a4a-9dcc-4984-a340-acd2062c348f">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
-                        <jr:groupHeader groupName="groupByOrderable">
-                            <jr:cell style="Table_TD" height="30" rowSpan="1"/>
+                        <jr:groupHeader groupName="OrderProductGroup">
+                            <jr:cell style="table_group" height="30" rowSpan="1"/>
                         </jr:groupHeader>
-                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                        <jr:groupHeader groupName="ProductGroup">
+                            <jr:cell style="table_content" height="30" rowSpan="1"/>
+                        </jr:groupHeader>
+                        <jr:columnHeader style="table_header" height="30" rowSpan="1">
                             <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
                             <staticText>
                                 <reportElement x="0" y="0" width="90" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="5d0efb1b-aa11-497b-96d3-4996a162ee44"/>
@@ -286,7 +370,7 @@ WHERE
                                 <text><![CDATA[Expiry Date]]></text>
                             </staticText>
                         </jr:columnHeader>
-                        <jr:detailCell style="Table_TD" height="30">
+                        <jr:detailCell style="table_content" height="30">
                             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
                                 <reportElement x="0" y="0" width="90" height="30" uuid="fd8b35bc-d736-4e82-b559-d86e9d933681"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
@@ -296,16 +380,19 @@ WHERE
                     </jr:column>
                     <jr:column width="123" uuid="10c999f4-982c-4232-bf78-0e7c8f804135">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
-                        <jr:groupHeader groupName="groupByOrderable">
-                            <jr:cell style="Table_TD" height="30" rowSpan="1">
-                                <textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="groupByOrderable" isBlankWhenNull="false">
+                        <jr:groupHeader groupName="OrderProductGroup">
+                            <jr:cell style="table_group" height="30" rowSpan="1"/>
+                        </jr:groupHeader>
+                        <jr:groupHeader groupName="ProductGroup">
+                            <jr:cell style="table_content" height="30" rowSpan="1">
+                                <textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="ProductGroup" isBlankWhenNull="false">
                                     <reportElement x="0" y="0" width="123" height="30" uuid="6d516c5b-b365-4b28-9936-454f6bedd6bc"/>
                                     <textElement textAlignment="Center" verticalAlignment="Middle"/>
                                     <textFieldExpression><![CDATA[$V{sumFilledQuantityDoses} == null ? 0 : $V{sumFilledQuantityDoses}]]></textFieldExpression>
                                 </textField>
                             </jr:cell>
                         </jr:groupHeader>
-                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                        <jr:columnHeader style="table_header" height="30" rowSpan="1">
                             <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
                             <staticText>
                                 <reportElement x="0" y="0" width="123" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="bd760be6-fbfa-4fe6-9606-7d77ae4c8e2b"/>
@@ -315,7 +402,7 @@ WHERE
                                 <text><![CDATA[Fill Quantity (doses)]]></text>
                             </staticText>
                         </jr:columnHeader>
-                        <jr:detailCell style="Table_TD" height="30">
+                        <jr:detailCell style="table_content" height="30">
                             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
                                 <reportElement x="0" y="0" width="123" height="30" uuid="3b460b8b-a8a2-4375-9761-8b0cf2fd93ae"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
@@ -325,16 +412,19 @@ WHERE
                     </jr:column>
                     <jr:column width="123" uuid="9943cf62-0cd5-47b4-a056-e89d8472c5f6">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Column8"/>
-                        <jr:groupHeader groupName="groupByOrderable">
-                            <jr:cell style="Table_TD" height="30" rowSpan="1">
-                                <textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="groupByOrderable" isBlankWhenNull="false">
+                        <jr:groupHeader groupName="OrderProductGroup">
+                            <jr:cell style="table_group" height="30" rowSpan="1"/>
+                        </jr:groupHeader>
+                        <jr:groupHeader groupName="ProductGroup">
+                            <jr:cell style="table_content" height="30" rowSpan="1">
+                                <textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="ProductGroup" isBlankWhenNull="false">
                                     <reportElement x="0" y="0" width="123" height="30" uuid="03ae313b-12e8-4a85-8416-d0ddb9092574"/>
                                     <textElement textAlignment="Center" verticalAlignment="Middle"/>
                                     <textFieldExpression><![CDATA[$V{sumFilledQuantity} == null ? 0 : $V{sumFilledQuantity}]]></textFieldExpression>
                                 </textField>
                             </jr:cell>
                         </jr:groupHeader>
-                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                        <jr:columnHeader style="table_header" height="30" rowSpan="1">
                             <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
                             <staticText>
                                 <reportElement x="0" y="0" width="123" height="30" forecolor="#FFFFFF" backcolor="#000000" uuid="0a8a4896-6d19-481e-9311-ae94a507d034"/>
@@ -344,7 +434,7 @@ WHERE
                                 <text><![CDATA[Fill Quantity (vials)]]></text>
                             </staticText>
                         </jr:columnHeader>
-                        <jr:detailCell style="Table_TD" height="30">
+                        <jr:detailCell style="table_content" height="30">
                             <textField isStretchWithOverflow="true" isBlankWhenNull="true">
                                 <reportElement x="0" y="0" width="123" height="30" uuid="d2ca6dde-2399-4fd0-adbc-f10f317348d3"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle"/>
