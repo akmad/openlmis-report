@@ -15,33 +15,24 @@
 
 package org.openlmis.report.service;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.export.HtmlExporter;
-import org.springframework.web.servlet.view.jasperreports.AbstractJasperReportsSingleFormatView;
+import org.junit.Test;
 
-/**
- * Implementation of {@code AbstractJasperReportsSingleFormatView}
- * that renders report results in HTML format.
- *
- * <p>This is an equivalent of the Spring class that creates Jasper HTML exporter, that doesn't use
- * JRHtmlExporter removed in Jasper 6.4.3.
- */
-@SuppressWarnings("deprecation")
-public class JasperReportsHtmlView extends AbstractJasperReportsSingleFormatView {
+public class JasperReportsHtmlViewTest {
 
-  public JasperReportsHtmlView() {
-    setContentType("text/html");
-  }
+  private JasperReportsHtmlView jasperReportsHtmlView = new JasperReportsHtmlView();
 
-  @Override
-  protected JRExporter createExporter() {
-    // Use HtmlExporter over deprecated and removed JRHtmlExporter
-    return new HtmlExporter();
-  }
+  @Test
+  public void shouldReturnInstanceOfHtmlExporter() {
+    JRExporter jrExporter = jasperReportsHtmlView.createExporter();
 
-  @Override
-  protected boolean useWriter() {
-    return true;
+    // We make sure to use HtmlExporter over deprecated and removed JrHtmlExporter
+    assertTrue(jrExporter instanceof HtmlExporter);
+    assertEquals("text/html", jasperReportsHtmlView.getContentType());
   }
 
 }
