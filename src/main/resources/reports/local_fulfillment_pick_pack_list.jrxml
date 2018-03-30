@@ -129,6 +129,7 @@ FROM
     ON stock_card_li.stockCardId = stock_card.id
 WHERE
   shipment.id = $P{shipmentDraftId}::uuid
+  AND shipment_li.quantityshipped > 0
   AND stock_card_li.id IN
   (SELECT id
    FROM stockmanagement.stock_card_line_items
@@ -448,6 +449,10 @@ WHERE
     </detail>
     <pageFooter>
         <band height="30" splitType="Stretch">
+            <staticText>
+                <reportElement positionType="FixRelativeToBottom" x="0" y="0" width="360" height="30" uuid="bbf79fc6-3369-11e8-b467-0ed5f89f718b"/>
+                <text><![CDATA[Only products that have positive fill quantity entered are displayed.]]></text>
+            </staticText>
             <textField>
                 <reportElement x="430" y="10" width="70" height="20" uuid="49d7030b-3cad-47e5-af05-f063c98fb9e4"/>
                 <textElement textAlignment="Right" verticalAlignment="Bottom"/>
