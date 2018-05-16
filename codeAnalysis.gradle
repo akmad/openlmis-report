@@ -37,6 +37,8 @@ sonarqube {
         property "sonar.projectKey", "org.sonarqube:openlmis-report"
         property "sonar.host.url", "http://sonar.openlmis.org"
         property "sonar.projectVersion", version
+        property "sonar.login", System.getenv("SONAR_LOGIN")
+        property "sonar.password", System.getenv("SONAR_PASSWORD")
         property "sonar.java.coveragePlugin", "jacoco"
         //Tells SonarQube where the unit tests execution reports are
         property "sonar.junit.reportsPath", "build/test-results/test"
