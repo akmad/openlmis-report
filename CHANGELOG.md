@@ -3,6 +3,7 @@
 
 Improvements:
 * [OLMIS-4649](https://openlmis.atlassian.net/browse/OLMIS-4649): Added Jenkinsfile
+* [OLMIS-2923](https://openlmis.atlassian.net/browse/OLMIS-2923): Updated demo data loading approach
 
 1.1.0 / 2018-04-24
 ==================
