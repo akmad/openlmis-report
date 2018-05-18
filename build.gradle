@@ -27,6 +27,12 @@ sourceSets {
         }
         resources.srcDir file('src/integration-test/resources')
     }
+
+    main {
+        resources {
+            srcDirs "src/main/resources", "build/data"
+        }
+    }
 }
 
 apply from: "dependency.gradle"
@@ -60,8 +66,11 @@ idea {
 }
 
 processResources {
+    dependsOn demoDataSeed
+
     // we want the generated HTML spec file included in the output jar
     finalizedBy ramlToHtml
+
     // update version information in build
     filesMatching('**/version.properties') {
         expand(project.properties)
@@ -77,7 +86,6 @@ assemble {
     dependsOn copyRamlHtmlToBuild
     dependsOn copyConsulRegistrationToBuild
     dependsOn jacocoTestReport
-    dependsOn demoDataSeed
 }
 
 build {
@@ -85,6 +93,5 @@ build {
     dependsOn check
     dependsOn ramlToHtml
     dependsOn copyRamlHtmlToBuild
-    dependsOn demoDataSeed
     dependsOn copyConsulRegistrationToBuild
 }
