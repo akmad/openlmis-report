@@ -71,7 +71,7 @@ WHERE
           JOIN referencedata.role_rights AS role_rights ON role_rights.roleid = role_assignments.roleid
           JOIN referencedata.rights AS rights ON rights.id = role_rights.rightid
         WHERE
-          CASE WHEN supervisory_nodes.id IS NOT NULL THEN
+          CASE WHEN role_assignments.supervisorynodeid IS NOT NULL THEN
             role_assignments.supervisorynodeid IN (SELECT id FROM findSupervisoryNodes)
           ELSE
             users.homefacilityid = facilities.id
