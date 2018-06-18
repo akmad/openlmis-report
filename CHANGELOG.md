@@ -5,7 +5,7 @@ Improvements:
 * [OLMIS-4649](https://openlmis.atlassian.net/browse/OLMIS-4649): Added Jenkinsfile
 * [OLMIS-2923](https://openlmis.atlassian.net/browse/OLMIS-2923): Updated demo data loading approach
 * [OLMIS-4815](https://openlmis.atlassian.net/browse/OLMIS-4815): Facility Assignment Configuration Errors report that doesn't always update
-* [OLMIS-4815](https://openlmis.atlassian.net/browse/OLMIS-4459): Pick Pack List no longer displays values in a separate line if there's no lot defined
+* [OLMIS-4459](https://openlmis.atlassian.net/browse/OLMIS-4459): Pick Pack List no longer displays values in a separate line if there's no lot defined
 
 1.1.0 / 2018-04-24
 ==================
