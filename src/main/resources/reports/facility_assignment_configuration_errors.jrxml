@@ -264,7 +264,7 @@ ORDER BY
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{supervisory_nodes}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{supervisory_nodes} == null ? "" : $F{supervisory_nodes}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="330" y="0" width="130" height="40" uuid="d4b07c8d-4a86-4e71-b6e4-3a2df32c8877"/>
@@ -277,7 +277,7 @@ ORDER BY
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{assigned_roles}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{assigned_roles} == null ? "" : $F{assigned_roles}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
