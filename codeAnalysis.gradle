@@ -33,6 +33,10 @@ configure(checkApiIsRaml) {
 //Usage: gradle sonarqube
 sonarqube {
     properties {
+        def branch = System.getenv("SONAR_BRANCH")
+        if (branch && branch != 'master') {
+            property "sonar.branch", branch
+        }
         property "sonar.projectName", "OpenLMIS Report"
         property "sonar.projectKey", "org.sonarqube:openlmis-report"
         property "sonar.host.url", "http://sonar.openlmis.org"
